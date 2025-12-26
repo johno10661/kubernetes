@@ -1,0 +1,3681 @@
+COMPUTED VALUES:
+asHook: true
+auth:
+  register: true
+clickhouse:
+  clickhouse:
+    configmap:
+      builtin_dictionaries_reload_interval: "3600"
+      compression:
+        cases:
+        - method: zstd
+          min_part_size: "10000000000"
+          min_part_size_ratio: "0.01"
+        enabled: false
+      configOverride: ""
+      default_session_timeout: "60"
+      disable_internal_dns_cache: "1"
+      enabled: true
+      graphite:
+        config:
+        - asynchronous_metrics: true
+          events: true
+          events_cumulative: true
+          interval: "60"
+          metrics: true
+          root_path: one_min
+          timeout: "0.1"
+        enabled: false
+      keep_alive_timeout: "3"
+      logger:
+        count: "10"
+        level: trace
+        path: /var/log/clickhouse-server
+        size: 1000M
+        stdoutLogsEnabled: false
+      mark_cache_size: "5368709120"
+      max_concurrent_queries: "100"
+      max_connections: "4096"
+      max_session_timeout: "3600"
+      merge_tree:
+        enabled: false
+        max_part_loading_threads: auto
+        max_suspicious_broken_parts: 100
+        parts_to_delay_insert: 150
+        parts_to_throw_insert: 300
+      mlock_executable: false
+      profiles:
+        enabled: false
+        profile:
+        - config:
+            load_balancing: random
+            max_memory_usage: "10000000000"
+            use_uncompressed_cache: "0"
+          name: default
+      quotas:
+        enabled: false
+        quota:
+        - config:
+          - duration: "3600"
+            errors: "0"
+            execution_time: "0"
+            queries: "0"
+            read_rows: "0"
+            result_rows: "0"
+          name: default
+      remote_servers:
+        enabled: true
+        internal_replication: true
+        replica:
+          backup:
+            enabled: false
+          compression: true
+          user: default
+      umask: "022"
+      uncompressed_cache_size: "8589934592"
+      users:
+        enabled: false
+        user:
+        - config:
+            networks:
+            - ::/0
+            password: ""
+            profile: default
+            quota: default
+          name: default
+      zookeeper_servers:
+        config:
+        - hostTemplate: '{{ .Release.Name }}-zookeeper-clickhouse'
+          index: clickhouse
+          port: "2181"
+        enabled: true
+        operation_timeout_ms: "10000"
+        session_timeout_ms: "30000"
+    http_port: "8123"
+    image: clickhouse/clickhouse-server
+    imagePullPolicy: IfNotPresent
+    imageVersion: null
+    ingress:
+      enabled: false
+    interserver_http_port: "9009"
+    listen_host: 0.0.0.0
+    livenessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 0
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 5
+    metrics:
+      enabled: true
+      podAnnotations:
+        prometheus.io/port: "9116"
+        prometheus.io/scrape: "true"
+      port: 9116
+      prometheusRule:
+        additionalLabels: {}
+        enabled: false
+        namespace: ""
+        rules: []
+      service:
+        annotations: {}
+        labels: {}
+        type: ClusterIP
+      serviceMonitor:
+        enabled: false
+        selector:
+          prometheus: kube-prometheus
+    path: /var/lib/clickhouse
+    persistence:
+      enabled: true
+      size: 50Gi
+    persistentVolumeClaim:
+      dataPersistentVolume:
+        accessModes:
+        - ReadWriteOnce
+        enabled: true
+        storage: 30Gi
+      enabled: true
+      logsPersistentVolume:
+        accessModes:
+        - ReadWriteOnce
+        enabled: false
+        storage: 50Gi
+    podManagementPolicy: Parallel
+    podSecurityContext: {}
+    priorityClassName: null
+    readinessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 0
+      periodSeconds: 30
+      successThreshold: 1
+      timeoutSeconds: 5
+    replicas: "1"
+    resources: {}
+    securityContext: {}
+    startupProbe:
+      enabled: true
+      failureThreshold: 60
+      periodSeconds: 5
+      successThreshold: 1
+      timeoutSeconds: 5
+    tcp_port: "9000"
+    updateStrategy: RollingUpdate
+  clusterDomain: cluster.local
+  enabled: true
+  global:
+    nodeSelector: {}
+    sidecars: []
+    tolerations: []
+    volumes: []
+  nodeSelector:
+    kubernetes.io/arch: amd64
+  serviceAccount:
+    annotations: {}
+    automountServiceAccountToken: true
+    enabled: false
+    name: clickhouse
+  tabix:
+    enabled: false
+    image: spoonest/clickhouse-tabix-web-client
+    imagePullPolicy: IfNotPresent
+    imageVersion: stable
+    ingress:
+      enabled: false
+    livenessProbe:
+      enabled: true
+      failureThreshold: "3"
+      initialDelaySeconds: "30"
+      periodSeconds: "30"
+      successThreshold: "1"
+      timeoutSeconds: "5"
+    podAnnotations: null
+    podLabels: null
+    readinessProbe:
+      enabled: true
+      failureThreshold: "3"
+      initialDelaySeconds: "30"
+      periodSeconds: "30"
+      successThreshold: "1"
+      timeoutSeconds: "5"
+    replicas: "1"
+    resources: {}
+    security:
+      password: admin
+      user: admin
+    updateStrategy:
+      maxSurge: 3
+      maxUnavailable: 1
+      type: RollingUpdate
+  timezone: UTC
+config:
+  configYml: {}
+  relay: |
+    # No YAML relay config given
+  sentryConfPy: |
+    SENTRY_FEATURES["auth:register"] = False
+
+    # Performance Monitoring - Core
+    SENTRY_FEATURES["organizations:performance-view"] = True
+    SENTRY_FEATURES["organizations:performance-issues"] = True
+    SENTRY_FEATURES["organizations:discover"] = True
+    SENTRY_FEATURES["organizations:global-views"] = True
+
+    # Transaction/Span Processing
+    SENTRY_FEATURES["organizations:transaction-metrics-extraction"] = True
+    SENTRY_FEATURES["organizations:indexed-spans-extraction"] = True
+    SENTRY_FEATURES["organizations:standalone-span-ingestion"] = True
+    SENTRY_FEATURES["organizations:span-stats"] = True
+    SENTRY_FEATURES["projects:span-metrics-extraction"] = True
+    SENTRY_FEATURES["projects:span-metrics-extraction-addons"] = True
+
+    # Insights (Caches, Queues, Database views)
+    SENTRY_FEATURES["organizations:insights-entry-points"] = True
+    SENTRY_FEATURES["organizations:insights-initial-modules"] = True
+    SENTRY_FEATURES["organizations:insights-addon-modules"] = True
+
+    # Exploration
+    SENTRY_FEATURES["organizations:visibility-explore-view"] = True
+
+    # Dashboards
+    SENTRY_FEATURES["organizations:dashboards-mep"] = True
+
+    # Improve PostgreSQL connection stability
+    DATABASES["default"]["CONN_MAX_AGE"] = 600  # Keep connections alive for 10 min
+    DATABASES["default"]["CONN_HEALTH_CHECKS"] = True  # Check connections before use
+  snubaSettingsPy: |
+    # No Python Extension Config Given
+  web:
+    bufferSize: 32768
+    disableLogging: true
+    disableWriteException: true
+    httpChunkedInput: true
+    httpKeepalive: 15
+    ignoreSignpipe: true
+    ignoreWriteErrors: true
+    limitPost: 209715200
+    logXForwardedFor: false
+    maxRequests: 100000
+    maxRequestsDelta: 500
+    maxWorkerLifetime: 86400
+    memoryReport: false
+    reloadOnRss: 600
+    thunderLock: true
+    workers: 3
+discord: {}
+externalClickhouse:
+  database: default
+  host: clickhouse
+  httpPort: 8123
+  password: ""
+  singleNode: true
+  tcpPort: 9000
+  username: default
+externalKafka:
+  compression:
+    type: null
+  message:
+    max:
+      bytes: 50000000
+  sasl:
+    mechanism: None
+    password: None
+    username: None
+  security:
+    protocol: plaintext
+  socket:
+    timeout:
+      ms: 1000
+externalPostgresql:
+  connMaxAge: 0
+  database: sentry
+  existingSecret: sentry-secrets
+  existingSecretKeys:
+    password: postgresql-password
+  host: 192.168.100.69
+  port: 5432
+  username: sentry
+externalRedis:
+  db: 8
+  host: 192.168.100.69
+  port: 6379
+extraManifests: []
+filestore:
+  backend: filesystem
+  filesystem:
+    path: /var/lib/sentry/files
+    persistence:
+      accessMode: ReadWriteOnce
+      enabled: true
+      existingClaim: ""
+      lookupVolumeName: true
+      persistentWorkers: false
+      size: 20Gi
+  gcs: {}
+  s3: {}
+geodata:
+  accountID: ""
+  annotations: {}
+  editionIDs: ""
+  licenseKey: ""
+  mountPath: ""
+  path: ""
+  persistence:
+    accessModes:
+    - ReadWriteMany
+    lookupVolumeName: true
+    size: 1Gi
+  volumeName: ""
+github: {}
+global:
+  nodeSelector:
+    kubernetes.io/arch: amd64
+  sidecars: []
+  tolerations: []
+  volumes: []
+google: {}
+hooks:
+  activeDeadlineSeconds: 900
+  dbCheck:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    image:
+      imagePullSecrets: []
+    nodeSelector: {}
+    podAnnotations: {}
+    resources:
+      limits:
+        memory: 64Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    securityContext: {}
+  dbInit:
+    affinity: {}
+    enabled: true
+    env: []
+    nodeSelector: {}
+    podAnnotations: {}
+    resources:
+      limits:
+        memory: 3Gi
+      requests:
+        cpu: 300m
+        memory: 2Gi
+    sidecars: []
+    volumes: []
+  enabled: true
+  preUpgrade: false
+  removeOnSuccess: true
+  shareProcessNamespace: false
+  snubaInit:
+    affinity: {}
+    enabled: true
+    kafka:
+      enabled: true
+    nodeSelector: {}
+    podAnnotations: {}
+    resources:
+      limits:
+        cpu: 2000m
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1Gi
+  snubaMigrate:
+    enabled: true
+images:
+  relay:
+    imagePullSecrets: []
+  sentry:
+    imagePullSecrets: []
+  snuba:
+    imagePullSecrets: []
+  symbolicator:
+    imagePullSecrets: []
+  uptimeChecker:
+    imagePullSecrets: []
+  vroom:
+    imagePullSecrets: []
+ingress:
+  additionalHostNames:
+  - sentry.ediai.net
+  alb:
+    httpRedirect: false
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+  enabled: true
+  hostname: sentry.ediai.com
+  ingressClassName: traefik
+  regexPathStyle: traefik
+ipv6: false
+kafka:
+  broker:
+    affinity: {}
+    args: []
+    automountServiceAccountToken: false
+    autoscaling:
+      hpa:
+        enabled: false
+        maxReplicas: ""
+        minReplicas: ""
+        targetCPU: ""
+        targetMemory: ""
+      vpa:
+        annotations: {}
+        controlledResources: []
+        enabled: false
+        maxAllowed: {}
+        minAllowed: {}
+        updatePolicy:
+          updateMode: Auto
+    command: []
+    config: ""
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      enabled: true
+      readOnlyRootFilesystem: true
+      runAsGroup: 1001
+      runAsNonRoot: true
+      runAsUser: 1001
+      seLinuxOptions: {}
+    customLivenessProbe: {}
+    customReadinessProbe: {}
+    customStartupProbe: {}
+    enableServiceLinks: true
+    existingConfigmap: ""
+    existingSecretConfig: ""
+    extraConfig: ""
+    extraConfigYaml: {}
+    extraContainerPorts: []
+    extraEnvVars: []
+    extraEnvVarsCM: ""
+    extraEnvVarsSecret: ""
+    extraVolumeMounts: []
+    extraVolumes: []
+    heapOpts: -Xmx1024m -Xms1024m
+    hostAliases: []
+    hostIPC: false
+    hostNetwork: false
+    initContainerResources:
+      limits: {}
+      requests: {}
+    initContainers: []
+    lifecycleHooks: {}
+    livenessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    logPersistence:
+      accessModes:
+      - ReadWriteOnce
+      annotations: {}
+      enabled: false
+      existingClaim: ""
+      mountPath: /opt/bitnami/kafka/logs
+      selector: {}
+      size: 8Gi
+      storageClass: ""
+    minId: 100
+    minReadySeconds: 0
+    nodeAffinityPreset:
+      key: ""
+      type: ""
+      values: []
+    nodeSelector: {}
+    pdb:
+      create: true
+      maxUnavailable: ""
+      minAvailable: ""
+    persistence:
+      accessModes:
+      - ReadWriteOnce
+      annotations: {}
+      enabled: true
+      existingClaim: ""
+      labels: {}
+      mountPath: /bitnami/kafka
+      selector: {}
+      size: 8Gi
+      storageClass: ""
+    podAffinityPreset: ""
+    podAnnotations: {}
+    podAntiAffinityPreset: soft
+    podLabels: {}
+    podManagementPolicy: Parallel
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+      fsGroupChangePolicy: Always
+      seccompProfile:
+        type: RuntimeDefault
+      supplementalGroups: []
+      sysctls: []
+    priorityClassName: ""
+    readinessProbe:
+      enabled: true
+      failureThreshold: 6
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    replicaCount: 0
+    resources: {}
+    resourcesPreset: small
+    runtimeClassName: ""
+    schedulerName: ""
+    secretConfig: ""
+    sidecars: []
+    startupProbe:
+      enabled: false
+      failureThreshold: 15
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    terminationGracePeriodSeconds: ""
+    tolerations: []
+    topologySpreadConstraints: []
+    updateStrategy:
+      type: RollingUpdate
+    zookeeperMigrationMode: false
+  brokerRackAssignment: ""
+  clusterDomain: cluster.local
+  common:
+    exampleValue: common-chart
+    global:
+      compatibility:
+        openshift:
+          adaptSecurityContext: auto
+      defaultStorageClass: ""
+      imagePullSecrets: []
+      imageRegistry: ""
+      nodeSelector: {}
+      sidecars: []
+      storageClass: ""
+      tolerations: []
+      volumes: []
+  commonAnnotations: {}
+  commonLabels: {}
+  config: ""
+  controller:
+    affinity: {}
+    args: []
+    automountServiceAccountToken: false
+    autoscaling:
+      hpa:
+        enabled: false
+        maxReplicas: ""
+        minReplicas: ""
+        targetCPU: ""
+        targetMemory: ""
+      vpa:
+        annotations: {}
+        controlledResources: []
+        enabled: false
+        maxAllowed: {}
+        minAllowed: {}
+        updatePolicy:
+          updateMode: Auto
+    command: []
+    config: ""
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      enabled: true
+      readOnlyRootFilesystem: true
+      runAsGroup: 1001
+      runAsNonRoot: true
+      runAsUser: 1001
+      seLinuxOptions: {}
+    controllerOnly: false
+    customLivenessProbe: {}
+    customReadinessProbe: {}
+    customStartupProbe: {}
+    enableServiceLinks: true
+    existingConfigmap: ""
+    existingSecretConfig: ""
+    extraConfig: |
+      offsets.topic.replication.factor=1
+      transaction.state.log.replication.factor=1
+      transaction.state.log.min.isr=1
+    extraConfigYaml: {}
+    extraContainerPorts: []
+    extraEnvVars: []
+    extraEnvVarsCM: ""
+    extraEnvVarsSecret: ""
+    extraVolumeMounts: []
+    extraVolumes: []
+    heapOpts: -Xmx1024m -Xms1024m
+    hostAliases: []
+    hostIPC: false
+    hostNetwork: false
+    initContainerResources:
+      limits: {}
+      requests: {}
+    initContainers: []
+    lifecycleHooks: {}
+    livenessProbe:
+      enabled: true
+      failureThreshold: 3
+      initialDelaySeconds: 10
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    logPersistence:
+      accessModes:
+      - ReadWriteOnce
+      annotations: {}
+      enabled: false
+      existingClaim: ""
+      mountPath: /opt/bitnami/kafka/logs
+      selector: {}
+      size: 8Gi
+      storageClass: ""
+    minId: 0
+    minReadySeconds: 0
+    nodeAffinityPreset:
+      key: ""
+      type: ""
+      values: []
+    nodeSelector:
+      kubernetes.io/arch: amd64
+    pdb:
+      create: true
+      maxUnavailable: ""
+      minAvailable: ""
+    persistence:
+      accessModes:
+      - ReadWriteOnce
+      annotations: {}
+      enabled: true
+      existingClaim: ""
+      labels: {}
+      mountPath: /bitnami/kafka
+      selector: {}
+      size: 10Gi
+      storageClass: ""
+    podAffinityPreset: ""
+    podAnnotations: {}
+    podAntiAffinityPreset: soft
+    podLabels: {}
+    podManagementPolicy: Parallel
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+      fsGroupChangePolicy: Always
+      seccompProfile:
+        type: RuntimeDefault
+      supplementalGroups: []
+      sysctls: []
+    priorityClassName: ""
+    readinessProbe:
+      enabled: true
+      failureThreshold: 6
+      initialDelaySeconds: 5
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 5
+    replicaCount: 1
+    resources:
+      limits:
+        memory: 2Gi
+      requests:
+        cpu: 500m
+        memory: 1536Mi
+    resourcesPreset: small
+    runtimeClassName: ""
+    schedulerName: ""
+    secretConfig: ""
+    sidecars: []
+    startupProbe:
+      enabled: false
+      failureThreshold: 15
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      successThreshold: 1
+      timeoutSeconds: 1
+    terminationGracePeriodSeconds: ""
+    tolerations: []
+    topologySpreadConstraints: []
+    updateStrategy:
+      type: RollingUpdate
+    zookeeperMigrationMode: false
+  diagnosticMode:
+    args:
+    - infinity
+    command:
+    - sleep
+    enabled: false
+  dnsConfig: {}
+  dnsPolicy: ""
+  enabled: true
+  existingConfigmap: ""
+  existingLog4jConfigMap: ""
+  existingSecretConfig: ""
+  externalAccess:
+    autoDiscovery:
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        enabled: true
+        readOnlyRootFilesystem: true
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seLinuxOptions: {}
+        seccompProfile:
+          type: RuntimeDefault
+      enabled: false
+      image:
+        digest: ""
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+        registry: docker.io
+        repository: bitnami/kubectl
+        tag: 1.30.3-debian-12-r3
+      resources: {}
+      resourcesPreset: nano
+    broker:
+      service:
+        allocateLoadBalancerNodePorts: true
+        annotations: {}
+        domain: ""
+        externalIPs: []
+        extraPorts: []
+        labels: {}
+        loadBalancerAnnotations: []
+        loadBalancerClass: ""
+        loadBalancerIPs: []
+        loadBalancerNames: []
+        loadBalancerSourceRanges: []
+        nodePorts: []
+        ports:
+          external: 9094
+        publishNotReadyAddresses: false
+        type: LoadBalancer
+        useHostIPs: false
+        usePodIPs: false
+    controller:
+      forceExpose: false
+      service:
+        allocateLoadBalancerNodePorts: true
+        annotations: {}
+        domain: ""
+        externalIPs: []
+        extraPorts: []
+        labels: {}
+        loadBalancerAnnotations: []
+        loadBalancerClass: ""
+        loadBalancerIPs: []
+        loadBalancerNames: []
+        loadBalancerSourceRanges: []
+        nodePorts: []
+        ports:
+          external: 9094
+        publishNotReadyAddresses: false
+        type: LoadBalancer
+        useHostIPs: false
+        usePodIPs: false
+    enabled: false
+  externalZookeeper:
+    servers: []
+  extraConfig: ""
+  extraConfigYaml: {}
+  extraDeploy: []
+  extraEnvVars: []
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+  extraInit: ""
+  extraVolumeMounts: []
+  extraVolumes: []
+  fullnameOverride: ""
+  global:
+    compatibility:
+      openshift:
+        adaptSecurityContext: auto
+    defaultStorageClass: ""
+    imagePullSecrets: []
+    imageRegistry: ""
+    nodeSelector: {}
+    sidecars: []
+    storageClass: ""
+    tolerations: []
+    volumes: []
+  heapOpts: -Xmx1024m -Xms1024m
+  image:
+    debug: false
+    digest: ""
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    registry: docker.io
+    repository: bitnamilegacy/kafka
+    tag: 3.7.1-debian-12-r4
+  initContainers: []
+  interBrokerProtocolVersion: ""
+  kraft:
+    clusterId: ""
+    controllerQuorumVoters: ""
+    enabled: true
+    existingClusterIdSecret: ""
+  kubeVersion: ""
+  listeners:
+    advertisedListeners: ""
+    client:
+      containerPort: 9092
+      name: CLIENT
+      protocol: PLAINTEXT
+      sslClientAuth: ""
+    controller:
+      containerPort: 9093
+      name: CONTROLLER
+      protocol: PLAINTEXT
+      sslClientAuth: ""
+    external:
+      containerPort: 9095
+      name: EXTERNAL
+      protocol: PLAINTEXT
+      sslClientAuth: ""
+    extraListeners: []
+    interbroker:
+      containerPort: 9094
+      name: INTERNAL
+      protocol: PLAINTEXT
+      sslClientAuth: ""
+    overrideListeners: ""
+    securityProtocolMap: ""
+  log4j: ""
+  metrics:
+    jmx:
+      config: |-
+        jmxUrl: service:jmx:rmi:///jndi/rmi://127.0.0.1:{{ .Values.metrics.jmx.kafkaJmxPort }}/jmxrmi
+        lowercaseOutputName: true
+        lowercaseOutputLabelNames: true
+        ssl: false
+        {{- if .Values.metrics.jmx.whitelistObjectNames }}
+        whitelistObjectNames: ["{{ join "\",\"" .Values.metrics.jmx.whitelistObjectNames }}"]
+        {{- end }}
+      containerPorts:
+        metrics: 5556
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+          - ALL
+        enabled: true
+        readOnlyRootFilesystem: true
+        runAsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seLinuxOptions: {}
+      enabled: false
+      existingConfigmap: ""
+      extraRules: ""
+      image:
+        digest: ""
+        pullPolicy: IfNotPresent
+        pullSecrets: []
+        registry: docker.io
+        repository: bitnamilegacy/jmx-exporter
+        tag: 1.0.1-debian-12-r5
+      kafkaJmxPort: 5555
+      resources: {}
+      resourcesPreset: micro
+      service:
+        annotations:
+          prometheus.io/path: /metrics
+          prometheus.io/port: '{{ .Values.metrics.jmx.service.ports.metrics }}'
+          prometheus.io/scrape: "true"
+        clusterIP: ""
+        ports:
+          metrics: 5556
+        sessionAffinity: None
+      whitelistObjectNames:
+      - kafka.controller:*
+      - kafka.server:*
+      - java.lang:*
+      - kafka.network:*
+      - kafka.log:*
+    prometheusRule:
+      enabled: false
+      groups: []
+      labels: {}
+      namespace: ""
+    serviceMonitor:
+      enabled: false
+      honorLabels: false
+      interval: ""
+      jobLabel: ""
+      labels: {}
+      metricRelabelings: []
+      namespace: ""
+      path: /metrics
+      relabelings: []
+      scrapeTimeout: ""
+      selector: {}
+  nameOverride: ""
+  networkPolicy:
+    allowExternal: true
+    allowExternalEgress: true
+    enabled: true
+    extraEgress: []
+    extraIngress: []
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  provisioning:
+    args: []
+    auth:
+      tls:
+        caCert: ca.crt
+        cert: tls.crt
+        certificatesSecret: ""
+        key: tls.key
+        keyPassword: ""
+        keyPasswordSecretKey: key-password
+        keystore: keystore.jks
+        keystorePassword: ""
+        keystorePasswordSecretKey: keystore-password
+        passwordsSecret: ""
+        truststore: truststore.jks
+        truststorePassword: ""
+        truststorePasswordSecretKey: truststore-password
+        type: jks
+    automountServiceAccountToken: false
+    command: []
+    containerSecurityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - ALL
+      enabled: true
+      readOnlyRootFilesystem: true
+      runAsGroup: 1001
+      runAsNonRoot: true
+      runAsUser: 1001
+      seLinuxOptions: {}
+    enableServiceLinks: true
+    enabled: true
+    extraEnvVars: []
+    extraEnvVarsCM: ""
+    extraEnvVarsSecret: ""
+    extraProvisioningCommands: []
+    extraVolumeMounts: []
+    extraVolumes: []
+    initContainers: []
+    nodeSelector: {}
+    numPartitions: 1
+    parallel: 1
+    podAnnotations: {}
+    podLabels: {}
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
+      fsGroupChangePolicy: Always
+      seccompProfile:
+        type: RuntimeDefault
+      supplementalGroups: []
+      sysctls: []
+    postScript: ""
+    preScript: ""
+    replicationFactor: 1
+    resources: {}
+    resourcesPreset: micro
+    schedulerName: ""
+    serviceAccount:
+      automountServiceAccountToken: false
+      create: true
+      name: ""
+    sidecars: []
+    tolerations: []
+    topics:
+    - config:
+        message.timestamp.type: LogAppendTime
+      name: events
+    - name: event-replacements
+    - config:
+        cleanup.policy: compact,delete
+        min.compaction.lag.ms: "3600000"
+      name: snuba-commit-log
+    - name: cdc
+    - config:
+        message.timestamp.type: LogAppendTime
+      name: transactions
+    - config:
+        cleanup.policy: compact,delete
+        min.compaction.lag.ms: "3600000"
+      name: snuba-transactions-commit-log
+    - config:
+        message.timestamp.type: LogAppendTime
+      name: snuba-metrics
+    - name: outcomes
+    - name: outcomes-dlq
+    - name: outcomes-billing
+    - name: outcomes-billing-dlq
+    - name: ingest-spans
+    - name: ingest-sessions
+    - config:
+        cleanup.policy: compact,delete
+        min.compaction.lag.ms: "3600000"
+      name: snuba-metrics-commit-log
+    - name: scheduled-subscriptions-events
+    - name: scheduled-subscriptions-transactions
+    - name: scheduled-subscriptions-metrics
+    - name: scheduled-subscriptions-generic-metrics-sets
+    - name: scheduled-subscriptions-generic-metrics-distributions
+    - name: scheduled-subscriptions-generic-metrics-counters
+    - name: scheduled-subscriptions-generic-metrics-gauges
+    - name: events-subscription-results
+    - name: transactions-subscription-results
+    - name: metrics-subscription-results
+    - name: generic-metrics-subscription-results
+    - config:
+        message.timestamp.type: LogAppendTime
+      name: snuba-queries
+    - config:
+        message.timestamp.type: LogAppendTime
+      name: processed-profiles
+    - name: profiles-call-tree
+    - config:
+        max.message.bytes: "15000000"
+        message.timestamp.type: LogAppendTime
+      name: ingest-replay-events
+    - config:
+        message.timestamp.type: LogAppendTime
+      name: snuba-generic-metrics
+    - config:
+        cleanup.policy: compact,delete
+        min.compaction.lag.ms: "3600000"
+      name: snuba-generic-metrics-sets-commit-log
+    - config:
+        cleanup.policy: compact,delete
+        min.compaction.lag.ms: "3600000"
+      name: snuba-generic-metrics-distributions-commit-log
+    - config:
+        cleanup.policy: compact,delete
+        min.compaction.lag.ms: "3600000"
+      name: snuba-generic-metrics-counters-commit-log
+    - config:
+        cleanup.policy: compact,delete
+        min.compaction.lag.ms: "3600000"
+      name: snuba-generic-metrics-gauges-commit-log
+    - config:
+        message.timestamp.type: LogAppendTime
+      name: generic-events
+    - config:
+        cleanup.policy: compact,delete
+        min.compaction.lag.ms: "3600000"
+      name: snuba-generic-events-commit-log
+    - config:
+        message.timestamp.type: LogAppendTime
+      name: group-attributes
+    - name: snuba-dead-letter-metrics
+    - name: snuba-dead-letter-generic-metrics
+    - name: snuba-dead-letter-replays
+    - name: snuba-dead-letter-generic-events
+    - name: snuba-dead-letter-querylog
+    - name: snuba-dead-letter-group-attributes
+    - name: ingest-attachments
+    - name: ingest-attachments-dlq
+    - name: ingest-transactions
+    - name: ingest-transactions-dlq
+    - name: ingest-transactions-backlog
+    - name: ingest-events-dlq
+    - name: ingest-events
+    - name: ingest-replay-recordings
+    - name: ingest-metrics
+    - name: ingest-metrics-dlq
+    - name: ingest-performance-metrics
+    - name: ingest-feedback-events
+    - name: ingest-feedback-events-dlq
+    - name: ingest-monitors
+    - name: monitors-clock-tasks
+    - name: monitors-clock-tick
+    - name: monitors-incident-occurrences
+    - name: profiles
+    - name: ingest-occurrences
+    - name: snuba-spans
+    - name: snuba-eap-spans-commit-log
+    - name: scheduled-subscriptions-eap-spans
+    - name: eap-spans-subscription-results
+    - name: subscription-results-eap-items
+    - name: snuba-items-commit-log
+    - name: snuba-eap-mutations
+    - name: snuba-lw-deletions-generic-events
+    - name: shared-resources-usage
+    - name: snuba-profile-chunks
+    - name: buffered-segments
+    - name: buffered-segments-dlq
+    - name: uptime-configs
+    - name: uptime-results
+    - name: snuba-uptime-results
+    - name: task-worker
+    - name: snuba-ourlogs
+    - name: snuba-items
+    - name: taskworker
+    - name: taskworker-dlq
+    - name: taskworker-billing
+    - name: taskworker-billing-dlq
+    - name: taskworker-control
+    - name: taskworker-control-dlq
+    - name: taskworker-ingest
+    - name: taskworker-ingest-dlq
+    - name: taskworker-ingest-errors
+    - name: taskworker-ingest-errors-dlq
+    - name: taskworker-ingest-transactions
+    - name: taskworker-ingest-transactions-dlq
+    - name: taskworker-internal
+    - name: taskworker-internal-dlq
+    - name: taskworker-limited
+    - name: taskworker-limited-dlq
+    - name: taskworker-long
+    - name: taskworker-long-dlq
+    - name: taskworker-products
+    - name: taskworker-products-dlq
+    - name: taskworker-sentryapp
+    - name: taskworker-sentryapp-dlq
+    - name: taskworker-symbolication
+    - name: taskworker-symbolication-dlq
+    - name: taskworker-usage
+    - name: taskworker-usage-dlq
+    useHelmHooks: true
+    waitForKafka: true
+  rbac:
+    create: false
+  sasl:
+    client:
+      passwords: ""
+      users:
+      - user1
+    controller:
+      clientId: controller_broker_client
+      clientSecret: ""
+      password: ""
+      user: controller_user
+    controllerMechanism: PLAIN
+    enabledMechanisms: PLAIN,SCRAM-SHA-256,SCRAM-SHA-512
+    existingSecret: ""
+    interBrokerMechanism: PLAIN
+    interbroker:
+      clientId: inter_broker_client
+      clientSecret: ""
+      password: ""
+      user: inter_broker_user
+    oauthbearer:
+      expectedAudience: ""
+      jwksEndpointUrl: ""
+      subClaimName: sub
+      tokenEndpointUrl: ""
+    zookeeper:
+      password: ""
+      user: ""
+  secretConfig: ""
+  service:
+    allocateLoadBalancerNodePorts: true
+    annotations: {}
+    clusterIP: ""
+    externalTrafficPolicy: Cluster
+    extraPorts: []
+    headless:
+      broker:
+        annotations: {}
+        labels: {}
+      controller:
+        annotations: {}
+        labels: {}
+    loadBalancerClass: ""
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    nodePorts:
+      client: ""
+      external: ""
+    ports:
+      client: 9092
+      controller: 9093
+      external: 9095
+      interbroker: 9094
+    sessionAffinity: None
+    sessionAffinityConfig: {}
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    automountServiceAccountToken: false
+    create: true
+    name: ""
+  serviceBindings:
+    enabled: false
+  sidecars: []
+  tls:
+    autoGenerated: false
+    customAltNames: []
+    endpointIdentificationAlgorithm: https
+    existingSecret: ""
+    jksKeystoreKey: ""
+    jksTruststoreKey: ""
+    jksTruststoreSecret: ""
+    keyPassword: ""
+    keystorePassword: ""
+    passwordsSecret: ""
+    passwordsSecretKeystoreKey: keystore-password
+    passwordsSecretPemPasswordKey: ""
+    passwordsSecretTruststoreKey: truststore-password
+    pemChainIncluded: false
+    sslClientAuth: required
+    truststorePassword: ""
+    type: JKS
+    zookeeper:
+      enabled: false
+      existingSecret: ""
+      existingSecretKeystoreKey: zookeeper.keystore.jks
+      existingSecretTruststoreKey: zookeeper.truststore.jks
+      keystorePassword: ""
+      passwordsSecret: ""
+      passwordsSecretKeystoreKey: keystore-password
+      passwordsSecretTruststoreKey: truststore-password
+      truststorePassword: ""
+      verifyHostname: true
+  volumePermissions:
+    containerSecurityContext:
+      runAsUser: 0
+      seLinuxOptions: {}
+    enabled: false
+    image:
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      registry: docker.io
+      repository: bitnami/os-shell
+      tag: 12-debian-12-r26
+    resources: {}
+    resourcesPreset: nano
+  zookeeper:
+    auth:
+      client:
+        clientPassword: ""
+        clientUser: ""
+        enabled: false
+        serverPasswords: ""
+        serverUsers: ""
+    enabled: false
+    persistence:
+      accessModes:
+      - ReadWriteOnce
+      enabled: true
+      size: 8Gi
+      storageClass: ""
+    replicaCount: 1
+  zookeeperChrootPath: ""
+mail:
+  backend: smtp
+  from: sentry@ediai.com
+  host: smtp.mailgun.org
+  password: REDACTED  # Mailgun SMTP password
+  port: 587
+  useSsl: false
+  useTls: true
+  username: sentry@ediai.com
+memcached:
+  args:
+  - memcached
+  - -u memcached
+  - -p 11211
+  - -v
+  - -m $(MEMCACHED_MEMORY_LIMIT)
+  - -I $(MEMCACHED_MAX_ITEM_SIZE)
+  extraEnvVarsCM: sentry-memcached
+  image:
+    repository: bitnamilegacy/memcached
+  maxItemSize: "26214400"
+  memoryLimit: "2048"
+  metrics:
+    image:
+      repository: bitnamilegacy/memcached-exporter
+  nodeSelector: {}
+metrics:
+  affinity: {}
+  containerSecurityContext: {}
+  enabled: false
+  image:
+    imagePullSecrets: []
+    pullPolicy: IfNotPresent
+    repository: prom/statsd-exporter
+    tag: v0.17.0
+  livenessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 2
+  nodeSelector: {}
+  podAnnotations: {}
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 30
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 2
+  resources: {}
+  securityContext: {}
+  service:
+    labels: {}
+    type: ClusterIP
+  serviceMonitor:
+    additionalLabels: {}
+    enabled: false
+    metricRelabelings: []
+    namespace: ""
+    namespaceSelector: {}
+    relabelings: []
+    scrapeInterval: 30s
+  sidecars: []
+  tolerations: []
+  volumes: []
+nginx:
+  affinity: {}
+  args: []
+  automountServiceAccountToken: false
+  autoscaling:
+    enabled: false
+    maxReplicas: ""
+    minReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+  cloneStaticSiteFromGit:
+    branch: ""
+    enabled: false
+    extraEnvVars: []
+    extraEnvVarsSecret: ""
+    extraVolumeMounts: []
+    gitClone:
+      args: []
+      command: []
+    gitSync:
+      args: []
+      command: []
+      resources: {}
+      resourcesPreset: nano
+    image:
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      registry: docker.io
+      repository: bitnami/git
+      tag: 2.47.0-debian-12-r0
+    interval: 60
+    repository: ""
+  clusterDomain: cluster.local
+  command: []
+  common:
+    exampleValue: common-chart
+    global:
+      compatibility:
+        openshift:
+          adaptSecurityContext: auto
+      imagePullSecrets: []
+      imageRegistry: ""
+      nodeSelector: {}
+      sidecars: []
+      tolerations: []
+      volumes: []
+  commonAnnotations: {}
+  commonLabels: {}
+  containerPort: 8080
+  containerPorts:
+    http: 8080
+    https: 8443
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop:
+      - ALL
+    enabled: true
+    privileged: false
+    readOnlyRootFilesystem: true
+    runAsGroup: 1001
+    runAsNonRoot: true
+    runAsUser: 1001
+    seLinuxOptions: {}
+    seccompProfile:
+      type: RuntimeDefault
+  customLivenessProbe: {}
+  customReadinessProbe:
+    failureThreshold: 3
+    initialDelaySeconds: 5
+    periodSeconds: 5
+    successThreshold: 1
+    tcpSocket:
+      port: http
+    timeoutSeconds: 3
+  customStartupProbe: {}
+  diagnosticMode:
+    args:
+    - infinity
+    command:
+    - sleep
+    enabled: false
+  dnsConfig: {}
+  dnsPolicy: ""
+  enabled: true
+  existingServerBlockConfigmap: '{{ template "sentry.fullname" . }}'
+  existingStreamServerBlockConfigmap: ""
+  extraContainerPorts: []
+  extraDeploy: []
+  extraEnvVars: []
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+  extraLocationSnippet: false
+  extraVolumeMounts: []
+  extraVolumes: []
+  fullnameOverride: ""
+  global:
+    compatibility:
+      openshift:
+        adaptSecurityContext: auto
+    imagePullSecrets: []
+    imageRegistry: ""
+    nodeSelector: {}
+    sidecars: []
+    tolerations: []
+    volumes: []
+  healthIngress:
+    annotations: {}
+    enabled: false
+    extraHosts: []
+    extraPaths: []
+    extraRules: []
+    extraTls: []
+    hostname: example.local
+    ingressClassName: ""
+    path: /
+    pathType: ImplementationSpecific
+    secrets: []
+    selfSigned: false
+    tls: false
+  hostAliases: []
+  hostIPC: false
+  hostNetwork: false
+  image:
+    debug: false
+    digest: ""
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    registry: docker.io
+    repository: bitnamilegacy/nginx
+    tag: 1.27.2-debian-12-r1
+  ingress:
+    annotations: {}
+    apiVersion: ""
+    enabled: false
+    extraHosts: []
+    extraPaths: []
+    extraRules: []
+    extraTls: []
+    hostname: nginx.local
+    ingressClassName: ""
+    path: /
+    pathType: ImplementationSpecific
+    secrets: []
+    selfSigned: false
+    tls: false
+    tlsWwwPrefix: false
+  initContainers: []
+  kubeVersion: ""
+  lifecycleHooks: {}
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  metrics:
+    containerPorts:
+      metrics: 9113
+    enabled: false
+    extraArgs: []
+    image:
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      registry: docker.io
+      repository: bitnami/nginx-exporter
+      tag: 1.3.0-debian-12-r7
+    podAnnotations: {}
+    port: ""
+    prometheusRule:
+      additionalLabels: {}
+      enabled: false
+      namespace: ""
+      rules: []
+    resources: {}
+    resourcesPreset: nano
+    securityContext:
+      enabled: false
+      runAsUser: 1001
+      seLinuxOptions: {}
+    service:
+      annotations:
+        prometheus.io/port: '{{ .Values.metrics.service.port }}'
+        prometheus.io/scrape: "true"
+      port: 9113
+    serviceMonitor:
+      enabled: false
+      honorLabels: false
+      interval: ""
+      jobLabel: ""
+      labels: {}
+      metricRelabelings: []
+      namespace: ""
+      relabelings: []
+      scrapeTimeout: ""
+      selector: {}
+  nameOverride: ""
+  namespaceOverride: ""
+  networkPolicy:
+    allowExternal: true
+    allowExternalEgress: true
+    enabled: true
+    extraEgress: []
+    extraIngress: []
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  nodeAffinityPreset:
+    key: ""
+    type: ""
+    values: []
+  nodeSelector:
+    kubernetes.io/arch: amd64
+  pdb:
+    create: true
+    maxUnavailable: ""
+    minAvailable: ""
+  podAffinityPreset: ""
+  podAnnotations: {}
+  podAntiAffinityPreset: soft
+  podLabels: {}
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    fsGroupChangePolicy: Always
+    supplementalGroups: []
+    sysctls: []
+  priorityClassName: ""
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 5
+    path: /
+    periodSeconds: 5
+    successThreshold: 1
+    timeoutSeconds: 3
+  replicaCount: 1
+  resources: {}
+  resourcesPreset: nano
+  revisionHistoryLimit: 10
+  schedulerName: ""
+  serverBlock: ""
+  service:
+    annotations: {}
+    clusterIP: ""
+    externalTrafficPolicy: Cluster
+    extraPorts: []
+    loadBalancerClass: ""
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    nodePorts:
+      http: ""
+      https: ""
+    ports:
+      http: 80
+      https: 443
+    sessionAffinity: None
+    sessionAffinityConfig: {}
+    targetPort:
+      http: http
+      https: https
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    automountServiceAccountToken: false
+    create: true
+    name: ""
+  sidecarSingleProcessNamespace: false
+  sidecars: []
+  startupProbe:
+    enabled: false
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 5
+  staticSiteConfigmap: ""
+  staticSitePVC: ""
+  streamServerBlock: ""
+  terminationGracePeriodSeconds: ""
+  tls:
+    autoGenerated: true
+    ca: ""
+    cert: ""
+    certCAFilename: ca.crt
+    certFilename: tls.crt
+    certKeyFilename: tls.key
+    enabled: true
+    existingSecret: ""
+    key: ""
+  tolerations: []
+  topologySpreadConstraints: []
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+openai: {}
+pgbouncer:
+  affinity: {}
+  authType: md5
+  enabled: false
+  env: []
+  image:
+    pullPolicy: IfNotPresent
+    repository: bitnamilegacy/pgbouncer
+    tag: 1.23.1-debian-12-r5
+  maxClientConn: "8192"
+  nodeSelector: {}
+  podDisruptionBudget:
+    enabled: true
+    minAvailable: 1
+  poolMode: transaction
+  poolSize: "50"
+  postgres:
+    cp_max: 10
+    cp_min: 5
+    dbname: ""
+    host: ""
+    password: ""
+    user: ""
+  priorityClassName: ""
+  replicas: 2
+  resources: {}
+  tolerations: []
+  topologySpreadConstraints: []
+  updateStrategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 1
+    type: RollingUpdate
+postgresql:
+  auth:
+    database: sentry
+  connMaxAge: 0
+  enabled: false
+  image:
+    repository: bitnamilegacy/postgresql
+  nameOverride: sentry-postgresql
+  replication:
+    applicationName: sentry
+    enabled: false
+    numSynchronousReplicas: 1
+    readReplicas: 2
+    synchronousCommit: "on"
+prefix: null
+profiles:
+- feature-complete
+rabbitmq:
+  advancedConfiguration: ""
+  advancedConfigurationExistingSecret: ""
+  affinity: {}
+  args: []
+  auth:
+    enableLoopbackUser: false
+    erlangCookie: pHgpy3Q6adTskzAT6bLHCFqFTF7lMxhA
+    existingErlangSecret: ""
+    existingPasswordSecret: ""
+    password: guest
+    securePassword: true
+    tls:
+      autoGenerated: false
+      caCertificate: ""
+      enabled: false
+      existingSecret: ""
+      existingSecretFullChain: false
+      failIfNoPeerCert: true
+      overrideCaCertificate: ""
+      serverCertificate: ""
+      serverKey: ""
+      sslOptionsPassword:
+        enabled: false
+        existingSecret: ""
+        key: ""
+        password: ""
+      sslOptionsVerify: verify_peer
+    username: guest
+  clusterDomain: cluster.local
+  clustering:
+    addressType: hostname
+    enabled: true
+    forceBoot: true
+    partitionHandling: autoheal
+    rebalance: true
+  command: []
+  common:
+    exampleValue: common-chart
+    global:
+      imagePullSecrets: []
+      imageRegistry: ""
+      nodeSelector: {}
+      sidecars: []
+      storageClass: ""
+      tolerations: []
+      volumes: []
+  commonAnnotations: {}
+  commonLabels: {}
+  communityPlugins: ""
+  configuration: |-
+    ## Username and password
+    ##
+    default_user = {{ .Values.auth.username }}
+    {{- if and (not .Values.auth.securePassword) .Values.auth.password }}
+    default_pass = {{ .Values.auth.password }}
+    {{- end }}
+    {{- if .Values.clustering.enabled }}
+    ## Clustering
+    ##
+    cluster_formation.peer_discovery_backend  = rabbit_peer_discovery_k8s
+    cluster_formation.k8s.host = kubernetes.default
+    cluster_formation.node_cleanup.interval = 10
+    cluster_formation.node_cleanup.only_log_warning = true
+    cluster_partition_handling = {{ .Values.clustering.partitionHandling }}
+    {{- end }}
+    {{ if and .Values.clustering.enabled .Values.loadDefinition.enabled }}
+    cluster_formation.target_cluster_size_hint = {{ .Values.replicaCount }}
+    {{ end }}
+    {{- if .Values.loadDefinition.enabled }}
+    load_definitions = {{ .Values.loadDefinition.file }}
+    {{- end }}
+    # queue master locator
+    queue_master_locator = min-masters
+    # enable loopback user
+    {{- if not (empty .Values.auth.username) }}
+    loopback_users.{{ .Values.auth.username }} = {{ .Values.auth.enableLoopbackUser }}
+    {{- else}}
+    loopback_users.guest = {{ .Values.auth.enableLoopbackUser }}
+    {{- end }}
+    {{ template "rabbitmq.extraConfiguration" . }}
+    {{- if .Values.auth.tls.enabled }}
+    ssl_options.verify = {{ .Values.auth.tls.sslOptionsVerify }}
+    listeners.ssl.default = {{ .Values.service.ports.amqpTls }}
+    ssl_options.fail_if_no_peer_cert = {{ .Values.auth.tls.failIfNoPeerCert }}
+    ssl_options.cacertfile = /opt/bitnami/rabbitmq/certs/ca_certificate.pem
+    ssl_options.certfile = /opt/bitnami/rabbitmq/certs/server_certificate.pem
+    ssl_options.keyfile = /opt/bitnami/rabbitmq/certs/server_key.pem
+    {{- if .Values.auth.tls.sslOptionsPassword.enabled }}
+    ssl_options.password = {{ template "rabbitmq.tlsSslOptionsPassword" . }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.ldap.enabled }}
+    auth_backends.1.authn = ldap
+    auth_backends.1.authz = {{ ternary "ldap" "internal" .Values.ldap.authorisationEnabled }}
+    auth_backends.2 = internal
+    {{- $host :=  list }}
+    {{- $port :=  ternary 636 389 .Values.ldap.tls.enabled }}
+    {{- if .Values.ldap.uri }}
+    {{- $hostPort := get (urlParse .Values.ldap.uri) "host" }}
+    {{- $host = list (index (splitList ":" $hostPort) 0) -}}
+    {{- if (contains ":" $hostPort) }}
+    {{- $port = index (splitList ":" $hostPort) 1 -}}
+    {{- end }}
+    {{- end }}
+    {{- range $index, $server := concat $host .Values.ldap.servers }}
+    auth_ldap.servers.{{ add $index 1 }} = {{ $server }}
+    {{- end }}
+    auth_ldap.port = {{ coalesce .Values.ldap.port $port }}
+    {{- if or .Values.ldap.user_dn_pattern .Values.ldap.userDnPattern }}
+    auth_ldap.user_dn_pattern = {{ coalesce .Values.ldap.user_dn_pattern .Values.ldap.userDnPattern }}
+    {{- end }}
+    {{- if .Values.ldap.basedn }}
+    auth_ldap.dn_lookup_base = {{ .Values.ldap.basedn }}
+    {{- end }}
+    {{- if .Values.ldap.uidField }}
+    auth_ldap.dn_lookup_attribute = {{ .Values.ldap.uidField }}
+    {{- end }}
+    {{- if .Values.ldap.binddn }}
+    auth_ldap.dn_lookup_bind.user_dn = {{ .Values.ldap.binddn }}
+    auth_ldap.dn_lookup_bind.password = {{ required "'ldap.bindpw' is required when 'ldap.binddn' is defined" .Values.ldap.bindpw }}
+    {{- end }}
+    {{- if .Values.ldap.tls.enabled }}
+    auth_ldap.use_ssl = {{ not .Values.ldap.tls.startTls }}
+    auth_ldap.use_starttls = {{ .Values.ldap.tls.startTls }}
+    {{- if .Values.ldap.tls.CAFilename }}
+    auth_ldap.ssl_options.cacertfile = {{ .Values.ldap.tls.certificatesMountPath }}/{{ .Values.ldap.tls.CAFilename }}
+    {{- end }}
+    {{- if .Values.ldap.tls.certFilename }}
+    auth_ldap.ssl_options.certfile = {{ .Values.ldap.tls.certificatesMountPath }}/{{ .Values.ldap.tls.certFilename }}
+    auth_ldap.ssl_options.keyfile = {{ .Values.ldap.tls.certificatesMountPath }}/{{ required "'ldap.tls.certKeyFilename' is required when 'ldap.tls.certFilename' is defined" .Values.ldap.tls.certKeyFilename }}
+    {{- end }}
+    {{- if .Values.ldap.tls.skipVerify }}
+    auth_ldap.ssl_options.verify = verify_none
+    auth_ldap.ssl_options.fail_if_no_peer_cert = false
+    {{- else if .Values.ldap.tls.verify }}
+    auth_ldap.ssl_options.verify = {{ .Values.ldap.tls.verify }}
+    {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- if .Values.metrics.enabled }}
+    ## Prometheus metrics
+    ##
+    prometheus.tcp.port = {{ .Values.containerPorts.metrics }}
+    {{- end }}
+    {{- if .Values.memoryHighWatermark.enabled }}
+    ## Memory Threshold
+    ##
+    total_memory_available_override_value = {{ include "rabbitmq.toBytes" .Values.resources.limits.memory }}
+    vm_memory_high_watermark.{{ .Values.memoryHighWatermark.type }} = {{ .Values.memoryHighWatermark.value }}
+    ## TCP Listen Options
+    ##
+    tcp_listen_options.backlog = {{ .Values.tcpListenOptions.backlog }}
+    tcp_listen_options.nodelay = {{ .Values.tcpListenOptions.nodelay }}
+    tcp_listen_options.linger.on      = {{ .Values.tcpListenOptions.linger.lingerOn }}
+    tcp_listen_options.linger.timeout = {{ .Values.tcpListenOptions.linger.timeout }}
+    tcp_listen_options.keepalive = {{ .Values.tcpListenOptions.keepalive }}
+    {{- end }}
+  configurationExistingSecret: ""
+  containerPorts:
+    amqp: 5672
+    amqpTls: 5671
+    dist: 25672
+    epmd: 4369
+    manager: 15672
+    metrics: 9419
+  containerSecurityContext:
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+  customStartupProbe: {}
+  diagnosticMode:
+    args:
+    - infinity
+    command:
+    - sleep
+    enabled: false
+  dnsConfig: {}
+  dnsPolicy: ""
+  enabled: true
+  extraConfiguration: |
+    load_definitions = /app/load_definition.json
+  extraConfigurationExistingSecret: ""
+  extraContainerPorts: []
+  extraDeploy: []
+  extraEnvVars: []
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+  extraPlugins: rabbitmq_auth_backend_ldap
+  extraSecrets:
+    load-definition:
+      load_definition.json: |
+        {
+          "users": [
+            {
+              "name": "{{ .Values.auth.username }}",
+              "password": "{{ .Values.auth.password }}",
+              "tags": "administrator"
+            }
+          ],
+          "permissions": [{
+            "user": "{{ .Values.auth.username }}",
+            "vhost": "/",
+            "configure": ".*",
+            "write": ".*",
+            "read": ".*"
+          }],
+          "policies": [
+            {
+              "name": "ha-all",
+              "pattern": ".*",
+              "vhost": "/",
+              "definition": {
+                "ha-mode": "all",
+                "ha-sync-mode": "automatic",
+                "ha-sync-batch-size": 1
+              }
+            }
+          ],
+          "vhosts": [
+            {
+              "name": "/"
+            }
+          ]
+        }
+  extraSecretsPrependReleaseName: false
+  extraVolumeMounts: []
+  extraVolumes: []
+  featureFlags: ""
+  fullnameOverride: ""
+  global:
+    imagePullSecrets: []
+    imageRegistry: ""
+    nodeSelector: {}
+    sidecars: []
+    storageClass: ""
+    tolerations: []
+    volumes: []
+  hostAliases: []
+  image:
+    debug: false
+    digest: ""
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    registry: docker.io
+    repository: bitnamilegacy/rabbitmq
+    tag: 3.11.18-debian-11-r0
+  ingress:
+    annotations: {}
+    enabled: false
+    existingSecret: ""
+    extraHosts: []
+    extraPaths: []
+    extraRules: []
+    extraTls: []
+    hostname: rabbitmq.local
+    ingressClassName: ""
+    path: /
+    pathType: ImplementationSpecific
+    secrets: []
+    selfSigned: false
+    tls: false
+  initContainers: []
+  initScripts: {}
+  initScriptsCM: ""
+  initScriptsSecret: ""
+  kubeVersion: ""
+  ldap:
+    authorisationEnabled: false
+    basedn: ""
+    binddn: ""
+    bindpw: ""
+    enabled: false
+    port: ""
+    servers: []
+    tls:
+      CAFilename: ""
+      certFilename: ""
+      certKeyFilename: ""
+      certificatesMountPath: /opt/bitnami/rabbitmq/ldap/certs
+      certificatesSecret: ""
+      enabled: false
+      skipVerify: false
+      startTls: false
+      verify: verify_peer
+    uidField: ""
+    uri: ""
+    userDnPattern: ""
+  lifecycleHooks: {}
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 120
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 20
+  loadDefinition:
+    enabled: true
+    existingSecret: load-definition
+    file: /app/load_definition.json
+  logs: '-'
+  maxAvailableSchedulers: ""
+  memoryHighWatermark:
+    enabled: false
+    type: relative
+    value: 0.4
+  metrics:
+    enabled: false
+    plugins: rabbitmq_prometheus
+    podAnnotations:
+      prometheus.io/port: '{{ .Values.service.ports.metrics }}'
+      prometheus.io/scrape: "true"
+    prometheusRule:
+      additionalLabels: {}
+      enabled: false
+      namespace: ""
+      rules: []
+    serviceMonitor:
+      annotations: {}
+      enabled: false
+      honorLabels: false
+      interval: 30s
+      jobLabel: ""
+      labels:
+        release: prometheus-operator
+      metricRelabelings: []
+      namespace: ""
+      params: {}
+      path: /metrics/per-object
+      podTargetLabels: {}
+      relabelings: []
+      scrapeTimeout: ""
+      selector: {}
+      targetLabels: {}
+  nameOverride: ""
+  namespaceOverride: ""
+  networkPolicy:
+    additionalRules: []
+    allowExternal: true
+    enabled: false
+  nodeAffinityPreset:
+    key: ""
+    type: ""
+    values: []
+  nodeSelector:
+    kubernetes.io/arch: amd64
+  onlineSchedulers: ""
+  pdb:
+    create: true
+    maxUnavailable: ""
+    minAvailable: 1
+  persistence:
+    accessModes:
+    - ReadWriteOnce
+    annotations: {}
+    enabled: true
+    existingClaim: ""
+    labels: {}
+    mountPath: /bitnami/rabbitmq/mnesia
+    selector: {}
+    size: 5Gi
+    storageClass: ""
+    subPath: ""
+  plugins: rabbitmq_management rabbitmq_peer_discovery_k8s
+  podAffinityPreset: ""
+  podAnnotations: {}
+  podAntiAffinityPreset: soft
+  podLabels: {}
+  podManagementPolicy: OrderedReady
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  priorityClassName: ""
+  rbac:
+    create: true
+  readinessProbe:
+    enabled: true
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 20
+  replicaCount: 1
+  resources:
+    limits: {}
+    requests: {}
+  schedulerName: ""
+  service:
+    annotations: {}
+    annotationsHeadless: {}
+    clusterIP: ""
+    distPortEnabled: true
+    epmdPortEnabled: true
+    externalIPs: []
+    externalTrafficPolicy: Cluster
+    extraPorts: []
+    headless:
+      annotations: {}
+    labels: {}
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    managerPortEnabled: true
+    nodePorts:
+      amqp: ""
+      amqpTls: ""
+      dist: ""
+      epmd: ""
+      manager: ""
+      metrics: ""
+    portEnabled: true
+    portNames:
+      amqp: amqp
+      amqpTls: amqp-tls
+      dist: dist
+      epmd: epmd
+      manager: http-stats
+      metrics: metrics
+    ports:
+      amqp: 5672
+      amqpTls: 5671
+      dist: 25672
+      epmd: 4369
+      manager: 15672
+      metrics: 9419
+    sessionAffinity: None
+    sessionAffinityConfig: {}
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    automountServiceAccountToken: true
+    create: true
+    name: ""
+  serviceBindings:
+    enabled: false
+  servicenameOverride: ""
+  sidecars: []
+  startupProbe:
+    enabled: false
+    failureThreshold: 3
+    initialDelaySeconds: 10
+    periodSeconds: 30
+    successThreshold: 1
+    timeoutSeconds: 20
+  statefulsetAnnotations: {}
+  statefulsetLabels: {}
+  tcpListenOptions:
+    backlog: 128
+    keepalive: false
+    linger:
+      lingerOn: true
+      timeout: 0
+    nodelay: true
+  terminationGracePeriodSeconds: 120
+  tolerations: []
+  topologySpreadConstraints: []
+  ulimitNofiles: "65536"
+  updateStrategy:
+    type: RollingUpdate
+  vhost: /
+  volumePermissions:
+    containerSecurityContext:
+      runAsUser: 0
+    enabled: false
+    image:
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      registry: docker.io
+      repository: bitnami/bitnami-shell
+      tag: 11-debian-11-r123
+    resources:
+      limits: {}
+      requests: {}
+redis:
+  auth:
+    enabled: false
+    sentinel: false
+  enabled: false
+  image:
+    repository: bitnamilegacy/redis
+  master:
+    nodeSelector: {}
+    persistence:
+      enabled: true
+  metrics:
+    image:
+      repository: bitnamilegacy/redis-exporter
+  nameOverride: sentry-redis
+  replica:
+    nodeSelector: {}
+    replicaCount: 1
+relay:
+  affinity: {}
+  autoscaling:
+    behavior: {}
+    enabled: false
+    maxReplicas: 5
+    minReplicas: 2
+    targetCPUUtilizationPercentage: 50
+  containerSecurityContext: {}
+  customResponseHeaders: []
+  enabled: true
+  env: []
+  init:
+    resources: {}
+  mode: managed
+  nodeSelector:
+    kubernetes.io/arch: amd64
+  probeFailureThreshold: 5
+  probeInitialDelaySeconds: 10
+  probePeriodSeconds: 10
+  probeSuccessThreshold: 1
+  probeTimeoutSeconds: 2
+  processing:
+    kafkaConfig:
+      messageMaxBytes: 50000000
+  replicas: 1
+  resources: {}
+  securityContext: {}
+  securityPolicy: ""
+  service:
+    annotations: {}
+  sidecars: []
+  topologySpreadConstraints: []
+  volumeMounts: []
+  volumes: []
+revisionHistoryLimit: 10
+sentry:
+  billingMetricsConsumer:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  cleanup:
+    activeDeadlineSeconds: 100
+    concurrency: 1
+    concurrencyPolicy: Allow
+    days: 90
+    enabled: true
+    failedJobsHistoryLimit: 5
+    logLevel: ""
+    schedule: 0 0 * * *
+    serviceAccount: {}
+    sidecars: []
+    successfulJobsHistoryLimit: 5
+    volumes: []
+  cron:
+    affinity: {}
+    enabled: true
+    env: []
+    nodeSelector:
+      kubernetes.io/arch: amd64
+    replicas: 1
+    resources: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  existingSecret: sentry-secrets
+  existingSecretKey: sentry-secret-key
+  features:
+    enableFeedback: false
+    enableProfiling: false
+    enableSessionReplay: true
+    enableSpan: false
+    enableUptime: false
+    orgSubdomains: false
+  genericMetricsConsumer:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  ingestConsumerAttachments:
+    affinity: {}
+    autoscaling:
+      behavior: {}
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector:
+      kubernetes.io/arch: amd64
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  ingestConsumerEvents:
+    affinity: {}
+    autoscaling:
+      behavior: {}
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector:
+      kubernetes.io/arch: amd64
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  ingestConsumerTransactions:
+    affinity: {}
+    autoscaling:
+      behavior: {}
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector:
+      kubernetes.io/arch: amd64
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  ingestFeedback:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    enabled: false
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  ingestMonitors:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  ingestOccurrences:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  ingestProfiles:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  ingestReplayRecordings:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  kafka:
+    compression:
+      type: null
+    message:
+      max:
+        bytes: 50000000
+    socket:
+      timeout:
+        ms: 1000
+  metricsConsumer:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 3
+      minReplicas: 1
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  monitorsClockTasks:
+    affinity: {}
+    autoscaling:
+      enabled: false
+    containerSecurityContext: {}
+    enabled: false
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  monitorsClockTick:
+    affinity: {}
+    autoscaling:
+      enabled: false
+    containerSecurityContext: {}
+    enabled: false
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  postProcessForwardErrors:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  postProcessForwardIssuePlatform:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  postProcessForwardTransactions:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  processSegments:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  processSpans:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  singleOrganization: true
+  subscriptionConsumerEvents:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  subscriptionConsumerGenericMetrics:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  subscriptionConsumerMetrics:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  subscriptionConsumerResultsEapItems:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  subscriptionConsumerTransactions:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  uptimeResults:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  web:
+    affinity: {}
+    autoscaling:
+      behavior: {}
+      enabled: false
+      maxReplicas: 5
+      minReplicas: 2
+      targetCPUUtilizationPercentage: 50
+    containerSecurityContext: {}
+    customResponseHeaders: []
+    enabled: true
+    env: []
+    existingSecretEnv: ""
+    nodeSelector:
+      kubernetes.io/arch: amd64
+    probeFailureThreshold: 5
+    probeInitialDelaySeconds: 10
+    probePeriodSeconds: 10
+    probeSuccessThreshold: 1
+    probeTimeoutSeconds: 2
+    replicas: 1
+    resources:
+      limits:
+        memory: 3Gi
+      requests:
+        cpu: 200m
+        memory: 1Gi
+    securityContext: {}
+    securityPolicy: ""
+    service:
+      annotations: {}
+    sidecars: []
+    strategyType: RollingUpdate
+    topologySpreadConstraints: []
+    volumeMounts: []
+    volumes: []
+  worker:
+    affinity: {}
+    autoscaling:
+      behavior: {}
+      enabled: false
+      maxReplicas: 5
+      minReplicas: 2
+      targetCPUUtilizationPercentage: 50
+    enabled: true
+    env: []
+    existingSecretEnv: ""
+    livenessProbe:
+      enabled: true
+      failureThreshold: 3
+      periodSeconds: 60
+      timeoutSeconds: 10
+    nodeSelector:
+      kubernetes.io/arch: amd64
+    replicas: 1
+    resources:
+      limits:
+        memory: 8Gi
+      requests:
+        cpu: 200m
+        memory: 4Gi
+    sidecars: []
+    topologySpreadConstraints: []
+    volumeMounts: []
+    volumes: []
+  workerEvents:
+    affinity: {}
+    autoscaling:
+      behavior: {}
+      enabled: false
+      maxReplicas: 5
+      minReplicas: 2
+      targetCPUUtilizationPercentage: 50
+    enabled: false
+    env: []
+    livenessProbe:
+      enabled: false
+      failureThreshold: 3
+      periodSeconds: 60
+      timeoutSeconds: 10
+    nodeSelector: {}
+    queues: events.save_event,post_process_errors
+    replicas: 1
+    resources: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumeMounts: []
+    volumes: []
+  workerTransactions:
+    affinity: {}
+    autoscaling:
+      behavior: {}
+      enabled: false
+      maxReplicas: 5
+      minReplicas: 2
+      targetCPUUtilizationPercentage: 50
+    enabled: false
+    env: []
+    livenessProbe:
+      enabled: false
+      failureThreshold: 3
+      periodSeconds: 60
+      timeoutSeconds: 10
+    nodeSelector: {}
+    queues: events.save_event_transaction,post_process_transactions
+    replicas: 1
+    resources: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumeMounts: []
+    volumes: []
+service:
+  annotations: {}
+  externalPort: 9000
+  name: sentry
+  type: ClusterIP
+serviceAccount:
+  annotations: {}
+  automountServiceAccountToken: true
+  enabled: false
+  name: sentry
+slack: {}
+snuba:
+  api:
+    affinity: {}
+    autoscaling:
+      behavior: {}
+      enabled: false
+      maxReplicas: 5
+      minReplicas: 2
+      targetCPUUtilizationPercentage: 50
+    command: []
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    liveness:
+      timeoutSeconds: 2
+    nodeSelector: {}
+    probeInitialDelaySeconds: 10
+    readiness:
+      timeoutSeconds: 2
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    service:
+      annotations: {}
+    sidecars: []
+    topologySpreadConstraints: []
+    volumes: []
+  cleanup:
+    activeDeadlineSeconds: 300
+    concurrencyPolicy: Forbid
+    enabled: false
+    failedJobsHistoryLimit: 5
+    image:
+      pullPolicy: IfNotPresent
+      repository: clickhouse/clickhouse-server
+      tag: latest
+    resources: {}
+    retentionDays: 30
+    schedule: 0 2 * * *
+    successfulJobsHistoryLimit: 5
+    tables:
+      autoDetect: false
+      excludePatterns:
+      - ^system\.
+      - ^information_schema\.
+      - ^INFORMATION_SCHEMA\.
+      - .*migrations.*
+      fallbackList:
+      - discover_local
+      - events_local
+      - events_ro_local
+      - outcomes_raw_local
+      - querylog_local
+      - sessions_raw_local
+      - transactions_local
+      - profiles_raw_local
+      - functions_raw_local
+      - replays_local
+      - generic_metric_sets_raw_local
+      - generic_metric_distributions_raw_local
+      - generic_metric_counters_raw_local
+      - spans_local
+      - group_attributes_raw_local
+      - generic_metric_gauges_raw_local
+      - profile_chunks_raw_local
+      includePatterns:
+      - .*_local$
+      - .*_raw_local$
+  clickhouse:
+    maxConnections: 100
+  consumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  dbInitJob:
+    env: []
+  eapItemsConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  genericMetricsCountersConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  genericMetricsDistributionConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  genericMetricsGaugesConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  genericMetricsSetsConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  groupAttributesConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  issueOccurrenceConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  metricsConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  migrateJob:
+    env: []
+  outcomesBillingConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchSize: "3"
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  outcomesConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchSize: "3"
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  profilingChunksConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+  profilingFunctionsConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+  profilingProfilesConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    sidecars: []
+    topologySpreadConstraints: []
+  replacer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  replaysConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  rustConsumer: false
+  spansConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  subscriptionConsumerEapItems:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  subscriptionConsumerEvents:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  subscriptionConsumerGenericMetricsCounters:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  subscriptionConsumerGenericMetricsDistributions:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  subscriptionConsumerGenericMetricsGauges:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  subscriptionConsumerGenericMetricsSets:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  subscriptionConsumerMetrics:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  subscriptionConsumerTransactions:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  transactionsConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+  uptimeResultsConsumer:
+    affinity: {}
+    containerSecurityContext: {}
+    enabled: true
+    env: []
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 5
+      periodSeconds: 320
+    maxBatchTimeMs: 750
+    nodeSelector: {}
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+sourcemaps:
+  enabled: false
+symbolicator:
+  api:
+    affinity: {}
+    autoscaling:
+      enabled: false
+      maxReplicas: 5
+      minReplicas: 2
+      targetCPUUtilizationPercentage: 50
+    cleaner:
+      enabled: true
+      sleepInterval: 3600
+    config: |-
+      # See: https://getsentry.github.io/symbolicator/#configuration
+      cache_dir: "/data"
+      bind: "0.0.0.0:3021"
+      logging:
+        level: "warn"
+      metrics:
+        statsd: null
+        prefix: "symbolicator"
+      sentry_dsn: null
+      connect_to_reserved_ips: true
+      # caches:
+      #   downloaded:
+      #     max_unused_for: 1w
+      #     retry_misses_after: 5m
+      #     retry_malformed_after: 5m
+      #   derived:
+      #     max_unused_for: 1w
+      #     retry_misses_after: 5m
+      #     retry_malformed_after: 5m
+      #   diagnostics:
+      #     retention: 1w
+    containerSecurityContext: {}
+    env: []
+    nodeSelector: {}
+    persistence:
+      accessModes:
+      - ReadWriteOnce
+      enabled: true
+      lookupVolumeName: true
+      size: 10Gi
+    probeInitialDelaySeconds: 10
+    replicas: 1
+    resources: {}
+    securityContext: {}
+    topologySpreadConstraints: []
+    usedeployment: true
+  enabled: false
+system:
+  adminEmail: admin@ediai.com
+  public: false
+  url: https://sentry.ediai.com
+uptimeChecker:
+  affinity: {}
+  containerSecurityContext: {}
+  env: []
+  nodeSelector: {}
+  replicas: 1
+  resources: {}
+  securityContext: {}
+  service:
+    annotations: {}
+  sidecars: []
+  volumeMounts: []
+  volumes: []
+user:
+  create: true
+  email: admin@sentry.local
+  existingSecret: sentry-secrets
+  existingSecretKey: admin-password
+  password: aaaa
+vroom:
+  affinity: {}
+  autoscaling:
+    behavior: {}
+    enabled: false
+    maxReplicas: 5
+    minReplicas: 2
+    targetCPUUtilizationPercentage: 50
+  containerSecurityContext: {}
+  env: []
+  nodeSelector:
+    kubernetes.io/arch: amd64
+  persistence:
+    accessModes:
+    - ReadWriteOnce
+    enabled: true
+    lookupVolumeName: true
+    size: 10Gi
+  probeFailureThreshold: 5
+  probeInitialDelaySeconds: 10
+  probePeriodSeconds: 10
+  probeSuccessThreshold: 1
+  probeTimeoutSeconds: 2
+  replicas: 1
+  resources: {}
+  securityContext: {}
+  service:
+    annotations: {}
+  sidecars: []
+  volumeMounts: []
+  volumes: []
+zookeeper:
+  affinity: {}
+  args: []
+  auth:
+    client:
+      clientPassword: ""
+      clientUser: ""
+      enabled: false
+      existingSecret: ""
+      serverPasswords: ""
+      serverUsers: ""
+    quorum:
+      enabled: false
+      existingSecret: ""
+      learnerPassword: ""
+      learnerUser: ""
+      serverPasswords: ""
+      serverUsers: ""
+  autopurge:
+    purgeInterval: 0
+    snapRetainCount: 3
+  clusterDomain: cluster.local
+  command:
+  - /scripts/setup.sh
+  common:
+    exampleValue: common-chart
+    global:
+      imagePullSecrets: []
+      imageRegistry: ""
+      nodeSelector: {}
+      sidecars: []
+      storageClass: ""
+      tolerations: []
+      volumes: []
+  commonAnnotations: {}
+  commonLabels: {}
+  configuration: ""
+  containerPorts:
+    client: 2181
+    election: 3888
+    follower: 2888
+    tls: 3181
+  containerSecurityContext:
+    allowPrivilegeEscalation: false
+    enabled: true
+    runAsNonRoot: true
+    runAsUser: 1001
+  customLivenessProbe: {}
+  customReadinessProbe: {}
+  customStartupProbe: {}
+  dataLogDir: ""
+  diagnosticMode:
+    args:
+    - infinity
+    command:
+    - sleep
+    enabled: false
+  enabled: true
+  existingConfigmap: ""
+  extraDeploy: []
+  extraEnvVars: []
+  extraEnvVarsCM: ""
+  extraEnvVarsSecret: ""
+  extraVolumeMounts: []
+  extraVolumes: []
+  fourlwCommandsWhitelist: srvr, mntr, ruok
+  fullnameOverride: ""
+  global:
+    imagePullSecrets: []
+    imageRegistry: ""
+    nodeSelector: {}
+    sidecars: []
+    storageClass: ""
+    tolerations: []
+    volumes: []
+  heapSize: 1024
+  hostAliases: []
+  image:
+    debug: false
+    digest: ""
+    pullPolicy: IfNotPresent
+    pullSecrets: []
+    registry: docker.io
+    repository: bitnamilegacy/zookeeper
+    tag: 3.8.2-debian-11-r27
+  initContainers: []
+  initLimit: 10
+  jvmFlags: ""
+  kubeVersion: ""
+  lifecycleHooks: {}
+  listenOnAllIPs: false
+  livenessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    probeCommandTimeout: 2
+    successThreshold: 1
+    timeoutSeconds: 5
+  logLevel: ERROR
+  maxClientCnxns: 60
+  maxSessionTimeout: 40000
+  metrics:
+    containerPort: 9141
+    enabled: false
+    prometheusRule:
+      additionalLabels: {}
+      enabled: false
+      namespace: ""
+      rules: []
+    service:
+      annotations:
+        prometheus.io/path: /metrics
+        prometheus.io/port: '{{ .Values.metrics.service.port }}'
+        prometheus.io/scrape: "true"
+      port: 9141
+      type: ClusterIP
+    serviceMonitor:
+      additionalLabels: {}
+      enabled: false
+      honorLabels: false
+      interval: ""
+      jobLabel: ""
+      metricRelabelings: []
+      namespace: ""
+      relabelings: []
+      scrapeTimeout: ""
+      selector: {}
+  minServerId: 1
+  nameOverride: zookeeper-clickhouse
+  namespaceOverride: ""
+  networkPolicy:
+    allowExternal: true
+    enabled: false
+  nodeAffinityPreset:
+    key: ""
+    type: ""
+    values: []
+  nodeSelector: {}
+  pdb:
+    create: false
+    maxUnavailable: 1
+    minAvailable: ""
+  persistence:
+    accessModes:
+    - ReadWriteOnce
+    annotations: {}
+    dataLogDir:
+      existingClaim: ""
+      selector: {}
+      size: 8Gi
+    enabled: true
+    existingClaim: ""
+    labels: {}
+    selector: {}
+    size: 8Gi
+    storageClass: ""
+  podAffinityPreset: ""
+  podAnnotations: {}
+  podAntiAffinityPreset: soft
+  podLabels: {}
+  podManagementPolicy: Parallel
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  preAllocSize: 65536
+  priorityClassName: ""
+  readinessProbe:
+    enabled: true
+    failureThreshold: 6
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    probeCommandTimeout: 2
+    successThreshold: 1
+    timeoutSeconds: 5
+  replicaCount: 1
+  resources:
+    limits: {}
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  schedulerName: ""
+  service:
+    annotations: {}
+    clusterIP: ""
+    disableBaseClientPort: false
+    externalTrafficPolicy: Cluster
+    extraPorts: []
+    headless:
+      annotations: {}
+      publishNotReadyAddresses: true
+      servicenameOverride: ""
+    loadBalancerIP: ""
+    loadBalancerSourceRanges: []
+    nodePorts:
+      client: ""
+      tls: ""
+    ports:
+      client: 2181
+      election: 3888
+      follower: 2888
+      tls: 3181
+    sessionAffinity: None
+    sessionAffinityConfig: {}
+    type: ClusterIP
+  serviceAccount:
+    annotations: {}
+    automountServiceAccountToken: true
+    create: false
+    name: ""
+  sidecars: []
+  snapCount: 100000
+  startupProbe:
+    enabled: false
+    failureThreshold: 15
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    successThreshold: 1
+    timeoutSeconds: 1
+  syncLimit: 5
+  tickTime: 2000
+  tls:
+    client:
+      auth: none
+      autoGenerated: false
+      enabled: false
+      existingSecret: ""
+      existingSecretKeystoreKey: ""
+      existingSecretTruststoreKey: ""
+      keystorePassword: ""
+      keystorePath: /opt/bitnami/zookeeper/config/certs/client/zookeeper.keystore.jks
+      passwordsSecretKeystoreKey: ""
+      passwordsSecretName: ""
+      passwordsSecretTruststoreKey: ""
+      truststorePassword: ""
+      truststorePath: /opt/bitnami/zookeeper/config/certs/client/zookeeper.truststore.jks
+    quorum:
+      auth: none
+      autoGenerated: false
+      enabled: false
+      existingSecret: ""
+      existingSecretKeystoreKey: ""
+      existingSecretTruststoreKey: ""
+      keystorePassword: ""
+      keystorePath: /opt/bitnami/zookeeper/config/certs/quorum/zookeeper.keystore.jks
+      passwordsSecretKeystoreKey: ""
+      passwordsSecretName: ""
+      passwordsSecretTruststoreKey: ""
+      truststorePassword: ""
+      truststorePath: /opt/bitnami/zookeeper/config/certs/quorum/zookeeper.truststore.jks
+    resources:
+      limits: {}
+      requests: {}
+  tolerations: []
+  topologySpreadConstraints: []
+  updateStrategy:
+    rollingUpdate: {}
+    type: RollingUpdate
+  volumePermissions:
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 0
+    enabled: false
+    image:
+      digest: ""
+      pullPolicy: IfNotPresent
+      pullSecrets: []
+      registry: docker.io
+      repository: bitnami/os-shell
+      tag: 11-debian-11-r40
+    resources:
+      limits: {}
+      requests: {}

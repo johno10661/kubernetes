@@ -1,0 +1,136 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"runner-cache-pvc","namespace":"arc-runners"},"spec":{"accessModes":["ReadWriteMany"],"resources":{"requests":{"storage":"2Ti"}},"storageClassName":"runner-cache"}}
+      pv.kubernetes.io/bind-completed: "yes"
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-12-13T04:10:27Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    name: runner-cache-pvc
+    namespace: arc-runners
+    resourceVersion: "9969262"
+    uid: f7307795-6463-462d-babe-0c79e7beebc2
+  spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+      requests:
+        storage: 2Ti
+    storageClassName: runner-cache
+    volumeMode: Filesystem
+    volumeName: runner-cache-pv
+  status:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 2Ti
+    phase: Bound
+- apiVersion: batch/v1
+  kind: CronJob
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"batch/v1","kind":"CronJob","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"database-cleanup","app.kubernetes.io/name":"ci-maintenance"},"name":"ci-db-cleanup","namespace":"arc-runners"},"spec":{"concurrencyPolicy":"Forbid","failedJobsHistoryLimit":1,"jobTemplate":{"spec":{"activeDeadlineSeconds":300,"template":{"metadata":{"labels":{"app.kubernetes.io/component":"database-cleanup","app.kubernetes.io/name":"ci-maintenance"}},"spec":{"containers":[{"command":["/bin/sh","-c","set -e\necho \"=== CI Database Cleanup ===\"\necho \"Time: $(date -Iseconds)\"\n\n# Count databases before cleanup\nBEFORE=$(psql \"$DATABASE_URL\" -t -c \"SELECT COUNT(*) FROM pg_database WHERE datname LIKE 'ediai_ci_gw%'\")\necho \"Found $BEFORE zombie database(s)\"\n\nif [ \"$BEFORE\" -eq 0 ]; then\n  echo \"Nothing to clean up\"\n  exit 0\nfi\n\n# Drop all ediai_ci_gw* databases that have no active connections\npsql \"$DATABASE_URL\" -t -c \"\n  SELECT datname FROM pg_database\n  WHERE datname LIKE 'ediai_ci_gw%'\n  AND datname NOT IN (\n    SELECT DISTINCT datname FROM pg_stat_activity\n    WHERE datname LIKE 'ediai_ci_gw%'\n  )\n\" | while read -r dbname; do\n  if [ -n \"$dbname\" ]; then\n    dbname=$(echo \"$dbname\" | xargs)  # trim whitespace\n    echo \"Dropping: $dbname\"\n    psql \"$DATABASE_URL\" -c \"DROP DATABASE IF EXISTS \\\"$dbname\\\"\" || echo \"Failed to drop $dbname\"\n  fi\ndone\n\n# Count databases after cleanup\nAFTER=$(psql \"$DATABASE_URL\" -t -c \"SELECT COUNT(*) FROM pg_database WHERE datname LIKE 'ediai_ci_gw%'\")\nDROPPED=$((BEFORE - AFTER))\necho \"=== Cleanup complete: dropped $DROPPED database(s), $AFTER remaining ===\"\n"],"env":[{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"key":"DATABASE_URL","name":"ci-postgres-credentials"}}},{"name":"PGCONNECT_TIMEOUT","value":"10"}],"image":"postgres:15-alpine","name":"cleanup","resources":{"limits":{"cpu":"100m","memory":"64Mi"},"requests":{"cpu":"50m","memory":"32Mi"}}}],"nodeSelector":{"kubernetes.io/hostname":"www02"},"restartPolicy":"OnFailure"}}}},"schedule":"0 */6 * * *","successfulJobsHistoryLimit":0}}
+    creationTimestamp: "2025-12-14T20:02:13Z"
+    generation: 2
+    labels:
+      app.kubernetes.io/component: database-cleanup
+      app.kubernetes.io/name: ci-maintenance
+    name: ci-db-cleanup
+    namespace: arc-runners
+    resourceVersion: "14260208"
+    uid: 0798b488-a64b-4c8c-8de8-2d357ac941a7
+  spec:
+    concurrencyPolicy: Forbid
+    failedJobsHistoryLimit: 1
+    jobTemplate:
+      metadata:
+        creationTimestamp: null
+      spec:
+        activeDeadlineSeconds: 300
+        template:
+          metadata:
+            creationTimestamp: null
+            labels:
+              app.kubernetes.io/component: database-cleanup
+              app.kubernetes.io/name: ci-maintenance
+          spec:
+            containers:
+            - command:
+              - /bin/sh
+              - -c
+              - |
+                set -e
+                echo "=== CI Database Cleanup ==="
+                echo "Time: $(date -Iseconds)"
+
+                # Count databases before cleanup
+                BEFORE=$(psql "$DATABASE_URL" -t -c "SELECT COUNT(*) FROM pg_database WHERE datname LIKE 'ediai_ci_gw%'")
+                echo "Found $BEFORE zombie database(s)"
+
+                if [ "$BEFORE" -eq 0 ]; then
+                  echo "Nothing to clean up"
+                  exit 0
+                fi
+
+                # Drop all ediai_ci_gw* databases that have no active connections
+                psql "$DATABASE_URL" -t -c "
+                  SELECT datname FROM pg_database
+                  WHERE datname LIKE 'ediai_ci_gw%'
+                  AND datname NOT IN (
+                    SELECT DISTINCT datname FROM pg_stat_activity
+                    WHERE datname LIKE 'ediai_ci_gw%'
+                  )
+                " | while read -r dbname; do
+                  if [ -n "$dbname" ]; then
+                    dbname=$(echo "$dbname" | xargs)  # trim whitespace
+                    echo "Dropping: $dbname"
+                    psql "$DATABASE_URL" -c "DROP DATABASE IF EXISTS \"$dbname\"" || echo "Failed to drop $dbname"
+                  fi
+                done
+
+                # Count databases after cleanup
+                AFTER=$(psql "$DATABASE_URL" -t -c "SELECT COUNT(*) FROM pg_database WHERE datname LIKE 'ediai_ci_gw%'")
+                DROPPED=$((BEFORE - AFTER))
+                echo "=== Cleanup complete: dropped $DROPPED database(s), $AFTER remaining ==="
+              env:
+              - name: DATABASE_URL
+                valueFrom:
+                  secretKeyRef:
+                    key: DATABASE_URL
+                    name: ci-postgres-credentials
+              - name: PGCONNECT_TIMEOUT
+                value: "10"
+              image: postgres:15-alpine
+              imagePullPolicy: IfNotPresent
+              name: cleanup
+              resources:
+                limits:
+                  cpu: 100m
+                  memory: 64Mi
+                requests:
+                  cpu: 50m
+                  memory: 32Mi
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+            dnsPolicy: ClusterFirst
+            nodeSelector:
+              kubernetes.io/hostname: www02
+            restartPolicy: OnFailure
+            schedulerName: default-scheduler
+            securityContext: {}
+            terminationGracePeriodSeconds: 30
+    schedule: 0 */6 * * *
+    successfulJobsHistoryLimit: 0
+    suspend: false
+  status:
+    lastScheduleTime: "2025-12-26T11:00:00Z"
+    lastSuccessfulTime: "2025-12-26T11:00:05Z"
+kind: List
+metadata:
+  resourceVersion: ""

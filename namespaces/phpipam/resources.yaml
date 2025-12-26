@@ -1,0 +1,228 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "3"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"web","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"phpipam","app.kubernetes.io/part-of":"phpipam"},"name":"phpipam","namespace":"phpipam"},"spec":{"replicas":2,"selector":{"matchLabels":{"app.kubernetes.io/component":"web","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"phpipam","app.kubernetes.io/part-of":"phpipam"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app.kubernetes.io/component":"web","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"phpipam","app.kubernetes.io/part-of":"phpipam"}},"spec":{"containers":[{"envFrom":[{"configMapRef":{"name":"phpipam-config"}},{"secretRef":{"name":"phpipam-db-credentials"}}],"image":"ghcr.io/johno10661/phpipam-www:latest","imagePullPolicy":"Always","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":"http"},"initialDelaySeconds":30,"periodSeconds":10,"timeoutSeconds":5},"name":"phpipam","ports":[{"containerPort":80,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":"http"},"initialDelaySeconds":10,"periodSeconds":5,"timeoutSeconds":3},"resources":{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}},"volumeMounts":[{"mountPath":"/phpipam/css/images/logo","name":"phpipam-logo","readOnly":true}]},{"envFrom":[{"configMapRef":{"name":"phpipam-config"}},{"secretRef":{"name":"phpipam-db-credentials"}}],"image":"ghcr.io/johno10661/phpipam-cron:latest","imagePullPolicy":"Always","name":"phpipam-cron","resources":{"limits":{"cpu":"200m","memory":"128Mi"},"requests":{"cpu":"50m","memory":"64Mi"}}}],"imagePullSecrets":[{"name":"ghcr-credentials"}],"securityContext":{"fsGroup":33},"volumes":[{"emptyDir":{},"name":"phpipam-logo"}]}}}}
+    creationTimestamp: "2025-12-04T22:36:31Z"
+    generation: 5
+    labels:
+      app.kubernetes.io/component: web
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: phpipam
+      app.kubernetes.io/part-of: phpipam
+    name: phpipam
+    namespace: phpipam
+    resourceVersion: "14311357"
+    uid: 43d43ada-f013-4708-8d19-2628ea97633b
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: web
+        app.kubernetes.io/managed-by: kustomize
+        app.kubernetes.io/name: phpipam
+        app.kubernetes.io/part-of: phpipam
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-04T19:14:48-05:00"
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: web
+          app.kubernetes.io/managed-by: kustomize
+          app.kubernetes.io/name: phpipam
+          app.kubernetes.io/part-of: phpipam
+      spec:
+        containers:
+        - envFrom:
+          - configMapRef:
+              name: phpipam-config
+          - secretRef:
+              name: phpipam-db-credentials
+          image: ghcr.io/johno10661/phpipam-www:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: phpipam
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /phpipam/css/images/logo
+            name: phpipam-logo
+            readOnly: true
+        - envFrom:
+          - configMapRef:
+              name: phpipam-config
+          - secretRef:
+              name: phpipam-db-credentials
+          image: ghcr.io/johno10661/phpipam-cron:latest
+          imagePullPolicy: Always
+          name: phpipam-cron
+          resources:
+            limits:
+              cpu: 200m
+              memory: 128Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-credentials
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 33
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: phpipam-logo
+  status:
+    availableReplicas: 2
+    conditions:
+    - lastTransitionTime: "2025-12-04T22:36:31Z"
+      lastUpdateTime: "2025-12-05T00:15:02Z"
+      message: ReplicaSet "phpipam-667d5964fd" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2025-12-26T15:00:10Z"
+      lastUpdateTime: "2025-12-26T15:00:10Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 5
+    readyReplicas: 2
+    replicas: 2
+    updatedReplicas: 2
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"web","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"phpipam","app.kubernetes.io/part-of":"phpipam"},"name":"phpipam","namespace":"phpipam"},"spec":{"ports":[{"name":"http","port":80,"protocol":"TCP","targetPort":"http"}],"selector":{"app.kubernetes.io/component":"web","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"phpipam","app.kubernetes.io/part-of":"phpipam"},"type":"ClusterIP"}}
+    creationTimestamp: "2025-12-04T22:36:30Z"
+    labels:
+      app.kubernetes.io/component: web
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: phpipam
+      app.kubernetes.io/part-of: phpipam
+    name: phpipam
+    namespace: phpipam
+    resourceVersion: "7436892"
+    uid: 6c2838b0-b573-42a5-b81e-cdb6444f0a22
+  spec:
+    clusterIP: 10.43.90.92
+    clusterIPs:
+    - 10.43.90.92
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+    selector:
+      app.kubernetes.io/component: web
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: phpipam
+      app.kubernetes.io/part-of: phpipam
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIBdzCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
+      dmVyLWNhQDE3NjIzMTk3MDUwHhcNMjUxMTA1MDUxNTA1WhcNMzUxMTAzMDUxNTA1
+      WjAjMSEwHwYDVQQDDBhrM3Mtc2VydmVyLWNhQDE3NjIzMTk3MDUwWTATBgcqhkjO
+      PQIBBggqhkjOPQMBBwNCAAR7AJxksdMJZVIqsOrjf54yL6K7iY/JWSs9ZkQg0AUk
+      aO30K0wLuHk4cK2eTPp/VQfmoT2dKjclRpDQ0VSUKWi2o0IwQDAOBgNVHQ8BAf8E
+      BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUf6j/2FFh3fnWFj0FbbrB
+      8UWVKzIwCgYIKoZIzj0EAwIDSAAwRQIhAJMPsstsw64+5mY7QIjcRxICHdHjksj3
+      FVMXbjV+OBPtAiBzvKXcXD6YxhyxvDyHZ/kYyX95MPXYfd/wutZ6iyAOrQ==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-12-04T22:36:30Z"
+    name: kube-root-ca.crt
+    namespace: phpipam
+    resourceVersion: "7436886"
+    uid: 665bfc91-dfbc-4d78-90f7-e3da1f41a54c
+- apiVersion: v1
+  data:
+    IPAM_DATABASE_HOST: 192.168.100.69
+    IPAM_DATABASE_NAME: phpipam
+    IPAM_DATABASE_PORT: "3306"
+    IPAM_DISABLE_INSTALLER: "1"
+    IPAM_TRUST_X_FORWARDED: "true"
+    TZ: America/New_York
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"IPAM_DATABASE_HOST":"192.168.100.69","IPAM_DATABASE_NAME":"phpipam","IPAM_DATABASE_PORT":"3306","IPAM_DISABLE_INSTALLER":"1","IPAM_TRUST_X_FORWARDED":"true","TZ":"America/New_York"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"config","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"phpipam","app.kubernetes.io/part-of":"phpipam"},"name":"phpipam-config","namespace":"phpipam"}}
+    creationTimestamp: "2025-12-04T22:36:30Z"
+    labels:
+      app.kubernetes.io/component: config
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: phpipam
+      app.kubernetes.io/part-of: phpipam
+    name: phpipam-config
+    namespace: phpipam
+    resourceVersion: "7457293"
+    uid: 69c185ff-13af-462b-b8af-45c1c7021c39
+kind: List
+metadata:
+  resourceVersion: ""

@@ -1,0 +1,1656 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "197"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"arq-worker","environment":"staging","priority":"high","tier":"worker"},"name":"arq-worker-high","namespace":"ediai-staging"},"spec":{"progressDeadlineSeconds":120,"replicas":3,"selector":{"matchLabels":{"app":"arq-worker","environment":"staging","priority":"high"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":1},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"arq-worker","environment":"staging","priority":"high","tier":"worker"}},"spec":{"containers":[{"command":["arq","app.jobs.worker.WorkerSettings"],"env":[{"name":"ENVIRONMENT","valueFrom":{"configMapKeyRef":{"key":"ENVIRONMENT","name":"app-config"}}},{"name":"REDIS_HOST","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_HOST","name":"app-config"}}},{"name":"REDIS_PORT","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_PORT","name":"app-config"}}},{"name":"REDIS_DB","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_DB","name":"app-config"}}},{"name":"ARQ_MAX_JOBS","valueFrom":{"configMapKeyRef":{"key":"ARQ_MAX_JOBS","name":"arq-worker-high-config"}}},{"name":"ARQ_JOB_TIMEOUT","valueFrom":{"configMapKeyRef":{"key":"ARQ_JOB_TIMEOUT","name":"arq-worker-high-config"}}},{"name":"ARQ_QUEUE_NAME","valueFrom":{"configMapKeyRef":{"key":"ARQ_QUEUE_NAME","name":"arq-worker-high-config"}}},{"name":"LOG_LEVEL","valueFrom":{"configMapKeyRef":{"key":"LOG_LEVEL","name":"app-config"}}},{"name":"SENTRY_TRACES_SAMPLE_RATE","valueFrom":{"configMapKeyRef":{"key":"SENTRY_TRACES_SAMPLE_RATE","name":"app-config"}}},{"name":"SENTRY_PROFILES_SAMPLE_RATE","valueFrom":{"configMapKeyRef":{"key":"SENTRY_PROFILES_SAMPLE_RATE","name":"app-config"}}},{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"key":"DATABASE_URL","name":"app-secrets"}}},{"name":"SENTRY_DSN","valueFrom":{"secretKeyRef":{"key":"SENTRY_DSN","name":"app-secrets"}}},{"name":"JWT_SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"JWT_SECRET_KEY","name":"app-secrets"}}},{"name":"SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"SECRET_KEY","name":"app-secrets"}}},{"name":"REDIS_PASSWORD","valueFrom":{"secretKeyRef":{"key":"REDIS_PASSWORD","name":"app-secrets"}}},{"name":"MAILGUN_API_KEY","valueFrom":{"secretKeyRef":{"key":"MAILGUN_API_KEY","name":"app-secrets"}}},{"name":"MAILGUN_DOMAIN","valueFrom":{"secretKeyRef":{"key":"MAILGUN_DOMAIN","name":"app-secrets"}}},{"name":"ANTHROPIC_API_KEY","valueFrom":{"secretKeyRef":{"key":"ANTHROPIC_API_KEY","name":"app-secrets"}}},{"name":"ANTHROPIC_MODEL","valueFrom":{"configMapKeyRef":{"key":"ANTHROPIC_MODEL","name":"app-config"}}},{"name":"ANTHROPIC_GENERATOR_MODEL","valueFrom":{"configMapKeyRef":{"key":"ANTHROPIC_GENERATOR_MODEL","name":"app-config"}}}],"image":"ghcr.io/johno10661/ediai-backend:staging","imagePullPolicy":"Always","livenessProbe":{"exec":{"command":["arq","--check","app.jobs.worker.WorkerSettings"]},"failureThreshold":3,"initialDelaySeconds":30,"periodSeconds":60,"timeoutSeconds":15},"name":"arq-worker-high","readinessProbe":{"exec":{"command":["arq","--check","app.jobs.worker.WorkerSettings"]},"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":30,"timeoutSeconds":15},"resources":{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"runAsUser":1000}}],"imagePullSecrets":[{"name":"ghcr-secret"}],"securityContext":{"fsGroup":1000,"runAsNonRoot":true,"runAsUser":1000},"terminationGracePeriodSeconds":30}}}}
+    creationTimestamp: "2025-11-20T13:27:53Z"
+    generation: 197
+    labels:
+      app: arq-worker
+      environment: staging
+      priority: high
+      tier: worker
+    name: arq-worker-high
+    namespace: ediai-staging
+    resourceVersion: "14235726"
+    uid: b22955c9-bc98-418a-8dbd-eb189508c1b1
+  spec:
+    progressDeadlineSeconds: 120
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: arq-worker
+        environment: staging
+        priority: high
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-21T21:05:21-05:00"
+        creationTimestamp: null
+        labels:
+          app: arq-worker
+          environment: staging
+          priority: high
+          tier: worker
+      spec:
+        containers:
+        - command:
+          - arq
+          - app.jobs.worker.WorkerSettings
+          env:
+          - name: ENVIRONMENT
+            valueFrom:
+              configMapKeyRef:
+                key: ENVIRONMENT
+                name: app-config
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_HOST
+                name: app-config
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_PORT
+                name: app-config
+          - name: REDIS_DB
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_DB
+                name: app-config
+          - name: ARQ_MAX_JOBS
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_MAX_JOBS
+                name: arq-worker-high-config
+          - name: ARQ_JOB_TIMEOUT
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_JOB_TIMEOUT
+                name: arq-worker-high-config
+          - name: ARQ_QUEUE_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_QUEUE_NAME
+                name: arq-worker-high-config
+          - name: LOG_LEVEL
+            valueFrom:
+              configMapKeyRef:
+                key: LOG_LEVEL
+                name: app-config
+          - name: SENTRY_TRACES_SAMPLE_RATE
+            valueFrom:
+              configMapKeyRef:
+                key: SENTRY_TRACES_SAMPLE_RATE
+                name: app-config
+          - name: SENTRY_PROFILES_SAMPLE_RATE
+            valueFrom:
+              configMapKeyRef:
+                key: SENTRY_PROFILES_SAMPLE_RATE
+                name: app-config
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: DATABASE_URL
+                name: app-secrets
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                key: SENTRY_DSN
+                name: app-secrets
+          - name: JWT_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: JWT_SECRET_KEY
+                name: app-secrets
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: SECRET_KEY
+                name: app-secrets
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: REDIS_PASSWORD
+                name: app-secrets
+          - name: MAILGUN_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_API_KEY
+                name: app-secrets
+          - name: MAILGUN_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_DOMAIN
+                name: app-secrets
+          - name: ANTHROPIC_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: ANTHROPIC_API_KEY
+                name: app-secrets
+          - name: ANTHROPIC_MODEL
+            valueFrom:
+              configMapKeyRef:
+                key: ANTHROPIC_MODEL
+                name: app-config
+          - name: ANTHROPIC_GENERATOR_MODEL
+            valueFrom:
+              configMapKeyRef:
+                key: ANTHROPIC_GENERATOR_MODEL
+                name: app-config
+          image: ghcr.io/johno10661/ediai-backend:staging-6da3180a60fea306d67103cfa92bbf9c4e669488
+          imagePullPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+              - arq
+              - --check
+              - app.jobs.worker.WorkerSettings
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 15
+          name: arq-worker-high
+          readinessProbe:
+            exec:
+              command:
+              - arq
+              - --check
+              - app.jobs.worker.WorkerSettings
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 15
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1000
+          runAsNonRoot: true
+          runAsUser: 1000
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-12-21T07:46:07Z"
+      lastUpdateTime: "2025-12-21T07:46:07Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-10T18:13:38Z"
+      lastUpdateTime: "2025-12-26T09:05:20Z"
+      message: ReplicaSet "arq-worker-high-b5dc958dc" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 197
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "197"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"arq-worker","environment":"staging","priority":"low","tier":"worker"},"name":"arq-worker-low","namespace":"ediai-staging"},"spec":{"progressDeadlineSeconds":120,"replicas":3,"selector":{"matchLabels":{"app":"arq-worker","environment":"staging","priority":"low"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":1},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"arq-worker","environment":"staging","priority":"low","tier":"worker"}},"spec":{"containers":[{"command":["arq","app.jobs.worker.WorkerSettings"],"env":[{"name":"ENVIRONMENT","valueFrom":{"configMapKeyRef":{"key":"ENVIRONMENT","name":"app-config"}}},{"name":"REDIS_HOST","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_HOST","name":"app-config"}}},{"name":"REDIS_PORT","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_PORT","name":"app-config"}}},{"name":"REDIS_DB","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_DB","name":"app-config"}}},{"name":"ARQ_MAX_JOBS","valueFrom":{"configMapKeyRef":{"key":"ARQ_MAX_JOBS","name":"arq-worker-low-config"}}},{"name":"ARQ_JOB_TIMEOUT","valueFrom":{"configMapKeyRef":{"key":"ARQ_JOB_TIMEOUT","name":"arq-worker-low-config"}}},{"name":"ARQ_QUEUE_NAME","valueFrom":{"configMapKeyRef":{"key":"ARQ_QUEUE_NAME","name":"arq-worker-low-config"}}},{"name":"LOG_LEVEL","valueFrom":{"configMapKeyRef":{"key":"LOG_LEVEL","name":"app-config"}}},{"name":"SENTRY_TRACES_SAMPLE_RATE","valueFrom":{"configMapKeyRef":{"key":"SENTRY_TRACES_SAMPLE_RATE","name":"app-config"}}},{"name":"SENTRY_PROFILES_SAMPLE_RATE","valueFrom":{"configMapKeyRef":{"key":"SENTRY_PROFILES_SAMPLE_RATE","name":"app-config"}}},{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"key":"DATABASE_URL","name":"app-secrets"}}},{"name":"SENTRY_DSN","valueFrom":{"secretKeyRef":{"key":"SENTRY_DSN","name":"app-secrets"}}},{"name":"JWT_SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"JWT_SECRET_KEY","name":"app-secrets"}}},{"name":"SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"SECRET_KEY","name":"app-secrets"}}},{"name":"REDIS_PASSWORD","valueFrom":{"secretKeyRef":{"key":"REDIS_PASSWORD","name":"app-secrets"}}},{"name":"MAILGUN_API_KEY","valueFrom":{"secretKeyRef":{"key":"MAILGUN_API_KEY","name":"app-secrets"}}},{"name":"MAILGUN_DOMAIN","valueFrom":{"secretKeyRef":{"key":"MAILGUN_DOMAIN","name":"app-secrets"}}},{"name":"ANTHROPIC_API_KEY","valueFrom":{"secretKeyRef":{"key":"ANTHROPIC_API_KEY","name":"app-secrets"}}},{"name":"ANTHROPIC_MODEL","valueFrom":{"configMapKeyRef":{"key":"ANTHROPIC_MODEL","name":"app-config"}}},{"name":"ANTHROPIC_GENERATOR_MODEL","valueFrom":{"configMapKeyRef":{"key":"ANTHROPIC_GENERATOR_MODEL","name":"app-config"}}}],"image":"ghcr.io/johno10661/ediai-backend:staging","imagePullPolicy":"Always","livenessProbe":{"exec":{"command":["arq","--check","app.jobs.worker.WorkerSettings"]},"failureThreshold":3,"initialDelaySeconds":30,"periodSeconds":60,"timeoutSeconds":15},"name":"arq-worker-low","readinessProbe":{"exec":{"command":["arq","--check","app.jobs.worker.WorkerSettings"]},"failureThreshold":3,"initialDelaySeconds":10,"periodSeconds":30,"timeoutSeconds":15},"resources":{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"runAsUser":1000}}],"imagePullSecrets":[{"name":"ghcr-secret"}],"securityContext":{"fsGroup":1000,"runAsNonRoot":true,"runAsUser":1000},"terminationGracePeriodSeconds":30}}}}
+    creationTimestamp: "2025-11-20T13:27:53Z"
+    generation: 197
+    labels:
+      app: arq-worker
+      environment: staging
+      priority: low
+      tier: worker
+    name: arq-worker-low
+    namespace: ediai-staging
+    resourceVersion: "14235716"
+    uid: 3d5c74e7-7bc2-4550-b194-00cef9a45e1d
+  spec:
+    progressDeadlineSeconds: 120
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: arq-worker
+        environment: staging
+        priority: low
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-21T21:05:21-05:00"
+        creationTimestamp: null
+        labels:
+          app: arq-worker
+          environment: staging
+          priority: low
+          tier: worker
+      spec:
+        containers:
+        - command:
+          - arq
+          - app.jobs.worker.WorkerSettings
+          env:
+          - name: ENVIRONMENT
+            valueFrom:
+              configMapKeyRef:
+                key: ENVIRONMENT
+                name: app-config
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_HOST
+                name: app-config
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_PORT
+                name: app-config
+          - name: REDIS_DB
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_DB
+                name: app-config
+          - name: ARQ_MAX_JOBS
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_MAX_JOBS
+                name: arq-worker-low-config
+          - name: ARQ_JOB_TIMEOUT
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_JOB_TIMEOUT
+                name: arq-worker-low-config
+          - name: ARQ_QUEUE_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_QUEUE_NAME
+                name: arq-worker-low-config
+          - name: LOG_LEVEL
+            valueFrom:
+              configMapKeyRef:
+                key: LOG_LEVEL
+                name: app-config
+          - name: SENTRY_TRACES_SAMPLE_RATE
+            valueFrom:
+              configMapKeyRef:
+                key: SENTRY_TRACES_SAMPLE_RATE
+                name: app-config
+          - name: SENTRY_PROFILES_SAMPLE_RATE
+            valueFrom:
+              configMapKeyRef:
+                key: SENTRY_PROFILES_SAMPLE_RATE
+                name: app-config
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: DATABASE_URL
+                name: app-secrets
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                key: SENTRY_DSN
+                name: app-secrets
+          - name: JWT_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: JWT_SECRET_KEY
+                name: app-secrets
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: SECRET_KEY
+                name: app-secrets
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: REDIS_PASSWORD
+                name: app-secrets
+          - name: MAILGUN_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_API_KEY
+                name: app-secrets
+          - name: MAILGUN_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_DOMAIN
+                name: app-secrets
+          - name: ANTHROPIC_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: ANTHROPIC_API_KEY
+                name: app-secrets
+          - name: ANTHROPIC_MODEL
+            valueFrom:
+              configMapKeyRef:
+                key: ANTHROPIC_MODEL
+                name: app-config
+          - name: ANTHROPIC_GENERATOR_MODEL
+            valueFrom:
+              configMapKeyRef:
+                key: ANTHROPIC_GENERATOR_MODEL
+                name: app-config
+          image: ghcr.io/johno10661/ediai-backend:staging-6da3180a60fea306d67103cfa92bbf9c4e669488
+          imagePullPolicy: Always
+          livenessProbe:
+            exec:
+              command:
+              - arq
+              - --check
+              - app.jobs.worker.WorkerSettings
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 60
+            successThreshold: 1
+            timeoutSeconds: 15
+          name: arq-worker-low
+          readinessProbe:
+            exec:
+              command:
+              - arq
+              - --check
+              - app.jobs.worker.WorkerSettings
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 15
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1000
+          runAsNonRoot: true
+          runAsUser: 1000
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-12-21T07:42:41Z"
+      lastUpdateTime: "2025-12-21T07:42:41Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-10T18:13:38Z"
+      lastUpdateTime: "2025-12-26T09:05:19Z"
+      message: ReplicaSet "arq-worker-low-7d7f89597c" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 197
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "215"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"backend","environment":"staging","tier":"api"},"name":"backend","namespace":"ediai-staging"},"spec":{"progressDeadlineSeconds":300,"replicas":3,"selector":{"matchLabels":{"app":"backend","environment":"staging"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"backend","environment":"staging","tier":"api"}},"spec":{"containers":[{"env":[{"name":"ENVIRONMENT","valueFrom":{"configMapKeyRef":{"key":"ENVIRONMENT","name":"app-config"}}},{"name":"REDIS_HOST","valueFrom":{"configMapKeyRef":{"key":"REDIS_HOST","name":"app-config"}}},{"name":"REDIS_PORT","valueFrom":{"configMapKeyRef":{"key":"REDIS_PORT","name":"app-config"}}},{"name":"REDIS_DB","valueFrom":{"configMapKeyRef":{"key":"REDIS_DB","name":"app-config"}}},{"name":"REDIS_SESSION_DB","valueFrom":{"configMapKeyRef":{"key":"REDIS_SESSION_DB","name":"app-config"}}},{"name":"REDIS_PERMISSION_DB","valueFrom":{"configMapKeyRef":{"key":"REDIS_PERMISSION_DB","name":"app-config"}}},{"name":"JWT_ALGORITHM","valueFrom":{"configMapKeyRef":{"key":"JWT_ALGORITHM","name":"app-config"}}},{"name":"ACCESS_TOKEN_EXPIRE_MINUTES","valueFrom":{"configMapKeyRef":{"key":"ACCESS_TOKEN_EXPIRE_MINUTES","name":"app-config"}}},{"name":"REFRESH_TOKEN_EXPIRE_DAYS","valueFrom":{"configMapKeyRef":{"key":"REFRESH_TOKEN_EXPIRE_DAYS","name":"app-config"}}},{"name":"SESSION_EXPIRE_HOURS","valueFrom":{"configMapKeyRef":{"key":"SESSION_EXPIRE_HOURS","name":"app-config"}}},{"name":"SESSION_SLIDE_MINUTES","valueFrom":{"configMapKeyRef":{"key":"SESSION_SLIDE_MINUTES","name":"app-config"}}},{"name":"SESSION_IDLE_TIMEOUT_MINUTES","valueFrom":{"configMapKeyRef":{"key":"SESSION_IDLE_TIMEOUT_MINUTES","name":"app-config"}}},{"name":"CORS_ORIGINS","valueFrom":{"configMapKeyRef":{"key":"CORS_ORIGINS","name":"app-config"}}},{"name":"FRONTEND_URL","valueFrom":{"configMapKeyRef":{"key":"FRONTEND_URL","name":"app-config"}}},{"name":"RATE_LIMIT_REGISTER","valueFrom":{"configMapKeyRef":{"key":"RATE_LIMIT_REGISTER","name":"app-config"}}},{"name":"RATE_LIMIT_LOGIN","valueFrom":{"configMapKeyRef":{"key":"RATE_LIMIT_LOGIN","name":"app-config"}}},{"name":"MAX_FAILED_LOGIN_ATTEMPTS","valueFrom":{"configMapKeyRef":{"key":"MAX_FAILED_LOGIN_ATTEMPTS","name":"app-config"}}},{"name":"LOCKOUT_DURATION_MINUTES","valueFrom":{"configMapKeyRef":{"key":"LOCKOUT_DURATION_MINUTES","name":"app-config"}}},{"name":"EMAIL_SUPPRESS_SEND","valueFrom":{"configMapKeyRef":{"key":"EMAIL_SUPPRESS_SEND","name":"app-config"}}},{"name":"MAILGUN_FROM_EMAIL","valueFrom":{"configMapKeyRef":{"key":"MAILGUN_FROM_EMAIL","name":"app-config"}}},{"name":"MAILGUN_FROM_NAME","valueFrom":{"configMapKeyRef":{"key":"MAILGUN_FROM_NAME","name":"app-config"}}},{"name":"LOG_LEVEL","valueFrom":{"configMapKeyRef":{"key":"LOG_LEVEL","name":"app-config"}}},{"name":"SENTRY_TRACES_SAMPLE_RATE","valueFrom":{"configMapKeyRef":{"key":"SENTRY_TRACES_SAMPLE_RATE","name":"app-config"}}},{"name":"SENTRY_PROFILES_SAMPLE_RATE","valueFrom":{"configMapKeyRef":{"key":"SENTRY_PROFILES_SAMPLE_RATE","name":"app-config"}}},{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"key":"DATABASE_URL","name":"app-secrets"}}},{"name":"SENTRY_DSN","valueFrom":{"secretKeyRef":{"key":"SENTRY_DSN","name":"app-secrets"}}},{"name":"JWT_SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"JWT_SECRET_KEY","name":"app-secrets"}}},{"name":"SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"SECRET_KEY","name":"app-secrets"}}},{"name":"REDIS_PASSWORD","valueFrom":{"secretKeyRef":{"key":"REDIS_PASSWORD","name":"app-secrets"}}},{"name":"MAILGUN_API_KEY","valueFrom":{"secretKeyRef":{"key":"MAILGUN_API_KEY","name":"app-secrets"}}},{"name":"MAILGUN_DOMAIN","valueFrom":{"secretKeyRef":{"key":"MAILGUN_DOMAIN","name":"app-secrets"}}},{"name":"ANTHROPIC_API_KEY","valueFrom":{"secretKeyRef":{"key":"ANTHROPIC_API_KEY","name":"app-secrets"}}},{"name":"ANTHROPIC_MODEL","valueFrom":{"configMapKeyRef":{"key":"ANTHROPIC_MODEL","name":"app-config"}}},{"name":"ANTHROPIC_GENERATOR_MODEL","valueFrom":{"configMapKeyRef":{"key":"ANTHROPIC_GENERATOR_MODEL","name":"app-config"}}}],"image":"ghcr.io/johno10661/ediai-backend:staging","imagePullPolicy":"Always","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/health","port":8000},"initialDelaySeconds":30,"periodSeconds":10,"timeoutSeconds":5},"name":"backend","ports":[{"containerPort":8000,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/ready","port":8000},"initialDelaySeconds":10,"periodSeconds":5,"timeoutSeconds":3},"resources":{"limits":{"cpu":"1000m","memory":"1Gi"},"requests":{"cpu":"250m","memory":"512Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"runAsUser":1000},"startupProbe":{"failureThreshold":30,"httpGet":{"path":"/health","port":8000},"initialDelaySeconds":0,"periodSeconds":10,"timeoutSeconds":5}}],"imagePullSecrets":[{"name":"ghcr-secret"}],"securityContext":{"fsGroup":1000,"runAsNonRoot":true,"runAsUser":1000},"terminationGracePeriodSeconds":30}}}}
+    creationTimestamp: "2025-11-20T13:19:18Z"
+    generation: 219
+    labels:
+      app: backend
+      environment: staging
+      tier: api
+    name: backend
+    namespace: ediai-staging
+    resourceVersion: "14235602"
+    uid: e9701e05-4d15-4744-950c-7c93f1344d94
+  spec:
+    progressDeadlineSeconds: 300
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: backend
+        environment: staging
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-22T00:32:58-05:00"
+        creationTimestamp: null
+        labels:
+          app: backend
+          environment: staging
+          tier: api
+      spec:
+        containers:
+        - env:
+          - name: ENVIRONMENT
+            valueFrom:
+              configMapKeyRef:
+                key: ENVIRONMENT
+                name: app-config
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: REDIS_HOST
+                name: app-config
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: REDIS_PORT
+                name: app-config
+          - name: REDIS_DB
+            valueFrom:
+              configMapKeyRef:
+                key: REDIS_DB
+                name: app-config
+          - name: REDIS_SESSION_DB
+            valueFrom:
+              configMapKeyRef:
+                key: REDIS_SESSION_DB
+                name: app-config
+          - name: REDIS_PERMISSION_DB
+            valueFrom:
+              configMapKeyRef:
+                key: REDIS_PERMISSION_DB
+                name: app-config
+          - name: JWT_ALGORITHM
+            valueFrom:
+              configMapKeyRef:
+                key: JWT_ALGORITHM
+                name: app-config
+          - name: ACCESS_TOKEN_EXPIRE_MINUTES
+            valueFrom:
+              configMapKeyRef:
+                key: ACCESS_TOKEN_EXPIRE_MINUTES
+                name: app-config
+          - name: REFRESH_TOKEN_EXPIRE_DAYS
+            valueFrom:
+              configMapKeyRef:
+                key: REFRESH_TOKEN_EXPIRE_DAYS
+                name: app-config
+          - name: SESSION_EXPIRE_HOURS
+            valueFrom:
+              configMapKeyRef:
+                key: SESSION_EXPIRE_HOURS
+                name: app-config
+          - name: SESSION_SLIDE_MINUTES
+            valueFrom:
+              configMapKeyRef:
+                key: SESSION_SLIDE_MINUTES
+                name: app-config
+          - name: SESSION_IDLE_TIMEOUT_MINUTES
+            valueFrom:
+              configMapKeyRef:
+                key: SESSION_IDLE_TIMEOUT_MINUTES
+                name: app-config
+          - name: CORS_ORIGINS
+            valueFrom:
+              configMapKeyRef:
+                key: CORS_ORIGINS
+                name: app-config
+          - name: FRONTEND_URL
+            valueFrom:
+              configMapKeyRef:
+                key: FRONTEND_URL
+                name: app-config
+          - name: RATE_LIMIT_REGISTER
+            valueFrom:
+              configMapKeyRef:
+                key: RATE_LIMIT_REGISTER
+                name: app-config
+          - name: RATE_LIMIT_LOGIN
+            valueFrom:
+              configMapKeyRef:
+                key: RATE_LIMIT_LOGIN
+                name: app-config
+          - name: MAX_FAILED_LOGIN_ATTEMPTS
+            valueFrom:
+              configMapKeyRef:
+                key: MAX_FAILED_LOGIN_ATTEMPTS
+                name: app-config
+          - name: LOCKOUT_DURATION_MINUTES
+            valueFrom:
+              configMapKeyRef:
+                key: LOCKOUT_DURATION_MINUTES
+                name: app-config
+          - name: EMAIL_SUPPRESS_SEND
+            valueFrom:
+              configMapKeyRef:
+                key: EMAIL_SUPPRESS_SEND
+                name: app-config
+          - name: MAILGUN_FROM_EMAIL
+            valueFrom:
+              configMapKeyRef:
+                key: MAILGUN_FROM_EMAIL
+                name: app-config
+          - name: MAILGUN_FROM_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: MAILGUN_FROM_NAME
+                name: app-config
+          - name: LOG_LEVEL
+            valueFrom:
+              configMapKeyRef:
+                key: LOG_LEVEL
+                name: app-config
+          - name: SENTRY_TRACES_SAMPLE_RATE
+            valueFrom:
+              configMapKeyRef:
+                key: SENTRY_TRACES_SAMPLE_RATE
+                name: app-config
+          - name: SENTRY_PROFILES_SAMPLE_RATE
+            valueFrom:
+              configMapKeyRef:
+                key: SENTRY_PROFILES_SAMPLE_RATE
+                name: app-config
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: DATABASE_URL
+                name: app-secrets
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                key: SENTRY_DSN
+                name: app-secrets
+          - name: JWT_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: JWT_SECRET_KEY
+                name: app-secrets
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: SECRET_KEY
+                name: app-secrets
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: REDIS_PASSWORD
+                name: app-secrets
+          - name: MAILGUN_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_API_KEY
+                name: app-secrets
+          - name: MAILGUN_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_DOMAIN
+                name: app-secrets
+          - name: ANTHROPIC_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: ANTHROPIC_API_KEY
+                name: app-secrets
+          - name: ANTHROPIC_MODEL
+            valueFrom:
+              configMapKeyRef:
+                key: ANTHROPIC_MODEL
+                name: app-config
+          - name: ANTHROPIC_GENERATOR_MODEL
+            valueFrom:
+              configMapKeyRef:
+                key: ANTHROPIC_GENERATOR_MODEL
+                name: app-config
+          image: ghcr.io/johno10661/ediai-backend:staging-6da3180a60fea306d67103cfa92bbf9c4e669488
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: backend
+          ports:
+          - containerPort: 8000
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: 8000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /health
+              port: 8000
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1000
+          runAsNonRoot: true
+          runAsUser: 1000
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-12-26T09:04:54Z"
+      lastUpdateTime: "2025-12-26T09:04:54Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-26T09:03:09Z"
+      lastUpdateTime: "2025-12-26T09:04:54Z"
+      message: ReplicaSet "backend-6f95b84876" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 219
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "203"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"frontend","environment":"staging","tier":"web"},"name":"frontend","namespace":"ediai-staging"},"spec":{"progressDeadlineSeconds":300,"replicas":3,"selector":{"matchLabels":{"app":"frontend","environment":"staging"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"frontend","environment":"staging","tier":"web"}},"spec":{"containers":[{"env":[{"name":"VITE_API_URL","value":"/api"},{"name":"VITE_ENVIRONMENT","value":"staging"}],"image":"ghcr.io/johno10661/ediai-frontend:staging","imagePullPolicy":"Always","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":80},"initialDelaySeconds":20,"periodSeconds":10,"timeoutSeconds":5},"name":"frontend","ports":[{"containerPort":80,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":80},"initialDelaySeconds":5,"periodSeconds":5,"timeoutSeconds":3},"resources":{"limits":{"cpu":"200m","memory":"256Mi"},"requests":{"cpu":"50m","memory":"128Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"add":["NET_BIND_SERVICE"],"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"runAsUser":101},"volumeMounts":[{"mountPath":"/var/cache/nginx","name":"nginx-cache"},{"mountPath":"/var/run","name":"nginx-run"}]}],"imagePullSecrets":[{"name":"ghcr-secret"}],"securityContext":{"fsGroup":101,"runAsNonRoot":true,"runAsUser":101},"terminationGracePeriodSeconds":30,"volumes":[{"emptyDir":{},"name":"nginx-cache"},{"emptyDir":{},"name":"nginx-run"}]}}}}
+    creationTimestamp: "2025-11-20T13:20:14Z"
+    generation: 204
+    labels:
+      app: frontend
+      environment: staging
+      tier: web
+    name: frontend
+    namespace: ediai-staging
+    resourceVersion: "14235340"
+    uid: d72bf52f-308a-4a94-8e15-ee2c3185d07d
+  spec:
+    progressDeadlineSeconds: 300
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: frontend
+        environment: staging
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-21T21:05:21-05:00"
+        creationTimestamp: null
+        labels:
+          app: frontend
+          environment: staging
+          tier: web
+      spec:
+        containers:
+        - env:
+          - name: VITE_API_URL
+            value: /api
+          - name: VITE_ENVIRONMENT
+            value: staging
+          image: ghcr.io/johno10661/ediai-frontend:staging-6da3180a60fea306d67103cfa92bbf9c4e669488
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: frontend
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+              - NET_BIND_SERVICE
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 101
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/cache/nginx
+            name: nginx-cache
+          - mountPath: /var/run
+            name: nginx-run
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 101
+          runAsNonRoot: true
+          runAsUser: 101
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: nginx-cache
+        - emptyDir: {}
+          name: nginx-run
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-12-26T09:04:26Z"
+      lastUpdateTime: "2025-12-26T09:04:26Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-04T02:22:00Z"
+      lastUpdateTime: "2025-12-26T09:04:26Z"
+      message: ReplicaSet "frontend-7c4875bb66" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 204
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"mailpit","environment":"staging"},"name":"mailpit","namespace":"ediai-staging"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"mailpit"}},"template":{"metadata":{"labels":{"app":"mailpit","environment":"staging"}},"spec":{"containers":[{"env":[{"name":"MP_UI_AUTH","valueFrom":{"secretKeyRef":{"key":"MP_UI_AUTH","name":"mailpit-secrets"}}},{"name":"MP_SMTP_AUTH_ACCEPT_ANY","value":"true"},{"name":"MP_SMTP_AUTH_ALLOW_INSECURE","value":"true"}],"image":"axllent/mailpit:latest","livenessProbe":{"httpGet":{"path":"/livez","port":8025},"initialDelaySeconds":10,"periodSeconds":30},"name":"mailpit","ports":[{"containerPort":1025,"name":"smtp"},{"containerPort":8025,"name":"web"}],"readinessProbe":{"httpGet":{"path":"/readyz","port":8025},"initialDelaySeconds":5,"periodSeconds":10},"resources":{"limits":{"cpu":"200m","memory":"256Mi"},"requests":{"cpu":"50m","memory":"64Mi"}}}]}}}}
+    creationTimestamp: "2025-12-22T05:32:34Z"
+    generation: 1
+    labels:
+      app: mailpit
+      environment: staging
+    name: mailpit
+    namespace: ediai-staging
+    resourceVersion: "12800787"
+    uid: b86984b3-b951-4024-9a8c-18ecfb8f33f3
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: mailpit
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: mailpit
+          environment: staging
+      spec:
+        containers:
+        - env:
+          - name: MP_UI_AUTH
+            valueFrom:
+              secretKeyRef:
+                key: MP_UI_AUTH
+                name: mailpit-secrets
+          - name: MP_SMTP_AUTH_ACCEPT_ANY
+            value: "true"
+          - name: MP_SMTP_AUTH_ALLOW_INSECURE
+            value: "true"
+          image: axllent/mailpit:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /livez
+              port: 8025
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: mailpit
+          ports:
+          - containerPort: 1025
+            name: smtp
+            protocol: TCP
+          - containerPort: 8025
+            name: web
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readyz
+              port: 8025
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-12-22T05:32:48Z"
+      lastUpdateTime: "2025-12-22T05:32:48Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-22T05:32:34Z"
+      lastUpdateTime: "2025-12-22T05:32:48Z"
+      message: ReplicaSet "mailpit-55bf6c7499" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"backend","environment":"staging","tier":"api"},"name":"backend-nodeport","namespace":"ediai-staging"},"spec":{"ports":[{"name":"http","nodePort":30801,"port":8000,"protocol":"TCP","targetPort":8000}],"selector":{"app":"backend","environment":"staging"},"type":"NodePort"}}
+    creationTimestamp: "2025-11-20T13:27:37Z"
+    labels:
+      app: backend
+      environment: staging
+      tier: api
+    name: backend-nodeport
+    namespace: ediai-staging
+    resourceVersion: "3128295"
+    uid: 32c82e2e-8d12-4f10-b4f7-3aac1c8ba234
+  spec:
+    clusterIP: 10.43.171.186
+    clusterIPs:
+    - 10.43.171.186
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      nodePort: 30801
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+    selector:
+      app: backend
+      environment: staging
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"backend","environment":"staging","tier":"api"},"name":"backend-service","namespace":"ediai-staging"},"spec":{"ports":[{"name":"http","port":8000,"protocol":"TCP","targetPort":8000}],"selector":{"app":"backend","environment":"staging"},"type":"ClusterIP"}}
+    creationTimestamp: "2025-11-20T13:27:37Z"
+    labels:
+      app: backend
+      environment: staging
+      tier: api
+    name: backend-service
+    namespace: ediai-staging
+    resourceVersion: "3120854"
+    uid: 25234740-b01d-4b95-8cf0-661d03701b8c
+  spec:
+    clusterIP: 10.43.186.146
+    clusterIPs:
+    - 10.43.186.146
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+    selector:
+      app: backend
+      environment: staging
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"frontend","environment":"staging","tier":"web"},"name":"frontend-service","namespace":"ediai-staging"},"spec":{"ports":[{"name":"http","nodePort":30800,"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"frontend","environment":"staging"},"type":"NodePort"}}
+    creationTimestamp: "2025-11-20T13:27:37Z"
+    labels:
+      app: frontend
+      environment: staging
+      tier: web
+    name: frontend-service
+    namespace: ediai-staging
+    resourceVersion: "3128292"
+    uid: 5796fc16-be40-427a-a5a6-f13018c748cf
+  spec:
+    clusterIP: 10.43.248.32
+    clusterIPs:
+    - 10.43.248.32
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      nodePort: 30800
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: frontend
+      environment: staging
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"mailpit","environment":"staging"},"name":"mailpit-service","namespace":"ediai-staging"},"spec":{"ports":[{"name":"smtp","port":1025,"targetPort":1025},{"name":"web","port":8025,"targetPort":8025}],"selector":{"app":"mailpit"}}}
+    creationTimestamp: "2025-12-22T05:32:34Z"
+    labels:
+      app: mailpit
+      environment: staging
+    name: mailpit-service
+    namespace: ediai-staging
+    resourceVersion: "12800665"
+    uid: a06ebb20-675f-4de1-96a0-9696d21aeafc
+  spec:
+    clusterIP: 10.43.74.78
+    clusterIPs:
+    - 10.43.74.78
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: smtp
+      port: 1025
+      protocol: TCP
+      targetPort: 1025
+    - name: web
+      port: 8025
+      protocol: TCP
+      targetPort: 8025
+    selector:
+      app: mailpit
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  data:
+    ACCESS_TOKEN_EXPIRE_MINUTES: "15"
+    ANTHROPIC_GENERATOR_MODEL: claude-3-5-haiku-latest
+    ANTHROPIC_MODEL: claude-3-5-sonnet-latest
+    ARQ_JOB_TIMEOUT: "300"
+    ARQ_KEEP_RESULT: "3600"
+    ARQ_MAX_JOBS: "10"
+    ARQ_MAX_TRIES: "3"
+    ARQ_REDIS_DB: "2"
+    ARQ_REDIS_HOST: 192.168.100.69
+    ARQ_REDIS_PORT: "6379"
+    COOKIE_HTTPONLY: "true"
+    COOKIE_SAMESITE: lax
+    COOKIE_SECURE: auto
+    CORS_ORIGINS: '["https://deploy.ediai.com","http://localhost:3000"]'
+    CSP_CONNECT_SRC: '''self'''
+    CSP_DEFAULT_SRC: '''self'''
+    CSP_FONT_SRC: '''self'' data:'
+    CSP_IMG_SRC: '''self'' data: https:'
+    CSP_SCRIPT_SRC: '''self'' ''unsafe-inline'''
+    CSP_STYLE_SRC: '''self'' ''unsafe-inline'''
+    EMAIL_SUPPRESS_SEND: "1"
+    ENVIRONMENT: staging
+    FRONTEND_URL: https://deploy.ediai.com
+    HSTS_INCLUDE_SUBDOMAINS: "true"
+    HSTS_MAX_AGE: "31536000"
+    HSTS_PRELOAD: "false"
+    JWT_ALGORITHM: HS256
+    LOCKOUT_DURATION_MINUTES: "30"
+    LOG_LEVEL: INFO
+    MAILGUN_FROM_EMAIL: noreply@ediai.com
+    MAILGUN_FROM_NAME: EDIai Staging
+    MAX_FAILED_LOGIN_ATTEMPTS: "5"
+    PASSWORD_RESET_TOKEN_EXPIRE_MINUTES: "60"
+    RATE_LIMIT_2FA_DISABLE: 3/10minute
+    RATE_LIMIT_2FA_REGENERATE: 3/day
+    RATE_LIMIT_2FA_SETUP: 3/hour
+    RATE_LIMIT_2FA_VERIFY: 5/minute
+    RATE_LIMIT_2FA_VERIFY_SETUP: 5/10minute
+    RATE_LIMIT_LOGIN: 5/minute
+    RATE_LIMIT_PASSWORD_RESET: 3/hour
+    RATE_LIMIT_REFRESH: 10/minute
+    RATE_LIMIT_REGISTER: 3/hour
+    REDIS_DB: "2"
+    REDIS_HOST: 192.168.100.69
+    REDIS_PERMISSION_DB: "2"
+    REDIS_PORT: "6379"
+    REDIS_SESSION_DB: "2"
+    REFRESH_TOKEN_EXPIRE_DAYS: "7"
+    SENTRY_PROFILES_SAMPLE_RATE: "1.0"
+    SENTRY_TRACES_SAMPLE_RATE: "1.0"
+    SESSION_EXPIRE_HOURS: "8"
+    SESSION_IDLE_TIMEOUT_MINUTES: "30"
+    SESSION_SLIDE_MINUTES: "5"
+    X_FRAME_OPTIONS: DENY
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"ACCESS_TOKEN_EXPIRE_MINUTES":"15","ANTHROPIC_GENERATOR_MODEL":"claude-3-5-haiku-latest","ANTHROPIC_MODEL":"claude-3-5-sonnet-latest","ARQ_JOB_TIMEOUT":"300","ARQ_KEEP_RESULT":"3600","ARQ_MAX_JOBS":"10","ARQ_MAX_TRIES":"3","ARQ_REDIS_DB":"2","ARQ_REDIS_HOST":"192.168.100.69","ARQ_REDIS_PORT":"6379","COOKIE_HTTPONLY":"true","COOKIE_SAMESITE":"lax","COOKIE_SECURE":"auto","CORS_ORIGINS":"[\"https://deploy.ediai.com\",\"http://localhost:3000\"]","CSP_CONNECT_SRC":"'self'","CSP_DEFAULT_SRC":"'self'","CSP_FONT_SRC":"'self' data:","CSP_IMG_SRC":"'self' data: https:","CSP_SCRIPT_SRC":"'self' 'unsafe-inline'","CSP_STYLE_SRC":"'self' 'unsafe-inline'","EMAIL_SUPPRESS_SEND":"1","ENVIRONMENT":"staging","FRONTEND_URL":"https://deploy.ediai.com","HSTS_INCLUDE_SUBDOMAINS":"true","HSTS_MAX_AGE":"31536000","HSTS_PRELOAD":"false","JWT_ALGORITHM":"HS256","LOCKOUT_DURATION_MINUTES":"30","LOG_LEVEL":"INFO","MAILGUN_FROM_EMAIL":"noreply@ediai.com","MAILGUN_FROM_NAME":"EDIai Staging","MAX_FAILED_LOGIN_ATTEMPTS":"5","PASSWORD_RESET_TOKEN_EXPIRE_MINUTES":"60","RATE_LIMIT_2FA_DISABLE":"3/10minute","RATE_LIMIT_2FA_REGENERATE":"3/day","RATE_LIMIT_2FA_SETUP":"3/hour","RATE_LIMIT_2FA_VERIFY":"5/minute","RATE_LIMIT_2FA_VERIFY_SETUP":"5/10minute","RATE_LIMIT_LOGIN":"5/minute","RATE_LIMIT_PASSWORD_RESET":"3/hour","RATE_LIMIT_REFRESH":"10/minute","RATE_LIMIT_REGISTER":"3/hour","REDIS_DB":"2","REDIS_HOST":"192.168.100.69","REDIS_PERMISSION_DB":"2","REDIS_PORT":"6379","REDIS_SESSION_DB":"2","REFRESH_TOKEN_EXPIRE_DAYS":"7","SENTRY_PROFILES_SAMPLE_RATE":"1.0","SENTRY_TRACES_SAMPLE_RATE":"1.0","SESSION_EXPIRE_HOURS":"8","SESSION_IDLE_TIMEOUT_MINUTES":"30","SESSION_SLIDE_MINUTES":"5","X_FRAME_OPTIONS":"DENY"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"ediai","environment":"staging"},"name":"app-config","namespace":"ediai-staging"}}
+    creationTimestamp: "2025-11-20T11:54:50Z"
+    labels:
+      app: ediai
+      environment: staging
+    name: app-config
+    namespace: ediai-staging
+    resourceVersion: "14234438"
+    uid: f5c784e8-f605-4b73-a753-331d11fa04a7
+- apiVersion: v1
+  data:
+    ARQ_JOB_TIMEOUT: "300"
+    ARQ_MAX_JOBS: "10"
+    ARQ_QUEUE_NAME: high-priority
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"ARQ_JOB_TIMEOUT":"300","ARQ_MAX_JOBS":"10","ARQ_QUEUE_NAME":"high-priority"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"ediai-arq-worker","environment":"staging","priority":"high"},"name":"arq-worker-high-config","namespace":"ediai-staging"}}
+    creationTimestamp: "2025-11-20T11:54:50Z"
+    labels:
+      app: ediai-arq-worker
+      environment: staging
+      priority: high
+    name: arq-worker-high-config
+    namespace: ediai-staging
+    resourceVersion: "3101379"
+    uid: 5b8873ba-b8f4-4dee-9ad9-d041a03ce072
+- apiVersion: v1
+  data:
+    ARQ_JOB_TIMEOUT: "600"
+    ARQ_MAX_JOBS: "5"
+    ARQ_QUEUE_NAME: low-priority
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"ARQ_JOB_TIMEOUT":"600","ARQ_MAX_JOBS":"5","ARQ_QUEUE_NAME":"low-priority"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"ediai-arq-worker","environment":"staging","priority":"low"},"name":"arq-worker-low-config","namespace":"ediai-staging"}}
+    creationTimestamp: "2025-11-20T11:54:50Z"
+    labels:
+      app: ediai-arq-worker
+      environment: staging
+      priority: low
+    name: arq-worker-low-config
+    namespace: ediai-staging
+    resourceVersion: "3101380"
+    uid: f29f34da-6f81-487f-879c-2f3c31d4aeeb
+- apiVersion: v1
+  data:
+    nginx.conf: |
+      # Simple NGINX config for routing
+      # Frontend: http://192.168.100.70:30801
+      # Backend API: http://192.168.100.70:30800
+
+      # If using a reverse proxy or load balancer, route:
+      # deploy.ediai.com/api/* -> http://192.168.100.70:30800
+      # deploy.ediai.com/* -> http://192.168.100.70:30801
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"nginx.conf":"# Simple NGINX config for routing\n# Frontend: http://192.168.100.70:30801\n# Backend API: http://192.168.100.70:30800\n\n# If using a reverse proxy or load balancer, route:\n# deploy.ediai.com/api/* -\u003e http://192.168.100.70:30800\n# deploy.ediai.com/* -\u003e http://192.168.100.70:30801\n"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"ediai","environment":"staging"},"name":"ingress-config","namespace":"ediai-staging"}}
+    creationTimestamp: "2025-11-20T13:27:45Z"
+    labels:
+      app: ediai
+      environment: staging
+    name: ingress-config
+    namespace: ediai-staging
+    resourceVersion: "3120898"
+    uid: 145edf5b-e219-4d2a-83a3-779959235534
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIBdzCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
+      dmVyLWNhQDE3NjIzMTk3MDUwHhcNMjUxMTA1MDUxNTA1WhcNMzUxMTAzMDUxNTA1
+      WjAjMSEwHwYDVQQDDBhrM3Mtc2VydmVyLWNhQDE3NjIzMTk3MDUwWTATBgcqhkjO
+      PQIBBggqhkjOPQMBBwNCAAR7AJxksdMJZVIqsOrjf54yL6K7iY/JWSs9ZkQg0AUk
+      aO30K0wLuHk4cK2eTPp/VQfmoT2dKjclRpDQ0VSUKWi2o0IwQDAOBgNVHQ8BAf8E
+      BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUf6j/2FFh3fnWFj0FbbrB
+      8UWVKzIwCgYIKoZIzj0EAwIDSAAwRQIhAJMPsstsw64+5mY7QIjcRxICHdHjksj3
+      FVMXbjV+OBPtAiBzvKXcXD6YxhyxvDyHZ/kYyX95MPXYfd/wutZ6iyAOrQ==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-11-19T13:00:17Z"
+    name: kube-root-ca.crt
+    namespace: ediai-staging
+    resourceVersion: "2830941"
+    uid: 65d19955-9443-4d97-84c9-9625720539a9
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"traefik.ingress.kubernetes.io/router.entrypoints":"web,websecure","traefik.ingress.kubernetes.io/router.middlewares":"ediai-staging-security-headers@kubernetescrd"},"labels":{"app":"ediai","environment":"staging"},"name":"ediai-ingress","namespace":"ediai-staging"},"spec":{"ingressClassName":"traefik","rules":[{"host":"ediai.net","http":{"paths":[{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/api","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/health","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/ready","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/docs","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/redoc","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/openapi.json","pathType":"Prefix"},{"backend":{"service":{"name":"frontend-service","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+      traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+      traefik.ingress.kubernetes.io/router.middlewares: ediai-staging-security-headers@kubernetescrd
+    creationTimestamp: "2025-11-20T13:27:45Z"
+    generation: 4
+    labels:
+      app: ediai
+      environment: staging
+    name: ediai-ingress
+    namespace: ediai-staging
+    resourceVersion: "6100253"
+    uid: 6ac805f7-c368-4b4d-8fe6-850a4fee65fb
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: ediai.net
+      http:
+        paths:
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /api
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /health
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /ready
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /docs
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /redoc
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /openapi.json
+          pathType: Prefix
+        - backend:
+            service:
+              name: frontend-service
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer: {}
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"traefik.ingress.kubernetes.io/router.entrypoints":"web,websecure"},"labels":{"app":"mailpit","environment":"staging"},"name":"mailpit-ingress","namespace":"ediai-staging"},"spec":{"ingressClassName":"traefik","rules":[{"host":"mail.ediai.net","http":{"paths":[{"backend":{"service":{"name":"mailpit-service","port":{"number":8025}}},"path":"/","pathType":"Prefix"}]}}]}}
+      traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    creationTimestamp: "2025-12-22T05:32:34Z"
+    generation: 1
+    labels:
+      app: mailpit
+      environment: staging
+    name: mailpit-ingress
+    namespace: ediai-staging
+    resourceVersion: "12800669"
+    uid: ddd4a007-bef2-4147-8d51-4412cab77578
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: mail.ediai.net
+      http:
+        paths:
+        - backend:
+            service:
+              name: mailpit-service
+              port:
+                number: 8025
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer: {}
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: "{\"apiVersion\":\"batch/v1\",\"kind\":\"Job\",\"metadata\":{\"annotations\":{},\"labels\":{\"app\":\"db-migration\",\"environment\":\"staging\"},\"name\":\"db-migration\",\"namespace\":\"ediai-staging\"},\"spec\":{\"backoffLimit\":3,\"template\":{\"metadata\":{\"labels\":{\"app\":\"db-migration\",\"environment\":\"staging\"}},\"spec\":{\"containers\":[{\"command\":[\"/bin/bash\",\"-c\",\"set
+        -e\\necho \\\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\\"\\necho
+        \\\"\U0001F504 Running Database Migrations (Staging)\\\"\\necho \\\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\\"\\necho
+        \\\"\\\"\\necho \\\"Environment: ${ENVIRONMENT}\\\"\\necho \\\"Database: ${DATABASE_URL%%@*}@...\\\"
+        # Hide password in logs\\necho \\\"\\\"\\n\\n# Navigate to backend directory\\ncd
+        /app\\n\\n# Extract password from DATABASE_URL and export PGPASSWORD for psql\\n#
+        Format: postgresql://user:pass@host:port/dbname\\nexport PGPASSWORD=$(echo
+        \\\"${DATABASE_URL}\\\" | sed -E 's|.*://[^:]+:([^@]+)@.*|\\\\1|')\\n\\n#
+        Step 0: Ensure database roles exist (required for RLS)\\necho \\\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\\"\\necho
+        \\\"Step 0: Verify Database Roles\\\"\\necho \\\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\\"\\n\\n#
+        Check if roles exist (required for RLS policies)\\nROLES_MISSING=false\\nif
+        ! psql \\\"${DATABASE_URL}\\\" -tAc \\\"SELECT 1 FROM pg_roles WHERE rolname
+        = 'ediai_app'\\\" | grep -q 1; then\\n  echo \\\"⚠️  Role 'ediai_app' does
+        not exist\\\"\\n  ROLES_MISSING=true\\nelse\\n  echo \\\"✅ Role 'ediai_app'
+        exists\\\"\\nfi\\n\\nif ! psql \\\"${DATABASE_URL}\\\" -tAc \\\"SELECT 1 FROM
+        pg_roles WHERE rolname = 'ediai_admin'\\\" | grep -q 1; then\\n  echo \\\"⚠️
+        \ Role 'ediai_admin' does not exist\\\"\\n  ROLES_MISSING=true\\nelse\\n  echo
+        \\\"✅ Role 'ediai_admin' exists\\\"\\nfi\\n\\nif [ \\\"$ROLES_MISSING\\\"
+        = \\\"true\\\" ]; then\\n  echo \\\"\\\"\\n  echo \\\"⚠️  Some roles are missing.
+        Attempting to create them...\\\"\\n  echo \\\"   (This requires CREATEROLE
+        privilege on the database user)\\\"\\n  echo \\\"\\\"\\n\\n  # Try to create
+        roles - gracefully handle permission errors\\n  psql \\\"${DATABASE_URL}\\\"
+        -c \\\"\\n    DO \\\\$\\\\$\\n    BEGIN\\n      IF NOT EXISTS (SELECT FROM
+        pg_roles WHERE rolname = 'ediai_app') THEN\\n        CREATE ROLE ediai_app
+        WITH LOGIN PASSWORD '${EDIAI_APP_PASSWORD:-ediai_app}' NOSUPERUSER NOBYPASSRLS;\\n
+        \       RAISE NOTICE 'Created role: ediai_app';\\n      END IF;\\n    EXCEPTION
+        WHEN insufficient_privilege THEN\\n      RAISE WARNING 'Cannot create ediai_app
+        role - insufficient privileges. Ask your DBA to create it.';\\n    END\\n
+        \   \\\\$\\\\$;\\n  \\\" || echo \\\"   Could not create ediai_app role\\\"\\n\\n
+        \ psql \\\"${DATABASE_URL}\\\" -c \\\"\\n    DO \\\\$\\\\$\\n    BEGIN\\n
+        \     IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'ediai_admin') THEN\\n
+        \       CREATE ROLE ediai_admin WITH LOGIN PASSWORD '${EDIAI_ADMIN_PASSWORD:-ediai_admin}'
+        NOSUPERUSER BYPASSRLS;\\n        RAISE NOTICE 'Created role: ediai_admin';\\n
+        \     END IF;\\n    EXCEPTION WHEN insufficient_privilege THEN\\n      RAISE
+        WARNING 'Cannot create ediai_admin role - insufficient privileges. Ask your
+        DBA to create it.';\\n    END\\n    \\\\$\\\\$;\\n  \\\" || echo \\\"   Could
+        not create ediai_admin role\\\"\\n\\n  # Verify roles exist after creation
+        attempt\\n  echo \\\"\\\"\\n  echo \\\"Verifying roles after creation attempt...\\\"\\n
+        \ FINAL_CHECK_FAILED=false\\n  if ! psql \\\"${DATABASE_URL}\\\" -tAc \\\"SELECT
+        1 FROM pg_roles WHERE rolname = 'ediai_app'\\\" | grep -q 1; then\\n    echo
+        \\\"❌ Role 'ediai_app' still missing - migrations may fail if RLS is enabled\\\"\\n
+        \   FINAL_CHECK_FAILED=true\\n  fi\\n  if ! psql \\\"${DATABASE_URL}\\\" -tAc
+        \\\"SELECT 1 FROM pg_roles WHERE rolname = 'ediai_admin'\\\" | grep -q 1;
+        then\\n    echo \\\"❌ Role 'ediai_admin' still missing - migrations may fail
+        if RLS is enabled\\\"\\n    FINAL_CHECK_FAILED=true\\n  fi\\n\\n  if [ \\\"$FINAL_CHECK_FAILED\\\"
+        = \\\"true\\\" ]; then\\n    echo \\\"\\\"\\n    echo \\\"⚠️  Required roles
+        are missing. Please ask your DBA to run:\\\"\\n    echo \\\"   CREATE ROLE
+        ediai_app WITH LOGIN PASSWORD 'xxx' NOSUPERUSER NOBYPASSRLS;\\\"\\n    echo
+        \\\"   CREATE ROLE ediai_admin WITH LOGIN PASSWORD 'xxx' NOSUPERUSER BYPASSRLS;\\\"\\n
+        \   echo \\\"\\\"\\n    echo \\\"   Continuing with migration - it may fail
+        if RLS policies reference these roles.\\\"\\n  fi\\nfi\\n\\necho \\\"\\\"\\n\\n#
+        Step 1: Show current migration status\\necho \\\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\\"\\necho
+        \\\"Step 1: Check Current Migration Status\\\"\\necho \\\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\\"\\necho
+        \\\"\U0001F4CA Current migration status:\\\"\\nalembic current || echo \\\"No
+        migrations applied yet\\\"\\necho \\\"\\\"\\n\\n# Show migration history\\necho
+        \\\"\U0001F4DC Migration history:\\\"\\nalembic history | head -20\\necho
+        \\\"\\\"\\n\\n# Step 2: Run migrations\\necho \\\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\\"\\necho
+        \\\"Step 2: Run Migrations\\\"\\necho \\\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\\"\\necho
+        \\\"\U0001F680 Running migrations...\\\"\\nalembic upgrade head\\n\\necho
+        \\\"\\\"\\necho \\\"✅ Migration completed successfully!\\\"\\n\\n# Show final
+        status\\necho \\\"\\\"\\necho \\\"\U0001F4CA Final migration status:\\\"\\nalembic
+        current\\n\\necho \\\"\\\"\\necho \\\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\\"\\necho
+        \\\"✅ Database migrations completed!\\\"\\necho \\\"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\\\"\\n\"],\"env\":[{\"name\":\"ENVIRONMENT\",\"valueFrom\":{\"configMapKeyRef\":{\"key\":\"ENVIRONMENT\",\"name\":\"app-config\"}}},{\"name\":\"DATABASE_URL\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"DATABASE_URL\",\"name\":\"app-secrets\"}}},{\"name\":\"JWT_SECRET_KEY\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"JWT_SECRET_KEY\",\"name\":\"app-secrets\"}}},{\"name\":\"LOG_LEVEL\",\"value\":\"INFO\"},{\"name\":\"PYTHONUNBUFFERED\",\"value\":\"1\"}],\"image\":\"ghcr.io/johno10661/ediai-backend:staging-6da3180a60fea306d67103cfa92bbf9c4e669488\",\"imagePullPolicy\":\"Always\",\"name\":\"migration\",\"resources\":{\"limits\":{\"cpu\":\"500m\",\"memory\":\"1Gi\"},\"requests\":{\"cpu\":\"100m\",\"memory\":\"512Mi\"}},\"securityContext\":{\"allowPrivilegeEscalation\":false,\"capabilities\":{\"drop\":[\"ALL\"]},\"readOnlyRootFilesystem\":false,\"runAsNonRoot\":true,\"runAsUser\":1000}}],\"imagePullSecrets\":[{\"name\":\"ghcr-secret\"}],\"initContainers\":[{\"command\":[\"sh\",\"-c\",\"#
+        Extract host and port from DATABASE_URL\\n# Format: postgresql://user:pass@host:port/dbname\\nDB_HOST=$(echo
+        \\\"$DATABASE_URL\\\" | sed -E 's|.*@([^:/]+).*|\\\\1|')\\nDB_PORT=$(echo
+        \\\"$DATABASE_URL\\\" | sed -E 's|.*:([0-9]+)/.*|\\\\1|')\\nDB_PORT=${DB_PORT:-5432}\\n\\necho
+        \\\"Waiting for PostgreSQL to be ready at ${DB_HOST}:${DB_PORT}...\\\"\\nuntil
+        nc -z \\\"$DB_HOST\\\" \\\"$DB_PORT\\\"; do\\n  echo \\\"PostgreSQL is not
+        ready yet, waiting...\\\"\\n  sleep 2\\ndone\\necho \\\"✅ PostgreSQL is ready!\\\"\\n\\n#
+        Extra wait to ensure PostgreSQL is fully initialized\\nsleep 5\\n\"],\"env\":[{\"name\":\"DATABASE_URL\",\"valueFrom\":{\"secretKeyRef\":{\"key\":\"DATABASE_URL\",\"name\":\"app-secrets\"}}}],\"image\":\"busybox:1.35\",\"name\":\"wait-for-postgres\"}],\"restartPolicy\":\"OnFailure\",\"securityContext\":{\"fsGroup\":1000,\"runAsNonRoot\":true,\"runAsUser\":1000}}},\"ttlSecondsAfterFinished\":86400}}\n"
+    creationTimestamp: "2025-12-26T09:03:21Z"
+    generation: 1
+    labels:
+      app: db-migration
+      environment: staging
+    name: db-migration
+    namespace: ediai-staging
+    resourceVersion: "14234793"
+    uid: 3e5ba721-7152-434c-a99e-ea52793ee143
+  spec:
+    backoffLimit: 3
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 3e5ba721-7152-434c-a99e-ea52793ee143
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: db-migration
+          batch.kubernetes.io/controller-uid: 3e5ba721-7152-434c-a99e-ea52793ee143
+          batch.kubernetes.io/job-name: db-migration
+          controller-uid: 3e5ba721-7152-434c-a99e-ea52793ee143
+          environment: staging
+          job-name: db-migration
+      spec:
+        containers:
+        - command:
+          - /bin/bash
+          - -c
+          - "set -e\necho \"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\necho
+            \"\U0001F504 Running Database Migrations (Staging)\"\necho \"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\necho
+            \"\"\necho \"Environment: ${ENVIRONMENT}\"\necho \"Database: ${DATABASE_URL%%@*}@...\"
+            # Hide password in logs\necho \"\"\n\n# Navigate to backend directory\ncd
+            /app\n\n# Extract password from DATABASE_URL and export PGPASSWORD for
+            psql\n# Format: postgresql://user:pass@host:port/dbname\nexport PGPASSWORD=$(echo
+            \"${DATABASE_URL}\" | sed -E 's|.*://[^:]+:([^@]+)@.*|\\1|')\n\n# Step
+            0: Ensure database roles exist (required for RLS)\necho \"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\necho
+            \"Step 0: Verify Database Roles\"\necho \"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\n\n#
+            Check if roles exist (required for RLS policies)\nROLES_MISSING=false\nif
+            ! psql \"${DATABASE_URL}\" -tAc \"SELECT 1 FROM pg_roles WHERE rolname
+            = 'ediai_app'\" | grep -q 1; then\n  echo \"⚠️  Role 'ediai_app' does
+            not exist\"\n  ROLES_MISSING=true\nelse\n  echo \"✅ Role 'ediai_app' exists\"\nfi\n\nif
+            ! psql \"${DATABASE_URL}\" -tAc \"SELECT 1 FROM pg_roles WHERE rolname
+            = 'ediai_admin'\" | grep -q 1; then\n  echo \"⚠️  Role 'ediai_admin' does
+            not exist\"\n  ROLES_MISSING=true\nelse\n  echo \"✅ Role 'ediai_admin'
+            exists\"\nfi\n\nif [ \"$ROLES_MISSING\" = \"true\" ]; then\n  echo \"\"\n
+            \ echo \"⚠️  Some roles are missing. Attempting to create them...\"\n
+            \ echo \"   (This requires CREATEROLE privilege on the database user)\"\n
+            \ echo \"\"\n\n  # Try to create roles - gracefully handle permission
+            errors\n  psql \"${DATABASE_URL}\" -c \"\n    DO \\$\\$\n    BEGIN\n      IF
+            NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'ediai_app') THEN\n        CREATE
+            ROLE ediai_app WITH LOGIN PASSWORD '${EDIAI_APP_PASSWORD:-ediai_app}'
+            NOSUPERUSER NOBYPASSRLS;\n        RAISE NOTICE 'Created role: ediai_app';\n
+            \     END IF;\n    EXCEPTION WHEN insufficient_privilege THEN\n      RAISE
+            WARNING 'Cannot create ediai_app role - insufficient privileges. Ask your
+            DBA to create it.';\n    END\n    \\$\\$;\n  \" || echo \"   Could not
+            create ediai_app role\"\n\n  psql \"${DATABASE_URL}\" -c \"\n    DO \\$\\$\n
+            \   BEGIN\n      IF NOT EXISTS (SELECT FROM pg_roles WHERE rolname = 'ediai_admin')
+            THEN\n        CREATE ROLE ediai_admin WITH LOGIN PASSWORD '${EDIAI_ADMIN_PASSWORD:-ediai_admin}'
+            NOSUPERUSER BYPASSRLS;\n        RAISE NOTICE 'Created role: ediai_admin';\n
+            \     END IF;\n    EXCEPTION WHEN insufficient_privilege THEN\n      RAISE
+            WARNING 'Cannot create ediai_admin role - insufficient privileges. Ask
+            your DBA to create it.';\n    END\n    \\$\\$;\n  \" || echo \"   Could
+            not create ediai_admin role\"\n\n  # Verify roles exist after creation
+            attempt\n  echo \"\"\n  echo \"Verifying roles after creation attempt...\"\n
+            \ FINAL_CHECK_FAILED=false\n  if ! psql \"${DATABASE_URL}\" -tAc \"SELECT
+            1 FROM pg_roles WHERE rolname = 'ediai_app'\" | grep -q 1; then\n    echo
+            \"❌ Role 'ediai_app' still missing - migrations may fail if RLS is enabled\"\n
+            \   FINAL_CHECK_FAILED=true\n  fi\n  if ! psql \"${DATABASE_URL}\" -tAc
+            \"SELECT 1 FROM pg_roles WHERE rolname = 'ediai_admin'\" | grep -q 1;
+            then\n    echo \"❌ Role 'ediai_admin' still missing - migrations may fail
+            if RLS is enabled\"\n    FINAL_CHECK_FAILED=true\n  fi\n\n  if [ \"$FINAL_CHECK_FAILED\"
+            = \"true\" ]; then\n    echo \"\"\n    echo \"⚠️  Required roles are missing.
+            Please ask your DBA to run:\"\n    echo \"   CREATE ROLE ediai_app WITH
+            LOGIN PASSWORD 'xxx' NOSUPERUSER NOBYPASSRLS;\"\n    echo \"   CREATE
+            ROLE ediai_admin WITH LOGIN PASSWORD 'xxx' NOSUPERUSER BYPASSRLS;\"\n
+            \   echo \"\"\n    echo \"   Continuing with migration - it may fail if
+            RLS policies reference these roles.\"\n  fi\nfi\n\necho \"\"\n\n# Step
+            1: Show current migration status\necho \"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\necho
+            \"Step 1: Check Current Migration Status\"\necho \"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\necho
+            \"\U0001F4CA Current migration status:\"\nalembic current || echo \"No
+            migrations applied yet\"\necho \"\"\n\n# Show migration history\necho
+            \"\U0001F4DC Migration history:\"\nalembic history | head -20\necho \"\"\n\n#
+            Step 2: Run migrations\necho \"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\necho
+            \"Step 2: Run Migrations\"\necho \"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\necho
+            \"\U0001F680 Running migrations...\"\nalembic upgrade head\n\necho \"\"\necho
+            \"✅ Migration completed successfully!\"\n\n# Show final status\necho \"\"\necho
+            \"\U0001F4CA Final migration status:\"\nalembic current\n\necho \"\"\necho
+            \"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\necho \"✅ Database
+            migrations completed!\"\necho \"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\"\n"
+          env:
+          - name: ENVIRONMENT
+            valueFrom:
+              configMapKeyRef:
+                key: ENVIRONMENT
+                name: app-config
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: DATABASE_URL
+                name: app-secrets
+          - name: JWT_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: JWT_SECRET_KEY
+                name: app-secrets
+          - name: LOG_LEVEL
+            value: INFO
+          - name: PYTHONUNBUFFERED
+            value: "1"
+          image: ghcr.io/johno10661/ediai-backend:staging-6da3180a60fea306d67103cfa92bbf9c4e669488
+          imagePullPolicy: Always
+          name: migration
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            # Extract host and port from DATABASE_URL
+            # Format: postgresql://user:pass@host:port/dbname
+            DB_HOST=$(echo "$DATABASE_URL" | sed -E 's|.*@([^:/]+).*|\1|')
+            DB_PORT=$(echo "$DATABASE_URL" | sed -E 's|.*:([0-9]+)/.*|\1|')
+            DB_PORT=${DB_PORT:-5432}
+
+            echo "Waiting for PostgreSQL to be ready at ${DB_HOST}:${DB_PORT}..."
+            until nc -z "$DB_HOST" "$DB_PORT"; do
+              echo "PostgreSQL is not ready yet, waiting..."
+              sleep 2
+            done
+            echo "✅ PostgreSQL is ready!"
+
+            # Extra wait to ensure PostgreSQL is fully initialized
+            sleep 5
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: DATABASE_URL
+                name: app-secrets
+          image: busybox:1.35
+          imagePullPolicy: IfNotPresent
+          name: wait-for-postgres
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1000
+          runAsNonRoot: true
+          runAsUser: 1000
+        terminationGracePeriodSeconds: 30
+    ttlSecondsAfterFinished: 86400
+  status:
+    completionTime: "2025-12-26T09:03:48Z"
+    conditions:
+    - lastProbeTime: "2025-12-26T09:03:48Z"
+      lastTransitionTime: "2025-12-26T09:03:48Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: SuccessCriteriaMet
+    - lastProbeTime: "2025-12-26T09:03:48Z"
+      lastTransitionTime: "2025-12-26T09:03:48Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2025-12-26T09:03:21Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+kind: List
+metadata:
+  resourceVersion: ""

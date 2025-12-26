@@ -1,0 +1,33 @@
+COMPUTED VALUES:
+githubConfigSecret: github-app-secret
+githubConfigUrl: https://github.com/johno10661/EDIai
+maxRunners: 20
+minRunners: 8
+namespaceOverride: ""
+runnerScaleSetName: runners-ediai
+template:
+  spec:
+    containers:
+    - command:
+      - /home/runner/run.sh
+      env:
+      - name: PIP_CACHE_DIR
+        value: /cache/pip
+      - name: npm_config_cache
+        value: /cache/npm
+      - name: UV_CACHE_DIR
+        value: /cache/uv
+      - name: RUNNER_TOOL_CACHE
+        value: /cache/tool-cache
+      image: ghcr.io/ediai-dev/arc-runner:latest
+      name: runner
+      volumeMounts:
+      - mountPath: /cache
+        name: runner-cache
+    imagePullSecrets:
+    - name: ghcr-pull-secret
+    restartPolicy: Never
+    volumes:
+    - name: runner-cache
+      persistentVolumeClaim:
+        claimName: runner-cache-pvc

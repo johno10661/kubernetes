@@ -1,0 +1,39 @@
+apiVersion: v1
+items:
+- apiVersion: cert-manager.io/v1
+  kind: ClusterIssuer
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"cert-manager.io/v1","kind":"ClusterIssuer","metadata":{"annotations":{},"labels":{"app":"ediai"},"name":"letsencrypt-production"},"spec":{"acme":{"email":"john@ediai.com","privateKeySecretRef":{"name":"letsencrypt-production"},"server":"https://acme-v02.api.letsencrypt.org/directory","solvers":[{"http01":{"ingress":{"class":"traefik"}}}]}}}
+    creationTimestamp: "2025-11-20T18:27:24Z"
+    generation: 1
+    labels:
+      app: ediai
+    name: letsencrypt-production
+    resourceVersion: "3186991"
+    uid: 206d3978-9e0a-4311-b19c-8bb30170d71a
+  spec:
+    acme:
+      email: john@ediai.com
+      privateKeySecretRef:
+        name: letsencrypt-production
+      server: https://acme-v02.api.letsencrypt.org/directory
+      solvers:
+      - http01:
+          ingress:
+            class: traefik
+  status:
+    acme:
+      lastPrivateKeyHash: 9gvC2pzxB+sACE7s1MQwfEGVtGwQ2QWTVz6HhomQVUY=
+      lastRegisteredEmail: john@ediai.com
+    conditions:
+    - lastTransitionTime: "2025-11-20T18:27:25Z"
+      message: The ACME account was registered with the ACME server
+      observedGeneration: 1
+      reason: ACMEAccountRegistered
+      status: "True"
+      type: Ready
+kind: List
+metadata:
+  resourceVersion: ""

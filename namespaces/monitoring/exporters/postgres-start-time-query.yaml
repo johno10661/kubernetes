@@ -1,0 +1,7 @@
+pg_postmaster:
+  query: 'SELECT extract(epoch from pg_postmaster_start_time()) as start_time_seconds'
+  master: true
+  metrics:
+    - start_time_seconds:
+        usage: 'GAUGE'
+        description: 'Time at which postmaster started'

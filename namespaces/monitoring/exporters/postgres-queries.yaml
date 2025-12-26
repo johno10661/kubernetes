@@ -1,0 +1,84 @@
+pg_settings:
+  query: "SELECT name, setting::float, unit, short_desc FROM pg_settings WHERE vartype IN ('integer', 'real')"
+  master: true
+  metrics:
+    - name:
+        usage: 'LABEL'
+        description: 'Setting name'
+    - setting:
+        usage: 'GAUGE'
+        description: 'Setting value'
+    - unit:
+        usage: 'LABEL'
+        description: 'Setting unit'
+    - short_desc:
+        usage: 'LABEL'
+        description: 'Setting description'
+
+pg_stat_database:
+  query: |
+    SELECT
+      datname,
+      numbackends,
+      xact_commit,
+      xact_rollback,
+      blks_read,
+      blks_hit,
+      tup_returned,
+      tup_fetched,
+      tup_inserted,
+      tup_updated,
+      tup_deleted,
+      conflicts,
+      temp_files,
+      temp_bytes,
+      deadlocks
+    FROM pg_stat_database
+    WHERE datname NOT IN ('template0', 'template1')
+  master: true
+  metrics:
+    - datname:
+        usage: 'LABEL'
+        description: 'Database name'
+    - numbackends:
+        usage: 'GAUGE'
+        description: 'Number of backends'
+    - xact_commit:
+        usage: 'COUNTER'
+        description: 'Transactions committed'
+    - xact_rollback:
+        usage: 'COUNTER'
+        description: 'Transactions rolled back'
+    - blks_read:
+        usage: 'COUNTER'
+        description: 'Blocks read from disk'
+    - blks_hit:
+        usage: 'COUNTER'
+        description: 'Blocks found in cache'
+    - tup_returned:
+        usage: 'COUNTER'
+        description: 'Rows returned'
+    - tup_fetched:
+        usage: 'COUNTER'
+        description: 'Rows fetched'
+    - tup_inserted:
+        usage: 'COUNTER'
+        description: 'Rows inserted'
+    - tup_updated:
+        usage: 'COUNTER'
+        description: 'Rows updated'
+    - tup_deleted:
+        usage: 'COUNTER'
+        description: 'Rows deleted'
+    - conflicts:
+        usage: 'COUNTER'
+        description: 'Conflicts'
+    - temp_files:
+        usage: 'COUNTER'
+        description: 'Temporary files created'
+    - temp_bytes:
+        usage: 'COUNTER'
+        description: 'Temporary bytes written'
+    - deadlocks:
+        usage: 'COUNTER'
+        description: 'Deadlocks detected'

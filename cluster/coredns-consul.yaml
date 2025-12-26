@@ -1,0 +1,19 @@
+# CoreDNS custom config for Consul DNS integration
+# Enables K8s pods to resolve *.consul domains via Patroni/Consul service discovery
+#
+# Usage:
+#   primary.pg-cluster.service.consul -> PostgreSQL leader
+#   replica.pg-cluster.service.consul -> PostgreSQL replicas
+#
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  consul.server: |
+    consul:53 {
+      errors
+      cache 30
+      forward . 192.168.100.60:8600 192.168.100.71:8600 192.168.100.81:8600
+    }

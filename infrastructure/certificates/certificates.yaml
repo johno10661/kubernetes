@@ -1,0 +1,89 @@
+apiVersion: v1
+items:
+- apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    creationTimestamp: "2025-11-20T18:28:35Z"
+    generation: 1
+    labels:
+      app: ediai
+      environment: production
+    name: ediai-production-tls
+    namespace: ediai-production
+    ownerReferences:
+    - apiVersion: networking.k8s.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Ingress
+      name: ediai-ingress
+      uid: 0c80d605-2bbc-49da-b6c7-fb4923e433e8
+    resourceVersion: "3187482"
+    uid: 4a268dfb-57d4-4a83-9476-be6eda80fca1
+  spec:
+    dnsNames:
+    - ediai.com
+    issuerRef:
+      group: cert-manager.io
+      kind: ClusterIssuer
+      name: letsencrypt-production
+    secretName: ediai-production-tls
+    usages:
+    - digital signature
+    - key encipherment
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-20T18:28:57Z"
+      message: Certificate is up to date and has not expired
+      observedGeneration: 1
+      reason: Ready
+      status: "True"
+      type: Ready
+    notAfter: "2026-02-18T17:30:25Z"
+    notBefore: "2025-11-20T17:30:26Z"
+    renewalTime: "2026-01-19T17:30:25Z"
+    revision: 1
+- apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    creationTimestamp: "2025-11-20T18:28:31Z"
+    generation: 1
+    labels:
+      app: ediai
+      environment: staging
+    name: ediai-staging-tls
+    namespace: ediai-staging
+    ownerReferences:
+    - apiVersion: networking.k8s.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Ingress
+      name: ediai-ingress
+      uid: 6ac805f7-c368-4b4d-8fe6-850a4fee65fb
+    resourceVersion: "3187439"
+    uid: 7bcfc870-b2b1-4034-94c1-f67021e850c1
+  spec:
+    dnsNames:
+    - ediai.net
+    issuerRef:
+      group: cert-manager.io
+      kind: ClusterIssuer
+      name: letsencrypt-production
+    secretName: ediai-staging-tls
+    usages:
+    - digital signature
+    - key encipherment
+  status:
+    conditions:
+    - lastTransitionTime: "2025-11-20T18:28:54Z"
+      message: Certificate is up to date and has not expired
+      observedGeneration: 1
+      reason: Ready
+      status: "True"
+      type: Ready
+    notAfter: "2026-02-18T17:30:22Z"
+    notBefore: "2025-11-20T17:30:23Z"
+    renewalTime: "2026-01-19T17:30:22Z"
+    revision: 1
+kind: List
+metadata:
+  resourceVersion: ""

@@ -1,0 +1,207 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "6"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"web","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"n8n","app.kubernetes.io/part-of":"n8n"},"name":"n8n","namespace":"n8n"},"spec":{"replicas":1,"selector":{"matchLabels":{"app.kubernetes.io/component":"web","app.kubernetes.io/name":"n8n"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app.kubernetes.io/component":"web","app.kubernetes.io/name":"n8n"}},"spec":{"containers":[{"envFrom":[{"configMapRef":{"name":"n8n-config"}},{"secretRef":{"name":"n8n-credentials"}}],"image":"ghcr.io/johno10661/n8n:latest","imagePullPolicy":"Always","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/healthz","port":"http"},"initialDelaySeconds":30,"periodSeconds":10,"timeoutSeconds":5},"name":"n8n","ports":[{"containerPort":5678,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/healthz","port":"http"},"initialDelaySeconds":10,"periodSeconds":5,"timeoutSeconds":3},"resources":{"limits":{"cpu":"1000m","memory":"1Gi"},"requests":{"cpu":"100m","memory":"256Mi"}}}],"imagePullSecrets":[{"name":"ghcr-credentials"}],"securityContext":{"fsGroup":1000}}}}}
+    creationTimestamp: "2025-12-05T01:45:14Z"
+    generation: 6
+    labels:
+      app.kubernetes.io/component: web
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: n8n
+      app.kubernetes.io/part-of: n8n
+    name: n8n
+    namespace: n8n
+    resourceVersion: "13560306"
+    uid: 26ac67ba-01f6-48b7-a1bb-ee43716d68c4
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: web
+        app.kubernetes.io/name: n8n
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-23T23:28:21-05:00"
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: web
+          app.kubernetes.io/name: n8n
+      spec:
+        containers:
+        - envFrom:
+          - configMapRef:
+              name: n8n-config
+          - secretRef:
+              name: n8n-credentials
+          image: ghcr.io/johno10661/n8n:latest
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: n8n
+          ports:
+          - containerPort: 5678
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: http
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-credentials
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1000
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-12-05T01:48:35Z"
+      lastUpdateTime: "2025-12-05T01:48:35Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-05T01:45:14Z"
+      lastUpdateTime: "2025-12-24T04:29:06Z"
+      message: ReplicaSet "n8n-6f64c89454" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 6
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"service","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"n8n","app.kubernetes.io/part-of":"n8n"},"name":"n8n","namespace":"n8n"},"spec":{"ports":[{"name":"http","port":5678,"protocol":"TCP","targetPort":"http"}],"selector":{"app.kubernetes.io/component":"web","app.kubernetes.io/name":"n8n"},"type":"ClusterIP"}}
+    creationTimestamp: "2025-12-05T01:45:14Z"
+    labels:
+      app.kubernetes.io/component: service
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: n8n
+      app.kubernetes.io/part-of: n8n
+    name: n8n
+    namespace: n8n
+    resourceVersion: "7476702"
+    uid: 49ffc266-9dc1-469a-b3c3-3859d6d0787e
+  spec:
+    clusterIP: 10.43.251.179
+    clusterIPs:
+    - 10.43.251.179
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 5678
+      protocol: TCP
+      targetPort: http
+    selector:
+      app.kubernetes.io/component: web
+      app.kubernetes.io/name: n8n
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIBdzCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
+      dmVyLWNhQDE3NjIzMTk3MDUwHhcNMjUxMTA1MDUxNTA1WhcNMzUxMTAzMDUxNTA1
+      WjAjMSEwHwYDVQQDDBhrM3Mtc2VydmVyLWNhQDE3NjIzMTk3MDUwWTATBgcqhkjO
+      PQIBBggqhkjOPQMBBwNCAAR7AJxksdMJZVIqsOrjf54yL6K7iY/JWSs9ZkQg0AUk
+      aO30K0wLuHk4cK2eTPp/VQfmoT2dKjclRpDQ0VSUKWi2o0IwQDAOBgNVHQ8BAf8E
+      BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUf6j/2FFh3fnWFj0FbbrB
+      8UWVKzIwCgYIKoZIzj0EAwIDSAAwRQIhAJMPsstsw64+5mY7QIjcRxICHdHjksj3
+      FVMXbjV+OBPtAiBzvKXcXD6YxhyxvDyHZ/kYyX95MPXYfd/wutZ6iyAOrQ==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-12-05T01:45:14Z"
+    name: kube-root-ca.crt
+    namespace: n8n
+    resourceVersion: "7476696"
+    uid: af13ec50-438b-472b-8681-062c12878432
+- apiVersion: v1
+  data:
+    DB_POSTGRESDB_DATABASE: n8n
+    DB_POSTGRESDB_HOST: 192.168.100.69
+    DB_POSTGRESDB_PORT: "5432"
+    DB_TYPE: postgresdb
+    EXECUTIONS_DATA_MAX_AGE: "168"
+    EXECUTIONS_DATA_PRUNE: "true"
+    GENERIC_TIMEZONE: America/New_York
+    N8N_EDITOR_BASE_URL: https://n8n.localdomain/
+    N8N_HOST: n8n.localdomain
+    N8N_PORT: "5678"
+    N8N_PROTOCOL: https
+    N8N_SECURE_COOKIE: "true"
+    N8N_TRUST_PROXY: "true"
+    TZ: America/New_York
+    WEBHOOK_URL: https://n8n.localdomain/
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"DB_POSTGRESDB_DATABASE":"n8n","DB_POSTGRESDB_HOST":"192.168.100.69","DB_POSTGRESDB_PORT":"5432","DB_TYPE":"postgresdb","EXECUTIONS_DATA_MAX_AGE":"168","EXECUTIONS_DATA_PRUNE":"true","GENERIC_TIMEZONE":"America/New_York","N8N_EDITOR_BASE_URL":"https://n8n.localdomain/","N8N_HOST":"n8n.localdomain","N8N_PORT":"5678","N8N_PROTOCOL":"https","N8N_SECURE_COOKIE":"true","N8N_TRUST_PROXY":"true","TZ":"America/New_York","WEBHOOK_URL":"https://n8n.localdomain/"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"config","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"n8n","app.kubernetes.io/part-of":"n8n"},"name":"n8n-config","namespace":"n8n"}}
+    creationTimestamp: "2025-12-05T01:45:14Z"
+    labels:
+      app.kubernetes.io/component: config
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: n8n
+      app.kubernetes.io/part-of: n8n
+    name: n8n-config
+    namespace: n8n
+    resourceVersion: "7495252"
+    uid: 6b51c067-bdd3-4848-9195-423873ed8338
+kind: List
+metadata:
+  resourceVersion: ""

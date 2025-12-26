@@ -1,0 +1,831 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "37"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"discourse","component":"sidekiq","environment":"production","tier":"worker"},"name":"discourse-sidekiq","namespace":"discourse-production"},"spec":{"progressDeadlineSeconds":300,"replicas":3,"selector":{"matchLabels":{"app":"discourse","component":"sidekiq","environment":"production"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":1},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"discourse","component":"sidekiq","environment":"production","tier":"worker"}},"spec":{"affinity":{"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchExpressions":[{"key":"app","operator":"In","values":["discourse"]},{"key":"component","operator":"In","values":["sidekiq"]}]},"topologyKey":"kubernetes.io/hostname"},"weight":100}]}},"containers":[{"command":["/bin/bash","-c","echo \"Starting Discourse Sidekiq workers as discourse user...\"\ncd /var/www/discourse\n# Create symlinks for uploads and backups\necho \"Creating symlinks for uploads and backups...\"\nrm -rf public/uploads public/backups\nln -sfn /shared/uploads public/uploads\nln -sfn /shared/backups public/backups\nexport HOME=/home/discourse\nexport USER=discourse\nexport RAILS_ENV=production\nexec bundle exec sidekiq -q critical,8 -q default,4 -q low,2 -q ultra_low,1\n"],"env":[{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"key":"DATABASE_URL","name":"discourse-secrets"}}},{"name":"DISCOURSE_DB_PASSWORD","valueFrom":{"secretKeyRef":{"key":"DISCOURSE_DB_PASSWORD","name":"discourse-secrets"}}},{"name":"SECRET_KEY_BASE","valueFrom":{"secretKeyRef":{"key":"SECRET_KEY_BASE","name":"discourse-secrets"}}},{"name":"DISCOURSE_SMTP_PASSWORD","valueFrom":{"secretKeyRef":{"key":"DISCOURSE_SMTP_PASSWORD","name":"discourse-secrets"}}},{"name":"SIDEKIQ_CONCURRENCY","value":"5"}],"envFrom":[{"configMapRef":{"name":"discourse-config"}}],"image":"ghcr.io/johno10661/discourse:production","imagePullPolicy":"IfNotPresent","livenessProbe":{"exec":{"command":["/bin/bash","-c","# Check if Sidekiq process is running\npgrep -f sidekiq \u003e /dev/null\n"]},"failureThreshold":3,"initialDelaySeconds":60,"periodSeconds":30,"timeoutSeconds":5},"name":"discourse-sidekiq","readinessProbe":{"exec":{"command":["/bin/bash","-c","# Check Redis connectivity\nredis-cli -h ${DISCOURSE_REDIS_HOST} -p ${DISCOURSE_REDIS_PORT} ping | grep -q PONG\n"]},"failureThreshold":3,"initialDelaySeconds":30,"periodSeconds":10,"timeoutSeconds":5},"resources":{"limits":{"cpu":"2000m","memory":"3Gi"},"requests":{"cpu":"500m","memory":"1Gi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000},"startupProbe":{"exec":{"command":["/bin/bash","-c","# Check if Sidekiq process started\npgrep -f sidekiq \u003e /dev/null\n"]},"failureThreshold":30,"initialDelaySeconds":10,"periodSeconds":10,"timeoutSeconds":5},"volumeMounts":[{"mountPath":"/shared/uploads","name":"uploads"},{"mountPath":"/shared/backups","name":"backups"}]}],"imagePullSecrets":[{"name":"ghcr-secret"}],"initContainers":[{"command":["sh","-c","until pg_isready -h ${DISCOURSE_DB_HOST} -p ${DISCOURSE_DB_PORT} -U ${DISCOURSE_DB_USERNAME}; do\n  echo \"Waiting for PostgreSQL...\"\n  sleep 2\ndone\n"],"envFrom":[{"configMapRef":{"name":"discourse-config"}}],"image":"postgres:17-alpine","name":"wait-for-db"},{"command":["sh","-c","until redis-cli -h ${DISCOURSE_REDIS_HOST} -p ${DISCOURSE_REDIS_PORT} ping; do\n  echo \"Waiting for Redis...\"\n  sleep 2\ndone\n"],"envFrom":[{"configMapRef":{"name":"discourse-config"}}],"image":"redis:7-alpine","name":"wait-for-redis"}],"securityContext":{"fsGroup":1000,"runAsNonRoot":false},"terminationGracePeriodSeconds":120,"volumes":[{"name":"uploads","persistentVolumeClaim":{"claimName":"discourse-uploads-pvc"}},{"name":"backups","persistentVolumeClaim":{"claimName":"discourse-backups-pvc"}}]}}}}
+    creationTimestamp: "2025-12-02T02:23:27Z"
+    generation: 41
+    labels:
+      app: discourse
+      component: sidekiq
+      environment: production
+      tier: worker
+    name: discourse-sidekiq
+    namespace: discourse-production
+    resourceVersion: "12807999"
+    uid: 977492c3-46e7-4d29-b5d9-c7c476cdc395
+  spec:
+    progressDeadlineSeconds: 300
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: discourse
+        component: sidekiq
+        environment: production
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 1
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-21T23:31:36-05:00"
+        creationTimestamp: null
+        labels:
+          app: discourse
+          component: sidekiq
+          environment: production
+          tier: worker
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - discourse
+                  - key: component
+                    operator: In
+                    values:
+                    - sidekiq
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+        containers:
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            echo "Starting Discourse Sidekiq workers as discourse user..."
+            cd /var/www/discourse
+            # Create symlinks for uploads and backups
+            echo "Creating symlinks for uploads and backups..."
+            rm -rf public/uploads public/backups
+            ln -sfn /shared/uploads public/uploads
+            ln -sfn /shared/backups public/backups
+            export HOME=/home/discourse
+            export USER=discourse
+            export RAILS_ENV=production
+            exec bundle exec sidekiq -q critical,8 -q default,4 -q low,2 -q ultra_low,1
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: DATABASE_URL
+                name: discourse-secrets
+          - name: DISCOURSE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: DISCOURSE_DB_PASSWORD
+                name: discourse-secrets
+          - name: SECRET_KEY_BASE
+            valueFrom:
+              secretKeyRef:
+                key: SECRET_KEY_BASE
+                name: discourse-secrets
+          - name: DISCOURSE_SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: DISCOURSE_SMTP_PASSWORD
+                name: discourse-secrets
+          - name: SIDEKIQ_CONCURRENCY
+            value: "5"
+          envFrom:
+          - configMapRef:
+              name: discourse-config
+          image: ghcr.io/johno10661/discourse:production
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - |
+                # Check if Sidekiq process is running
+                pgrep -f sidekiq > /dev/null
+            failureThreshold: 3
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: discourse-sidekiq
+          readinessProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - |
+                # Check Redis connectivity
+                redis-cli -h ${DISCOURSE_REDIS_HOST} -p ${DISCOURSE_REDIS_PORT} ping | grep -q PONG
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "2"
+              memory: 3Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          startupProbe:
+            exec:
+              command:
+              - /bin/bash
+              - -c
+              - |
+                # Check if Sidekiq process started
+                pgrep -f sidekiq > /dev/null
+            failureThreshold: 30
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /shared/uploads
+            name: uploads
+          - mountPath: /shared/backups
+            name: backups
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            until pg_isready -h ${DISCOURSE_DB_HOST} -p ${DISCOURSE_DB_PORT} -U ${DISCOURSE_DB_USERNAME}; do
+              echo "Waiting for PostgreSQL..."
+              sleep 2
+            done
+          envFrom:
+          - configMapRef:
+              name: discourse-config
+          image: postgres:17-alpine
+          imagePullPolicy: IfNotPresent
+          name: wait-for-db
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - command:
+          - sh
+          - -c
+          - |
+            until redis-cli -h ${DISCOURSE_REDIS_HOST} -p ${DISCOURSE_REDIS_PORT} ping; do
+              echo "Waiting for Redis..."
+              sleep 2
+            done
+          envFrom:
+          - configMapRef:
+              name: discourse-config
+          image: redis:7-alpine
+          imagePullPolicy: IfNotPresent
+          name: wait-for-redis
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1000
+          runAsNonRoot: false
+        terminationGracePeriodSeconds: 120
+        volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: discourse-uploads-pvc
+        - name: backups
+          persistentVolumeClaim:
+            claimName: discourse-backups-pvc
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-12-21T07:46:16Z"
+      lastUpdateTime: "2025-12-21T07:46:16Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-21T22:26:53Z"
+      lastUpdateTime: "2025-12-22T04:32:58Z"
+      message: ReplicaSet "discourse-sidekiq-746c786758" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 41
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "35"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"discourse","component":"web","environment":"production","tier":"frontend"},"name":"discourse-web","namespace":"discourse-production"},"spec":{"progressDeadlineSeconds":600,"replicas":3,"selector":{"matchLabels":{"app":"discourse","component":"web","environment":"production"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"discourse","component":"web","environment":"production","tier":"frontend"}},"spec":{"affinity":{"podAntiAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"podAffinityTerm":{"labelSelector":{"matchExpressions":[{"key":"app","operator":"In","values":["discourse"]},{"key":"component","operator":"In","values":["web"]}]},"topologyKey":"kubernetes.io/hostname"},"weight":100}]}},"containers":[{"command":["/bin/bash","-c","echo \"Starting Discourse Unicorn web server as discourse user...\"\ncd /var/www/discourse\n# Create symlinks for uploads and backups\necho \"Creating symlinks for uploads and backups...\"\nrm -rf public/uploads public/backups\nln -sfn /shared/uploads public/uploads\nln -sfn /shared/backups public/backups\n# Verify asset-processor.js exists (copied by initContainer)\nif [ -f tmp/asset-processor.js ]; then\n  echo \"Found asset-processor.js ($(du -h tmp/asset-processor.js | cut -f1))\"\nelse\n  echo \"WARNING: asset-processor.js not found in tmp directory!\"\nfi\n# Create necessary directories (already running as discourse user)\nmkdir -p tmp/pids tmp/sockets tmp/cache log\n# Fix git ownership warning\ngit config --global --add safe.directory /var/www/discourse\n# Export environment variables\nexport HOME=/home/discourse\nexport USER=discourse\nexport RAILS_ENV=production\n# Run unicorn (already running as discourse user - matches Docker)\nexec bundle exec unicorn -E production -c config/unicorn.conf.rb\n"],"env":[{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"key":"DATABASE_URL","name":"discourse-secrets"}}},{"name":"DISCOURSE_DB_PASSWORD","valueFrom":{"secretKeyRef":{"key":"DISCOURSE_DB_PASSWORD","name":"discourse-secrets"}}},{"name":"SECRET_KEY_BASE","valueFrom":{"secretKeyRef":{"key":"SECRET_KEY_BASE","name":"discourse-secrets"}}},{"name":"DISCOURSE_SMTP_PASSWORD","valueFrom":{"secretKeyRef":{"key":"DISCOURSE_SMTP_PASSWORD","name":"discourse-secrets"}}},{"name":"UNICORN_BIND_ALL","value":"true"},{"name":"UNICORN_WORKERS","value":"3"},{"name":"UNICORN_SIDEKIQS","value":"0"}],"envFrom":[{"configMapRef":{"name":"discourse-config"}}],"image":"ghcr.io/johno10661/discourse:production","imagePullPolicy":"Always","livenessProbe":{"failureThreshold":3,"httpGet":{"httpHeaders":[{"name":"Host","value":"forum.gatesmills.app"}],"path":"/srv/status","port":3000},"initialDelaySeconds":60,"periodSeconds":30,"successThreshold":1,"timeoutSeconds":10},"name":"discourse-web","ports":[{"containerPort":3000,"name":"unicorn","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"httpHeaders":[{"name":"Host","value":"forum.gatesmills.app"}],"path":"/srv/status","port":3000},"initialDelaySeconds":30,"periodSeconds":10,"successThreshold":1,"timeoutSeconds":5},"resources":{"limits":{"cpu":"2000m","memory":"4Gi"},"requests":{"cpu":"1000m","memory":"2Gi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsGroup":1000,"runAsNonRoot":true,"runAsUser":1000},"startupProbe":{"failureThreshold":30,"httpGet":{"httpHeaders":[{"name":"Host","value":"forum.gatesmills.app"}],"path":"/srv/status","port":3000},"initialDelaySeconds":10,"periodSeconds":5,"timeoutSeconds":5},"volumeMounts":[{"mountPath":"/shared/uploads","name":"uploads"},{"mountPath":"/shared/backups","name":"backups"},{"mountPath":"/var/www/discourse/tmp","name":"discourse-tmp"},{"mountPath":"/var/www/discourse/log","name":"discourse-log"},{"mountPath":"/home/discourse","name":"discourse-home"}]},{"command":["/bin/bash","-c","echo \"Setting up nginx for Discourse...\"\ncd /var/www/discourse\n# Create symlinks for uploads and backups\necho \"Creating symlinks for uploads and backups...\"\nrm -rf public/uploads public/backups\nln -sfn /shared/uploads public/uploads\nln -sfn /shared/backups public/backups\n# Create nginx directories\nmkdir -p /var/log/nginx /var/nginx/cache\necho \"Starting nginx...\"\nexec /usr/sbin/nginx -g \"daemon off;\"\n"],"image":"ghcr.io/johno10661/discourse:production","imagePullPolicy":"Always","livenessProbe":{"httpGet":{"httpHeaders":[{"name":"Host","value":"forum.gatesmills.app"}],"path":"/srv/status","port":80},"initialDelaySeconds":15,"periodSeconds":30,"timeoutSeconds":10},"name":"nginx","ports":[{"containerPort":80,"name":"http","protocol":"TCP"}],"readinessProbe":{"httpGet":{"httpHeaders":[{"name":"Host","value":"forum.gatesmills.app"}],"path":"/srv/status","port":80},"initialDelaySeconds":10,"periodSeconds":10,"timeoutSeconds":5},"resources":{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}},"volumeMounts":[{"mountPath":"/shared/uploads","name":"uploads"},{"mountPath":"/shared/backups","name":"backups"},{"mountPath":"/var/log/nginx","name":"nginx-log"}]}],"imagePullSecrets":[{"name":"ghcr-secret"}],"initContainers":[{"command":["sh","-c","until pg_isready -h ${DISCOURSE_DB_HOST} -p ${DISCOURSE_DB_PORT} -U ${DISCOURSE_DB_USERNAME}; do\n  echo \"Waiting for PostgreSQL...\"\n  sleep 2\ndone\n"],"envFrom":[{"configMapRef":{"name":"discourse-config"}}],"image":"postgres:17-alpine","name":"wait-for-db"},{"command":["sh","-c","until redis-cli -h ${DISCOURSE_REDIS_HOST} -p ${DISCOURSE_REDIS_PORT} ping; do\n  echo \"Waiting for Redis...\"\n  sleep 2\ndone\n"],"envFrom":[{"configMapRef":{"name":"discourse-config"}}],"image":"redis:7-alpine","name":"wait-for-redis"},{"command":["/bin/bash","-c","echo \"Copying Discourse tmp directory to emptyDir volume...\"\ncp -av /var/www/discourse/tmp/* /tmp-volume/ || true\necho \"Fixing ownership (discourse:www-data = 1000:1000)...\"\nchown -R 1000:1000 /tmp-volume\necho \"Copied tmp files ($(du -sh /tmp-volume | cut -f1))\"\nls -lh /tmp-volume/asset-processor.js || echo \"WARNING: asset-processor.js not found!\"\n"],"image":"ghcr.io/johno10661/discourse:production","name":"copy-tmp-files","volumeMounts":[{"mountPath":"/tmp-volume","name":"discourse-tmp"}]}],"securityContext":{"fsGroup":1000,"runAsNonRoot":false},"terminationGracePeriodSeconds":60,"volumes":[{"name":"uploads","persistentVolumeClaim":{"claimName":"discourse-uploads-pvc"}},{"name":"backups","persistentVolumeClaim":{"claimName":"discourse-backups-pvc"}},{"emptyDir":{},"name":"discourse-tmp"},{"emptyDir":{},"name":"discourse-log"},{"emptyDir":{},"name":"discourse-home"},{"emptyDir":{},"name":"nginx-log"}]}}}}
+    creationTimestamp: "2025-12-03T02:08:27Z"
+    generation: 35
+    labels:
+      app: discourse
+      component: web
+      environment: production
+      tier: frontend
+    name: discourse-web
+    namespace: discourse-production
+    resourceVersion: "12786265"
+    uid: 3b845cd2-2ec3-4667-8cf5-cdb4d15e54af
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: discourse
+        component: web
+        environment: production
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-21T23:31:36-05:00"
+        creationTimestamp: null
+        labels:
+          app: discourse
+          component: web
+          environment: production
+          tier: frontend
+      spec:
+        affinity:
+          podAntiAffinity:
+            preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                    - discourse
+                  - key: component
+                    operator: In
+                    values:
+                    - web
+                topologyKey: kubernetes.io/hostname
+              weight: 100
+        containers:
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            echo "Starting Discourse Unicorn web server as discourse user..."
+            cd /var/www/discourse
+            # Create symlinks for uploads and backups
+            echo "Creating symlinks for uploads and backups..."
+            rm -rf public/uploads public/backups
+            ln -sfn /shared/uploads public/uploads
+            ln -sfn /shared/backups public/backups
+            # Verify asset-processor.js exists (copied by initContainer)
+            if [ -f tmp/asset-processor.js ]; then
+              echo "Found asset-processor.js ($(du -h tmp/asset-processor.js | cut -f1))"
+            else
+              echo "WARNING: asset-processor.js not found in tmp directory!"
+            fi
+            # Create necessary directories (already running as discourse user)
+            mkdir -p tmp/pids tmp/sockets tmp/cache log
+            # Fix git ownership warning
+            git config --global --add safe.directory /var/www/discourse
+            # Export environment variables
+            export HOME=/home/discourse
+            export USER=discourse
+            export RAILS_ENV=production
+            # Run unicorn (already running as discourse user - matches Docker)
+            exec bundle exec unicorn -E production -c config/unicorn.conf.rb
+          env:
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: DATABASE_URL
+                name: discourse-secrets
+          - name: DISCOURSE_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: DISCOURSE_DB_PASSWORD
+                name: discourse-secrets
+          - name: SECRET_KEY_BASE
+            valueFrom:
+              secretKeyRef:
+                key: SECRET_KEY_BASE
+                name: discourse-secrets
+          - name: DISCOURSE_SMTP_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: DISCOURSE_SMTP_PASSWORD
+                name: discourse-secrets
+          - name: UNICORN_BIND_ALL
+            value: "true"
+          - name: UNICORN_WORKERS
+            value: "3"
+          - name: UNICORN_SIDEKIQS
+            value: "0"
+          envFrom:
+          - configMapRef:
+              name: discourse-config
+          image: ghcr.io/johno10661/discourse:production
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              httpHeaders:
+              - name: Host
+                value: forum.gatesmills.app
+              path: /srv/status
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: discourse-web
+          ports:
+          - containerPort: 3000
+            name: unicorn
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              httpHeaders:
+              - name: Host
+                value: forum.gatesmills.app
+              path: /srv/status
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: "2"
+              memory: 4Gi
+            requests:
+              cpu: "1"
+              memory: 2Gi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsGroup: 1000
+            runAsNonRoot: true
+            runAsUser: 1000
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              httpHeaders:
+              - name: Host
+                value: forum.gatesmills.app
+              path: /srv/status
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /shared/uploads
+            name: uploads
+          - mountPath: /shared/backups
+            name: backups
+          - mountPath: /var/www/discourse/tmp
+            name: discourse-tmp
+          - mountPath: /var/www/discourse/log
+            name: discourse-log
+          - mountPath: /home/discourse
+            name: discourse-home
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            echo "Setting up nginx for Discourse..."
+            cd /var/www/discourse
+            # Create symlinks for uploads and backups
+            echo "Creating symlinks for uploads and backups..."
+            rm -rf public/uploads public/backups
+            ln -sfn /shared/uploads public/uploads
+            ln -sfn /shared/backups public/backups
+            # Create nginx directories
+            mkdir -p /var/log/nginx /var/nginx/cache
+            echo "Starting nginx..."
+            exec /usr/sbin/nginx -g "daemon off;"
+          image: ghcr.io/johno10661/discourse:production
+          imagePullPolicy: Always
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              httpHeaders:
+              - name: Host
+                value: forum.gatesmills.app
+              path: /srv/status
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 15
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 10
+          name: nginx
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              httpHeaders:
+              - name: Host
+                value: forum.gatesmills.app
+              path: /srv/status
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /shared/uploads
+            name: uploads
+          - mountPath: /shared/backups
+            name: backups
+          - mountPath: /var/log/nginx
+            name: nginx-log
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            until pg_isready -h ${DISCOURSE_DB_HOST} -p ${DISCOURSE_DB_PORT} -U ${DISCOURSE_DB_USERNAME}; do
+              echo "Waiting for PostgreSQL..."
+              sleep 2
+            done
+          envFrom:
+          - configMapRef:
+              name: discourse-config
+          image: postgres:17-alpine
+          imagePullPolicy: IfNotPresent
+          name: wait-for-db
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - command:
+          - sh
+          - -c
+          - |
+            until redis-cli -h ${DISCOURSE_REDIS_HOST} -p ${DISCOURSE_REDIS_PORT} ping; do
+              echo "Waiting for Redis..."
+              sleep 2
+            done
+          envFrom:
+          - configMapRef:
+              name: discourse-config
+          image: redis:7-alpine
+          imagePullPolicy: IfNotPresent
+          name: wait-for-redis
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        - command:
+          - /bin/bash
+          - -c
+          - |
+            echo "Copying Discourse tmp directory to emptyDir volume..."
+            cp -av /var/www/discourse/tmp/* /tmp-volume/ || true
+            echo "Fixing ownership (discourse:www-data = 1000:1000)..."
+            chown -R 1000:1000 /tmp-volume
+            echo "Copied tmp files ($(du -sh /tmp-volume | cut -f1))"
+            ls -lh /tmp-volume/asset-processor.js || echo "WARNING: asset-processor.js not found!"
+          image: ghcr.io/johno10661/discourse:production
+          imagePullPolicy: IfNotPresent
+          name: copy-tmp-files
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /tmp-volume
+            name: discourse-tmp
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1000
+          runAsNonRoot: false
+        terminationGracePeriodSeconds: 60
+        volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: discourse-uploads-pvc
+        - name: backups
+          persistentVolumeClaim:
+            claimName: discourse-backups-pvc
+        - emptyDir: {}
+          name: discourse-tmp
+        - emptyDir: {}
+          name: discourse-log
+        - emptyDir: {}
+          name: discourse-home
+        - emptyDir: {}
+          name: nginx-log
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-12-21T07:46:14Z"
+      lastUpdateTime: "2025-12-21T07:46:14Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-03T03:10:10Z"
+      lastUpdateTime: "2025-12-22T04:33:36Z"
+      message: ReplicaSet "discourse-web-68485dc766" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 35
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"discourse","component":"web","environment":"production","tier":"frontend"},"name":"discourse-web-nodeport","namespace":"discourse-production"},"spec":{"ports":[{"name":"http","nodePort":30300,"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"discourse","component":"web","environment":"production"},"sessionAffinity":"None","type":"NodePort"}}
+    creationTimestamp: "2025-12-02T02:16:57Z"
+    labels:
+      app: discourse
+      component: web
+      environment: production
+      tier: frontend
+    name: discourse-web-nodeport
+    namespace: discourse-production
+    resourceVersion: "6772642"
+    uid: 5f0b0105-c91c-4a6b-b813-46c79c63b722
+  spec:
+    clusterIP: 10.43.6.201
+    clusterIPs:
+    - 10.43.6.201
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      nodePort: 30300
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: discourse
+      component: web
+      environment: production
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"discourse","component":"web","environment":"production","tier":"frontend"},"name":"discourse-web-service","namespace":"discourse-production"},"spec":{"ports":[{"name":"http","port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"discourse","component":"web","environment":"production"},"sessionAffinity":"None","type":"ClusterIP"}}
+    creationTimestamp: "2025-12-02T02:16:57Z"
+    labels:
+      app: discourse
+      component: web
+      environment: production
+      tier: frontend
+    name: discourse-web-service
+    namespace: discourse-production
+    resourceVersion: "6772641"
+    uid: f528c95c-4a05-48fc-b0c9-2d875dcf0063
+  spec:
+    clusterIP: 10.43.234.64
+    clusterIPs:
+    - 10.43.234.64
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: discourse
+      component: web
+      environment: production
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  data:
+    DISCOURSE_DB_HOST: primary.pg-cluster.service.consul
+    DISCOURSE_DB_NAME: discourse
+    DISCOURSE_DB_OPTIONS: target_session_attrs=read-write
+    DISCOURSE_DB_PORT: "5432"
+    DISCOURSE_DB_USERNAME: postgres
+    DISCOURSE_DEVELOPER_EMAILS: admin@gatesmills.app
+    DISCOURSE_FORCE_HTTPS: "true"
+    DISCOURSE_HOSTNAME: forum.gatesmills.app
+    DISCOURSE_LOG_LEVEL: debug
+    DISCOURSE_MAILGUN_DOMAIN: gatesmills.app
+    DISCOURSE_MAX_DIGESTS_ENQUEUED_PER_30_MINS_PER_SITE: "50"
+    DISCOURSE_MAX_REQS_PER_IP_MODE: none
+    DISCOURSE_NOTIFICATION_EMAIL: no-reply@gatesmills.app
+    DISCOURSE_REDIS_DB: "0"
+    DISCOURSE_REDIS_HOST: 192.168.100.69
+    DISCOURSE_REDIS_PORT: "6379"
+    DISCOURSE_SMTP_ADDRESS: smtp.mailgun.org
+    DISCOURSE_SMTP_ENABLE_START_TLS: "true"
+    DISCOURSE_SMTP_PORT: "587"
+    DISCOURSE_SMTP_USER_NAME: postmaster@gatesmills.app
+    DISCOURSE_USE_REVERSE_PROXY: "true"
+    DISCOURSE_USE_SSL: "true"
+    RAILS_ENV: production
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"DISCOURSE_DB_HOST":"primary.pg-cluster.service.consul","DISCOURSE_DB_NAME":"discourse","DISCOURSE_DB_PORT":"5432","DISCOURSE_DB_USERNAME":"postgres","DISCOURSE_DEVELOPER_EMAILS":"admin@gatesmills.app","DISCOURSE_FORCE_HTTPS":"true","DISCOURSE_HOSTNAME":"forum.gatesmills.app","DISCOURSE_LOG_LEVEL":"debug","DISCOURSE_MAILGUN_DOMAIN":"gatesmills.app","DISCOURSE_MAX_DIGESTS_ENQUEUED_PER_30_MINS_PER_SITE":"50","DISCOURSE_MAX_REQS_PER_IP_MODE":"none","DISCOURSE_NOTIFICATION_EMAIL":"no-reply@gatesmills.app","DISCOURSE_REDIS_DB":"0","DISCOURSE_REDIS_HOST":"192.168.100.69","DISCOURSE_REDIS_PORT":"6379","DISCOURSE_SMTP_ADDRESS":"smtp.mailgun.org","DISCOURSE_SMTP_ENABLE_START_TLS":"true","DISCOURSE_SMTP_PORT":"587","DISCOURSE_SMTP_USER_NAME":"postmaster@gatesmills.app","DISCOURSE_USE_REVERSE_PROXY":"true","DISCOURSE_USE_SSL":"true","RAILS_ENV":"production"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"discourse","environment":"production"},"name":"discourse-config","namespace":"discourse-production"}}
+    creationTimestamp: "2025-12-02T02:15:38Z"
+    labels:
+      app: discourse
+      environment: production
+    name: discourse-config
+    namespace: discourse-production
+    resourceVersion: "12785504"
+    uid: eefc9cf8-33a1-411c-aff1-572c49ab9528
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIBdzCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
+      dmVyLWNhQDE3NjIzMTk3MDUwHhcNMjUxMTA1MDUxNTA1WhcNMzUxMTAzMDUxNTA1
+      WjAjMSEwHwYDVQQDDBhrM3Mtc2VydmVyLWNhQDE3NjIzMTk3MDUwWTATBgcqhkjO
+      PQIBBggqhkjOPQMBBwNCAAR7AJxksdMJZVIqsOrjf54yL6K7iY/JWSs9ZkQg0AUk
+      aO30K0wLuHk4cK2eTPp/VQfmoT2dKjclRpDQ0VSUKWi2o0IwQDAOBgNVHQ8BAf8E
+      BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUf6j/2FFh3fnWFj0FbbrB
+      8UWVKzIwCgYIKoZIzj0EAwIDSAAwRQIhAJMPsstsw64+5mY7QIjcRxICHdHjksj3
+      FVMXbjV+OBPtAiBzvKXcXD6YxhyxvDyHZ/kYyX95MPXYfd/wutZ6iyAOrQ==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-12-02T02:14:42Z"
+    name: kube-root-ca.crt
+    namespace: discourse-production
+    resourceVersion: "6570746"
+    uid: bc4e9155-d746-4c6a-b613-a2b0df332b2f
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"labels":{"app":"discourse","environment":"production","volume":"backups"},"name":"discourse-backups-pvc","namespace":"discourse-production"},"spec":{"accessModes":["ReadWriteMany"],"resources":{"requests":{"storage":"50Gi"}},"storageClassName":"nfs-discourse","volumeName":"discourse-backups-pv"}}
+      pv.kubernetes.io/bind-completed: "yes"
+    creationTimestamp: "2025-12-02T02:23:24Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: discourse
+      environment: production
+      volume: backups
+    name: discourse-backups-pvc
+    namespace: discourse-production
+    resourceVersion: "6572731"
+    uid: a7afe6d5-c2bb-4f4c-87ee-f940ffa2ddff
+  spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+      requests:
+        storage: 50Gi
+    storageClassName: nfs-discourse
+    volumeMode: Filesystem
+    volumeName: discourse-backups-pv
+  status:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 50Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"labels":{"app":"discourse","environment":"production","volume":"uploads"},"name":"discourse-uploads-pvc","namespace":"discourse-production"},"spec":{"accessModes":["ReadWriteMany"],"resources":{"requests":{"storage":"100Gi"}},"storageClassName":"nfs-discourse","volumeName":"discourse-uploads-pv"}}
+      pv.kubernetes.io/bind-completed: "yes"
+    creationTimestamp: "2025-12-02T02:23:24Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: discourse
+      environment: production
+      volume: uploads
+    name: discourse-uploads-pvc
+    namespace: discourse-production
+    resourceVersion: "6572725"
+    uid: af1cc3e8-5938-4940-96f4-3528f61d65f2
+  spec:
+    accessModes:
+    - ReadWriteMany
+    resources:
+      requests:
+        storage: 100Gi
+    storageClassName: nfs-discourse
+    volumeMode: Filesystem
+    volumeName: discourse-uploads-pv
+  status:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 100Gi
+    phase: Bound
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"traefik.ingress.kubernetes.io/router.entrypoints":"web,websecure","traefik.ingress.kubernetes.io/router.middlewares":"discourse-production-security-headers@kubernetescrd"},"labels":{"app":"discourse","environment":"production"},"name":"discourse-ingress","namespace":"discourse-production"},"spec":{"ingressClassName":"traefik","rules":[{"host":"forum.gatesmills.app","http":{"paths":[{"backend":{"service":{"name":"discourse-web-service","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+      traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+      traefik.ingress.kubernetes.io/router.middlewares: discourse-production-security-headers@kubernetescrd
+    creationTimestamp: "2025-12-02T02:16:57Z"
+    generation: 2
+    labels:
+      app: discourse
+      environment: production
+    name: discourse-ingress
+    namespace: discourse-production
+    resourceVersion: "6772655"
+    uid: 7579efce-184a-467f-9558-33dd3504335c
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: forum.gatesmills.app
+      http:
+        paths:
+        - backend:
+            service:
+              name: discourse-web-service
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

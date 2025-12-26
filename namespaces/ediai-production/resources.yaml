@@ -1,0 +1,1052 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "37"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"arq-worker","environment":"production","priority":"high","tier":"worker"},"name":"arq-worker-high","namespace":"ediai-production"},"spec":{"replicas":3,"selector":{"matchLabels":{"app":"arq-worker","environment":"production","priority":"high"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"arq-worker","environment":"production","priority":"high","tier":"worker"}},"spec":{"containers":[{"command":["arq","app.jobs.worker.WorkerSettings"],"env":[{"name":"ENVIRONMENT","valueFrom":{"configMapKeyRef":{"key":"ENVIRONMENT","name":"app-config"}}},{"name":"REDIS_HOST","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_HOST","name":"app-config"}}},{"name":"REDIS_PORT","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_PORT","name":"app-config"}}},{"name":"REDIS_DB","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_DB","name":"app-config"}}},{"name":"ARQ_MAX_JOBS","valueFrom":{"configMapKeyRef":{"key":"ARQ_MAX_JOBS","name":"arq-worker-high-config"}}},{"name":"ARQ_JOB_TIMEOUT","valueFrom":{"configMapKeyRef":{"key":"ARQ_JOB_TIMEOUT","name":"arq-worker-high-config"}}},{"name":"ARQ_QUEUE_NAME","valueFrom":{"configMapKeyRef":{"key":"ARQ_QUEUE_NAME","name":"arq-worker-high-config"}}},{"name":"LOG_LEVEL","valueFrom":{"configMapKeyRef":{"key":"LOG_LEVEL","name":"app-config"}}},{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"key":"DATABASE_URL","name":"app-secrets"}}},{"name":"REDIS_PASSWORD","valueFrom":{"secretKeyRef":{"key":"REDIS_PASSWORD","name":"app-secrets"}}},{"name":"MAILGUN_API_KEY","valueFrom":{"secretKeyRef":{"key":"MAILGUN_API_KEY","name":"app-secrets"}}},{"name":"MAILGUN_DOMAIN","valueFrom":{"secretKeyRef":{"key":"MAILGUN_DOMAIN","name":"app-secrets"}}}],"image":"ghcr.io/johno10661/ediai-backend:production","imagePullPolicy":"IfNotPresent","name":"arq-worker-high","resources":{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"runAsUser":1000}}],"imagePullSecrets":[{"name":"ghcr-secret"}],"securityContext":{"fsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}}}}}
+    creationTimestamp: "2025-11-20T15:24:24Z"
+    generation: 37
+    labels:
+      app: arq-worker
+      environment: production
+      priority: high
+      tier: worker
+    name: arq-worker-high
+    namespace: ediai-production
+    resourceVersion: "12751522"
+    uid: 84890fd5-01d8-41cc-9b1f-71c325c140bf
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: arq-worker
+        environment: production
+        priority: high
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-21T21:05:21-05:00"
+        creationTimestamp: null
+        labels:
+          app: arq-worker
+          environment: production
+          priority: high
+          tier: worker
+      spec:
+        containers:
+        - command:
+          - arq
+          - app.jobs.worker.WorkerSettings
+          env:
+          - name: ENVIRONMENT
+            valueFrom:
+              configMapKeyRef:
+                key: ENVIRONMENT
+                name: app-config
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_HOST
+                name: app-config
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_PORT
+                name: app-config
+          - name: REDIS_DB
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_DB
+                name: app-config
+          - name: ARQ_MAX_JOBS
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_MAX_JOBS
+                name: arq-worker-high-config
+          - name: ARQ_JOB_TIMEOUT
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_JOB_TIMEOUT
+                name: arq-worker-high-config
+          - name: ARQ_QUEUE_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_QUEUE_NAME
+                name: arq-worker-high-config
+          - name: LOG_LEVEL
+            valueFrom:
+              configMapKeyRef:
+                key: LOG_LEVEL
+                name: app-config
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: DATABASE_URL
+                name: app-secrets
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: REDIS_PASSWORD
+                name: app-secrets
+          - name: MAILGUN_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_API_KEY
+                name: app-secrets
+          - name: MAILGUN_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_DOMAIN
+                name: app-secrets
+          image: ghcr.io/johno10661/ediai-backend:production-36a2a4a20ad0943857f973638c29b504112310c6
+          imagePullPolicy: IfNotPresent
+          name: arq-worker-high
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1000
+          runAsNonRoot: true
+          runAsUser: 1000
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-12-21T07:36:19Z"
+      lastUpdateTime: "2025-12-21T07:36:19Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-01T16:06:59Z"
+      lastUpdateTime: "2025-12-22T02:05:27Z"
+      message: ReplicaSet "arq-worker-high-65bd8f9cf8" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 37
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "37"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"arq-worker","environment":"production","priority":"low","tier":"worker"},"name":"arq-worker-low","namespace":"ediai-production"},"spec":{"replicas":3,"selector":{"matchLabels":{"app":"arq-worker","environment":"production","priority":"low"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"arq-worker","environment":"production","priority":"low","tier":"worker"}},"spec":{"containers":[{"command":["arq","app.jobs.worker.WorkerSettings"],"env":[{"name":"ENVIRONMENT","valueFrom":{"configMapKeyRef":{"key":"ENVIRONMENT","name":"app-config"}}},{"name":"REDIS_HOST","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_HOST","name":"app-config"}}},{"name":"REDIS_PORT","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_PORT","name":"app-config"}}},{"name":"REDIS_DB","valueFrom":{"configMapKeyRef":{"key":"ARQ_REDIS_DB","name":"app-config"}}},{"name":"ARQ_MAX_JOBS","valueFrom":{"configMapKeyRef":{"key":"ARQ_MAX_JOBS","name":"arq-worker-low-config"}}},{"name":"ARQ_JOB_TIMEOUT","valueFrom":{"configMapKeyRef":{"key":"ARQ_JOB_TIMEOUT","name":"arq-worker-low-config"}}},{"name":"ARQ_QUEUE_NAME","valueFrom":{"configMapKeyRef":{"key":"ARQ_QUEUE_NAME","name":"arq-worker-low-config"}}},{"name":"LOG_LEVEL","valueFrom":{"configMapKeyRef":{"key":"LOG_LEVEL","name":"app-config"}}},{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"key":"DATABASE_URL","name":"app-secrets"}}},{"name":"REDIS_PASSWORD","valueFrom":{"secretKeyRef":{"key":"REDIS_PASSWORD","name":"app-secrets"}}},{"name":"MAILGUN_API_KEY","valueFrom":{"secretKeyRef":{"key":"MAILGUN_API_KEY","name":"app-secrets"}}},{"name":"MAILGUN_DOMAIN","valueFrom":{"secretKeyRef":{"key":"MAILGUN_DOMAIN","name":"app-secrets"}}}],"image":"ghcr.io/johno10661/ediai-backend:production","imagePullPolicy":"IfNotPresent","name":"arq-worker-low","resources":{"limits":{"cpu":"500m","memory":"512Mi"},"requests":{"cpu":"100m","memory":"256Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"runAsUser":1000}}],"imagePullSecrets":[{"name":"ghcr-secret"}],"securityContext":{"fsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}}}}}
+    creationTimestamp: "2025-11-20T15:24:24Z"
+    generation: 37
+    labels:
+      app: arq-worker
+      environment: production
+      priority: low
+      tier: worker
+    name: arq-worker-low
+    namespace: ediai-production
+    resourceVersion: "12751519"
+    uid: e08dbe01-806b-4b54-a7e3-4db45f0f6717
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: arq-worker
+        environment: production
+        priority: low
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-21T21:05:21-05:00"
+        creationTimestamp: null
+        labels:
+          app: arq-worker
+          environment: production
+          priority: low
+          tier: worker
+      spec:
+        containers:
+        - command:
+          - arq
+          - app.jobs.worker.WorkerSettings
+          env:
+          - name: ENVIRONMENT
+            valueFrom:
+              configMapKeyRef:
+                key: ENVIRONMENT
+                name: app-config
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_HOST
+                name: app-config
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_PORT
+                name: app-config
+          - name: REDIS_DB
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_REDIS_DB
+                name: app-config
+          - name: ARQ_MAX_JOBS
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_MAX_JOBS
+                name: arq-worker-low-config
+          - name: ARQ_JOB_TIMEOUT
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_JOB_TIMEOUT
+                name: arq-worker-low-config
+          - name: ARQ_QUEUE_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: ARQ_QUEUE_NAME
+                name: arq-worker-low-config
+          - name: LOG_LEVEL
+            valueFrom:
+              configMapKeyRef:
+                key: LOG_LEVEL
+                name: app-config
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: DATABASE_URL
+                name: app-secrets
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: REDIS_PASSWORD
+                name: app-secrets
+          - name: MAILGUN_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_API_KEY
+                name: app-secrets
+          - name: MAILGUN_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_DOMAIN
+                name: app-secrets
+          image: ghcr.io/johno10661/ediai-backend:production-36a2a4a20ad0943857f973638c29b504112310c6
+          imagePullPolicy: IfNotPresent
+          name: arq-worker-low
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1000
+          runAsNonRoot: true
+          runAsUser: 1000
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-12-21T07:36:33Z"
+      lastUpdateTime: "2025-12-21T07:36:33Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-01T16:06:59Z"
+      lastUpdateTime: "2025-12-22T02:05:27Z"
+      message: ReplicaSet "arq-worker-low-6586cdfcb" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 37
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "38"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"backend","environment":"production","tier":"api"},"name":"backend","namespace":"ediai-production"},"spec":{"replicas":3,"selector":{"matchLabels":{"app":"backend","environment":"production"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"backend","environment":"production","tier":"api"}},"spec":{"containers":[{"env":[{"name":"ENVIRONMENT","valueFrom":{"configMapKeyRef":{"key":"ENVIRONMENT","name":"app-config"}}},{"name":"REDIS_HOST","valueFrom":{"configMapKeyRef":{"key":"REDIS_HOST","name":"app-config"}}},{"name":"REDIS_PORT","valueFrom":{"configMapKeyRef":{"key":"REDIS_PORT","name":"app-config"}}},{"name":"REDIS_DB","valueFrom":{"configMapKeyRef":{"key":"REDIS_DB","name":"app-config"}}},{"name":"REDIS_SESSION_DB","valueFrom":{"configMapKeyRef":{"key":"REDIS_SESSION_DB","name":"app-config"}}},{"name":"REDIS_PERMISSION_DB","valueFrom":{"configMapKeyRef":{"key":"REDIS_PERMISSION_DB","name":"app-config"}}},{"name":"JWT_ALGORITHM","valueFrom":{"configMapKeyRef":{"key":"JWT_ALGORITHM","name":"app-config"}}},{"name":"ACCESS_TOKEN_EXPIRE_MINUTES","valueFrom":{"configMapKeyRef":{"key":"ACCESS_TOKEN_EXPIRE_MINUTES","name":"app-config"}}},{"name":"REFRESH_TOKEN_EXPIRE_DAYS","valueFrom":{"configMapKeyRef":{"key":"REFRESH_TOKEN_EXPIRE_DAYS","name":"app-config"}}},{"name":"SESSION_EXPIRE_HOURS","valueFrom":{"configMapKeyRef":{"key":"SESSION_EXPIRE_HOURS","name":"app-config"}}},{"name":"SESSION_SLIDE_MINUTES","valueFrom":{"configMapKeyRef":{"key":"SESSION_SLIDE_MINUTES","name":"app-config"}}},{"name":"SESSION_IDLE_TIMEOUT_MINUTES","valueFrom":{"configMapKeyRef":{"key":"SESSION_IDLE_TIMEOUT_MINUTES","name":"app-config"}}},{"name":"CORS_ORIGINS","valueFrom":{"configMapKeyRef":{"key":"CORS_ORIGINS","name":"app-config"}}},{"name":"FRONTEND_URL","valueFrom":{"configMapKeyRef":{"key":"FRONTEND_URL","name":"app-config"}}},{"name":"RATE_LIMIT_REGISTER","valueFrom":{"configMapKeyRef":{"key":"RATE_LIMIT_REGISTER","name":"app-config"}}},{"name":"RATE_LIMIT_LOGIN","valueFrom":{"configMapKeyRef":{"key":"RATE_LIMIT_LOGIN","name":"app-config"}}},{"name":"MAX_FAILED_LOGIN_ATTEMPTS","valueFrom":{"configMapKeyRef":{"key":"MAX_FAILED_LOGIN_ATTEMPTS","name":"app-config"}}},{"name":"LOCKOUT_DURATION_MINUTES","valueFrom":{"configMapKeyRef":{"key":"LOCKOUT_DURATION_MINUTES","name":"app-config"}}},{"name":"EMAIL_SUPPRESS_SEND","valueFrom":{"configMapKeyRef":{"key":"EMAIL_SUPPRESS_SEND","name":"app-config"}}},{"name":"MAILGUN_FROM_EMAIL","valueFrom":{"configMapKeyRef":{"key":"MAILGUN_FROM_EMAIL","name":"app-config"}}},{"name":"MAILGUN_FROM_NAME","valueFrom":{"configMapKeyRef":{"key":"MAILGUN_FROM_NAME","name":"app-config"}}},{"name":"LOG_LEVEL","valueFrom":{"configMapKeyRef":{"key":"LOG_LEVEL","name":"app-config"}}},{"name":"DATABASE_URL","valueFrom":{"secretKeyRef":{"key":"DATABASE_URL","name":"app-secrets"}}},{"name":"JWT_SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"JWT_SECRET_KEY","name":"app-secrets"}}},{"name":"SECRET_KEY","valueFrom":{"secretKeyRef":{"key":"SECRET_KEY","name":"app-secrets"}}},{"name":"REDIS_PASSWORD","valueFrom":{"secretKeyRef":{"key":"REDIS_PASSWORD","name":"app-secrets"}}},{"name":"MAILGUN_API_KEY","valueFrom":{"secretKeyRef":{"key":"MAILGUN_API_KEY","name":"app-secrets"}}},{"name":"MAILGUN_DOMAIN","valueFrom":{"secretKeyRef":{"key":"MAILGUN_DOMAIN","name":"app-secrets"}}}],"image":"ghcr.io/johno10661/ediai-backend:production","imagePullPolicy":"IfNotPresent","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/health","port":8000},"initialDelaySeconds":30,"periodSeconds":10,"timeoutSeconds":5},"name":"backend","ports":[{"containerPort":8000,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/ready","port":8000},"initialDelaySeconds":10,"periodSeconds":5,"timeoutSeconds":3},"resources":{"limits":{"cpu":"1000m","memory":"1Gi"},"requests":{"cpu":"250m","memory":"512Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"runAsUser":1000},"startupProbe":{"failureThreshold":30,"httpGet":{"path":"/health","port":8000},"initialDelaySeconds":0,"periodSeconds":10,"timeoutSeconds":5}}],"imagePullSecrets":[{"name":"ghcr-secret"}],"securityContext":{"fsGroup":1000,"runAsNonRoot":true,"runAsUser":1000}}}}}
+    creationTimestamp: "2025-11-20T15:19:47Z"
+    generation: 38
+    labels:
+      app: backend
+      environment: production
+      tier: api
+    name: backend
+    namespace: ediai-production
+    resourceVersion: "12752062"
+    uid: af6bbc6e-f52d-4c45-85a9-610161c42ba8
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: backend
+        environment: production
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-21T21:05:21-05:00"
+        creationTimestamp: null
+        labels:
+          app: backend
+          environment: production
+          tier: api
+      spec:
+        containers:
+        - env:
+          - name: ENVIRONMENT
+            valueFrom:
+              configMapKeyRef:
+                key: ENVIRONMENT
+                name: app-config
+          - name: REDIS_HOST
+            valueFrom:
+              configMapKeyRef:
+                key: REDIS_HOST
+                name: app-config
+          - name: REDIS_PORT
+            valueFrom:
+              configMapKeyRef:
+                key: REDIS_PORT
+                name: app-config
+          - name: REDIS_DB
+            valueFrom:
+              configMapKeyRef:
+                key: REDIS_DB
+                name: app-config
+          - name: REDIS_SESSION_DB
+            valueFrom:
+              configMapKeyRef:
+                key: REDIS_SESSION_DB
+                name: app-config
+          - name: REDIS_PERMISSION_DB
+            valueFrom:
+              configMapKeyRef:
+                key: REDIS_PERMISSION_DB
+                name: app-config
+          - name: JWT_ALGORITHM
+            valueFrom:
+              configMapKeyRef:
+                key: JWT_ALGORITHM
+                name: app-config
+          - name: ACCESS_TOKEN_EXPIRE_MINUTES
+            valueFrom:
+              configMapKeyRef:
+                key: ACCESS_TOKEN_EXPIRE_MINUTES
+                name: app-config
+          - name: REFRESH_TOKEN_EXPIRE_DAYS
+            valueFrom:
+              configMapKeyRef:
+                key: REFRESH_TOKEN_EXPIRE_DAYS
+                name: app-config
+          - name: SESSION_EXPIRE_HOURS
+            valueFrom:
+              configMapKeyRef:
+                key: SESSION_EXPIRE_HOURS
+                name: app-config
+          - name: SESSION_SLIDE_MINUTES
+            valueFrom:
+              configMapKeyRef:
+                key: SESSION_SLIDE_MINUTES
+                name: app-config
+          - name: SESSION_IDLE_TIMEOUT_MINUTES
+            valueFrom:
+              configMapKeyRef:
+                key: SESSION_IDLE_TIMEOUT_MINUTES
+                name: app-config
+          - name: CORS_ORIGINS
+            valueFrom:
+              configMapKeyRef:
+                key: CORS_ORIGINS
+                name: app-config
+          - name: FRONTEND_URL
+            valueFrom:
+              configMapKeyRef:
+                key: FRONTEND_URL
+                name: app-config
+          - name: RATE_LIMIT_REGISTER
+            valueFrom:
+              configMapKeyRef:
+                key: RATE_LIMIT_REGISTER
+                name: app-config
+          - name: RATE_LIMIT_LOGIN
+            valueFrom:
+              configMapKeyRef:
+                key: RATE_LIMIT_LOGIN
+                name: app-config
+          - name: MAX_FAILED_LOGIN_ATTEMPTS
+            valueFrom:
+              configMapKeyRef:
+                key: MAX_FAILED_LOGIN_ATTEMPTS
+                name: app-config
+          - name: LOCKOUT_DURATION_MINUTES
+            valueFrom:
+              configMapKeyRef:
+                key: LOCKOUT_DURATION_MINUTES
+                name: app-config
+          - name: EMAIL_SUPPRESS_SEND
+            valueFrom:
+              configMapKeyRef:
+                key: EMAIL_SUPPRESS_SEND
+                name: app-config
+          - name: MAILGUN_FROM_EMAIL
+            valueFrom:
+              configMapKeyRef:
+                key: MAILGUN_FROM_EMAIL
+                name: app-config
+          - name: MAILGUN_FROM_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: MAILGUN_FROM_NAME
+                name: app-config
+          - name: LOG_LEVEL
+            valueFrom:
+              configMapKeyRef:
+                key: LOG_LEVEL
+                name: app-config
+          - name: DATABASE_URL
+            valueFrom:
+              secretKeyRef:
+                key: DATABASE_URL
+                name: app-secrets
+          - name: JWT_SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: JWT_SECRET_KEY
+                name: app-secrets
+          - name: SECRET_KEY
+            valueFrom:
+              secretKeyRef:
+                key: SECRET_KEY
+                name: app-secrets
+          - name: REDIS_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: REDIS_PASSWORD
+                name: app-secrets
+          - name: MAILGUN_API_KEY
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_API_KEY
+                name: app-secrets
+          - name: MAILGUN_DOMAIN
+            valueFrom:
+              secretKeyRef:
+                key: MAILGUN_DOMAIN
+                name: app-secrets
+          image: ghcr.io/johno10661/ediai-backend:production-36a2a4a20ad0943857f973638c29b504112310c6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8000
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: backend
+          ports:
+          - containerPort: 8000
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /ready
+              port: 8000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1Gi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 1000
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /health
+              port: 8000
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 1000
+          runAsNonRoot: true
+          runAsUser: 1000
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-12-21T23:05:05Z"
+      lastUpdateTime: "2025-12-21T23:05:05Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-12-01T16:06:59Z"
+      lastUpdateTime: "2025-12-22T02:06:00Z"
+      message: ReplicaSet "backend-6bf4f8b598" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 38
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "37"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"frontend","environment":"production","tier":"web"},"name":"frontend","namespace":"ediai-production"},"spec":{"replicas":3,"selector":{"matchLabels":{"app":"frontend","environment":"production"}},"strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0},"type":"RollingUpdate"},"template":{"metadata":{"labels":{"app":"frontend","environment":"production","tier":"web"}},"spec":{"containers":[{"env":[{"name":"VITE_API_URL","value":"/api"},{"name":"VITE_ENVIRONMENT","value":"production"}],"image":"ghcr.io/johno10661/ediai-frontend:production","imagePullPolicy":"IfNotPresent","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":80},"initialDelaySeconds":20,"periodSeconds":10,"timeoutSeconds":5},"name":"frontend","ports":[{"containerPort":80,"name":"http","protocol":"TCP"}],"readinessProbe":{"failureThreshold":3,"httpGet":{"path":"/","port":80},"initialDelaySeconds":5,"periodSeconds":5,"timeoutSeconds":3},"resources":{"limits":{"cpu":"200m","memory":"256Mi"},"requests":{"cpu":"50m","memory":"128Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"add":["NET_BIND_SERVICE"],"drop":["ALL"]},"readOnlyRootFilesystem":false,"runAsNonRoot":true,"runAsUser":101},"volumeMounts":[{"mountPath":"/var/cache/nginx","name":"nginx-cache"},{"mountPath":"/var/run","name":"nginx-run"}]}],"imagePullSecrets":[{"name":"ghcr-secret"}],"securityContext":{"fsGroup":101,"runAsNonRoot":true,"runAsUser":101},"volumes":[{"emptyDir":{},"name":"nginx-cache"},{"emptyDir":{},"name":"nginx-run"}]}}}}
+    creationTimestamp: "2025-11-20T15:24:00Z"
+    generation: 37
+    labels:
+      app: frontend
+      environment: production
+      tier: web
+    name: frontend
+    namespace: ediai-production
+    resourceVersion: "12751831"
+    uid: d6b1c981-c680-43d1-af92-25dcd805c5b9
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: frontend
+        environment: production
+    strategy:
+      rollingUpdate:
+        maxSurge: 1
+        maxUnavailable: 0
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2025-12-21T21:05:21-05:00"
+        creationTimestamp: null
+        labels:
+          app: frontend
+          environment: production
+          tier: web
+      spec:
+        containers:
+        - env:
+          - name: VITE_API_URL
+            value: /api
+          - name: VITE_ENVIRONMENT
+            value: production
+          image: ghcr.io/johno10661/ediai-frontend:production-36a2a4a20ad0943857f973638c29b504112310c6
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          name: frontend
+          ports:
+          - containerPort: 80
+            name: http
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 80
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 3
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 50m
+              memory: 128Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              add:
+              - NET_BIND_SERVICE
+              drop:
+              - ALL
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 101
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/cache/nginx
+            name: nginx-cache
+          - mountPath: /var/run
+            name: nginx-run
+        dnsPolicy: ClusterFirst
+        imagePullSecrets:
+        - name: ghcr-secret
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext:
+          fsGroup: 101
+          runAsNonRoot: true
+          runAsUser: 101
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: nginx-cache
+        - emptyDir: {}
+          name: nginx-run
+  status:
+    availableReplicas: 3
+    conditions:
+    - lastTransitionTime: "2025-12-21T07:42:22Z"
+      lastUpdateTime: "2025-12-21T07:42:22Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-11-20T15:24:00Z"
+      lastUpdateTime: "2025-12-22T02:05:45Z"
+      message: ReplicaSet "frontend-8644bc4756" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 37
+    readyReplicas: 3
+    replicas: 3
+    updatedReplicas: 3
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"backend","environment":"production","tier":"api"},"name":"backend-nodeport","namespace":"ediai-production"},"spec":{"ports":[{"name":"http","nodePort":31801,"port":8000,"protocol":"TCP","targetPort":8000}],"selector":{"app":"backend","environment":"production"},"type":"NodePort"}}
+    creationTimestamp: "2025-11-20T15:28:31Z"
+    labels:
+      app: backend
+      environment: production
+      tier: api
+    name: backend-nodeport
+    namespace: ediai-production
+    resourceVersion: "3147117"
+    uid: 974662d2-5c53-4754-8a7c-bd2fb0dbc89f
+  spec:
+    clusterIP: 10.43.186.208
+    clusterIPs:
+    - 10.43.186.208
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      nodePort: 31801
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+    selector:
+      app: backend
+      environment: production
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"backend","environment":"production","tier":"api"},"name":"backend-service","namespace":"ediai-production"},"spec":{"ports":[{"name":"http","port":8000,"protocol":"TCP","targetPort":8000}],"selector":{"app":"backend","environment":"production"},"type":"ClusterIP"}}
+    creationTimestamp: "2025-11-20T15:28:31Z"
+    labels:
+      app: backend
+      environment: production
+      tier: api
+    name: backend-service
+    namespace: ediai-production
+    resourceVersion: "3147104"
+    uid: 10471bee-3ffc-4b3c-a969-b618de6406d2
+  spec:
+    clusterIP: 10.43.152.180
+    clusterIPs:
+    - 10.43.152.180
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 8000
+      protocol: TCP
+      targetPort: 8000
+    selector:
+      app: backend
+      environment: production
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"frontend","environment":"production","tier":"web"},"name":"frontend-service","namespace":"ediai-production"},"spec":{"ports":[{"name":"http","nodePort":31800,"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"frontend","environment":"production"},"type":"NodePort"}}
+    creationTimestamp: "2025-11-20T15:28:31Z"
+    labels:
+      app: frontend
+      environment: production
+      tier: web
+    name: frontend-service
+    namespace: ediai-production
+    resourceVersion: "3147111"
+    uid: a0138b50-6476-4037-a2cc-8b173dc6d08a
+  spec:
+    clusterIP: 10.43.170.185
+    clusterIPs:
+    - 10.43.170.185
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      nodePort: 31800
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: frontend
+      environment: production
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  data:
+    ACCESS_TOKEN_EXPIRE_MINUTES: "15"
+    ANTHROPIC_GENERATOR_MODEL: claude-3-5-haiku-latest
+    ANTHROPIC_MODEL: claude-3-5-sonnet-latest
+    ARQ_JOB_TIMEOUT: "300"
+    ARQ_KEEP_RESULT: "3600"
+    ARQ_MAX_JOBS: "10"
+    ARQ_MAX_TRIES: "3"
+    ARQ_REDIS_DB: "3"
+    ARQ_REDIS_HOST: redis.service.consul
+    ARQ_REDIS_PORT: "6379"
+    COOKIE_HTTPONLY: "true"
+    COOKIE_SAMESITE: strict
+    COOKIE_SECURE: "true"
+    CORS_ORIGINS: '["https://ediai.com"]'
+    CSP_CONNECT_SRC: '''self'''
+    CSP_DEFAULT_SRC: '''self'''
+    CSP_FONT_SRC: '''self'' data:'
+    CSP_IMG_SRC: '''self'' data: https:'
+    CSP_SCRIPT_SRC: '''self'''
+    CSP_STYLE_SRC: '''self'' ''unsafe-inline'''
+    EMAIL_SUPPRESS_SEND: "1"
+    ENVIRONMENT: production
+    FRONTEND_URL: https://ediai.com
+    HSTS_INCLUDE_SUBDOMAINS: "true"
+    HSTS_MAX_AGE: "31536000"
+    HSTS_PRELOAD: "true"
+    JWT_ALGORITHM: HS256
+    LOCKOUT_DURATION_MINUTES: "30"
+    LOG_LEVEL: WARNING
+    MAILGUN_FROM_EMAIL: noreply@ediai.com
+    MAILGUN_FROM_NAME: EDIai
+    MAX_FAILED_LOGIN_ATTEMPTS: "5"
+    PASSWORD_RESET_TOKEN_EXPIRE_MINUTES: "60"
+    RATE_LIMIT_2FA_DISABLE: 3/10minute
+    RATE_LIMIT_2FA_REGENERATE: 3/day
+    RATE_LIMIT_2FA_SETUP: 3/hour
+    RATE_LIMIT_2FA_VERIFY: 5/minute
+    RATE_LIMIT_2FA_VERIFY_SETUP: 5/10minute
+    RATE_LIMIT_LOGIN: 5/minute
+    RATE_LIMIT_PASSWORD_RESET: 3/hour
+    RATE_LIMIT_REFRESH: 10/minute
+    RATE_LIMIT_REGISTER: 3/hour
+    REDIS_DB: "3"
+    REDIS_HOST: redis.service.consul
+    REDIS_PERMISSION_DB: "3"
+    REDIS_PORT: "6379"
+    REDIS_SESSION_DB: "3"
+    REFRESH_TOKEN_EXPIRE_DAYS: "7"
+    SENTRY_PROFILES_SAMPLE_RATE: "0.1"
+    SENTRY_TRACES_SAMPLE_RATE: "0.1"
+    SESSION_EXPIRE_HOURS: "8"
+    SESSION_IDLE_TIMEOUT_MINUTES: "30"
+    SESSION_SLIDE_MINUTES: "5"
+    X_FRAME_OPTIONS: DENY
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"ACCESS_TOKEN_EXPIRE_MINUTES":"15","ANTHROPIC_GENERATOR_MODEL":"claude-3-5-haiku-latest","ANTHROPIC_MODEL":"claude-3-5-sonnet-latest","ARQ_JOB_TIMEOUT":"300","ARQ_KEEP_RESULT":"3600","ARQ_MAX_JOBS":"10","ARQ_MAX_TRIES":"3","ARQ_REDIS_DB":"3","ARQ_REDIS_HOST":"redis.service.consul","ARQ_REDIS_PORT":"6379","COOKIE_HTTPONLY":"true","COOKIE_SAMESITE":"strict","COOKIE_SECURE":"true","CORS_ORIGINS":"[\"https://ediai.com\"]","CSP_CONNECT_SRC":"'self'","CSP_DEFAULT_SRC":"'self'","CSP_FONT_SRC":"'self' data:","CSP_IMG_SRC":"'self' data: https:","CSP_SCRIPT_SRC":"'self'","CSP_STYLE_SRC":"'self' 'unsafe-inline'","EMAIL_SUPPRESS_SEND":"1","ENVIRONMENT":"production","FRONTEND_URL":"https://ediai.com","HSTS_INCLUDE_SUBDOMAINS":"true","HSTS_MAX_AGE":"31536000","HSTS_PRELOAD":"true","JWT_ALGORITHM":"HS256","LOCKOUT_DURATION_MINUTES":"30","LOG_LEVEL":"WARNING","MAILGUN_FROM_EMAIL":"noreply@ediai.com","MAILGUN_FROM_NAME":"EDIai","MAX_FAILED_LOGIN_ATTEMPTS":"5","PASSWORD_RESET_TOKEN_EXPIRE_MINUTES":"60","RATE_LIMIT_2FA_DISABLE":"3/10minute","RATE_LIMIT_2FA_REGENERATE":"3/day","RATE_LIMIT_2FA_SETUP":"3/hour","RATE_LIMIT_2FA_VERIFY":"5/minute","RATE_LIMIT_2FA_VERIFY_SETUP":"5/10minute","RATE_LIMIT_LOGIN":"5/minute","RATE_LIMIT_PASSWORD_RESET":"3/hour","RATE_LIMIT_REFRESH":"10/minute","RATE_LIMIT_REGISTER":"3/hour","REDIS_DB":"3","REDIS_HOST":"redis.service.consul","REDIS_PERMISSION_DB":"3","REDIS_PORT":"6379","REDIS_SESSION_DB":"3","REFRESH_TOKEN_EXPIRE_DAYS":"7","SENTRY_PROFILES_SAMPLE_RATE":"0.1","SENTRY_TRACES_SAMPLE_RATE":"0.1","SESSION_EXPIRE_HOURS":"8","SESSION_IDLE_TIMEOUT_MINUTES":"30","SESSION_SLIDE_MINUTES":"5","X_FRAME_OPTIONS":"DENY"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"ediai","environment":"production"},"name":"app-config","namespace":"ediai-production"}}
+    creationTimestamp: "2025-11-20T15:19:24Z"
+    labels:
+      app: ediai
+      environment: production
+    name: app-config
+    namespace: ediai-production
+    resourceVersion: "12750987"
+    uid: ad1229f0-3ef9-4ce8-b663-16ed257fc803
+- apiVersion: v1
+  data:
+    ARQ_JOB_TIMEOUT: "300"
+    ARQ_MAX_JOBS: "10"
+    ARQ_QUEUE_NAME: high-priority
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"ARQ_JOB_TIMEOUT":"300","ARQ_MAX_JOBS":"10","ARQ_QUEUE_NAME":"high-priority"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"ediai-arq-worker","environment":"production","priority":"high"},"name":"arq-worker-high-config","namespace":"ediai-production"}}
+    creationTimestamp: "2025-11-20T15:19:24Z"
+    labels:
+      app: ediai-arq-worker
+      environment: production
+      priority: high
+    name: arq-worker-high-config
+    namespace: ediai-production
+    resourceVersion: "3144597"
+    uid: 215d2b07-e361-40b7-a22b-0fdf63676e10
+- apiVersion: v1
+  data:
+    ARQ_JOB_TIMEOUT: "600"
+    ARQ_MAX_JOBS: "5"
+    ARQ_QUEUE_NAME: low-priority
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"ARQ_JOB_TIMEOUT":"600","ARQ_MAX_JOBS":"5","ARQ_QUEUE_NAME":"low-priority"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"ediai-arq-worker","environment":"production","priority":"low"},"name":"arq-worker-low-config","namespace":"ediai-production"}}
+    creationTimestamp: "2025-11-20T15:19:24Z"
+    labels:
+      app: ediai-arq-worker
+      environment: production
+      priority: low
+    name: arq-worker-low-config
+    namespace: ediai-production
+    resourceVersion: "3144598"
+    uid: bf23a756-220c-467b-a473-aba54206782b
+- apiVersion: v1
+  data:
+    nginx.conf: |
+      # Simple NGINX config for routing
+      # Frontend: http://192.168.100.70:30801
+      # Backend API: http://192.168.100.70:30800
+
+      # If using a reverse proxy or load balancer, route:
+      # staging.ediaai.com/api/* -> http://192.168.100.70:30800
+      # staging.ediaai.com/* -> http://192.168.100.70:30801
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"nginx.conf":"# Simple NGINX config for routing\n# Frontend: http://192.168.100.70:30801\n# Backend API: http://192.168.100.70:30800\n\n# If using a reverse proxy or load balancer, route:\n# staging.ediaai.com/api/* -\u003e http://192.168.100.70:30800\n# staging.ediaai.com/* -\u003e http://192.168.100.70:30801\n"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"ediai","environment":"production"},"name":"ingress-config","namespace":"ediai-production"}}
+    creationTimestamp: "2025-11-20T15:28:31Z"
+    labels:
+      app: ediai
+      environment: production
+    name: ingress-config
+    namespace: ediai-production
+    resourceVersion: "3147121"
+    uid: b9f6d247-c364-4db1-8101-006c01cc8d7e
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIBdzCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
+      dmVyLWNhQDE3NjIzMTk3MDUwHhcNMjUxMTA1MDUxNTA1WhcNMzUxMTAzMDUxNTA1
+      WjAjMSEwHwYDVQQDDBhrM3Mtc2VydmVyLWNhQDE3NjIzMTk3MDUwWTATBgcqhkjO
+      PQIBBggqhkjOPQMBBwNCAAR7AJxksdMJZVIqsOrjf54yL6K7iY/JWSs9ZkQg0AUk
+      aO30K0wLuHk4cK2eTPp/VQfmoT2dKjclRpDQ0VSUKWi2o0IwQDAOBgNVHQ8BAf8E
+      BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUf6j/2FFh3fnWFj0FbbrB
+      8UWVKzIwCgYIKoZIzj0EAwIDSAAwRQIhAJMPsstsw64+5mY7QIjcRxICHdHjksj3
+      FVMXbjV+OBPtAiBzvKXcXD6YxhyxvDyHZ/kYyX95MPXYfd/wutZ6iyAOrQ==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-11-19T13:00:17Z"
+    name: kube-root-ca.crt
+    namespace: ediai-production
+    resourceVersion: "2830945"
+    uid: 5aee430e-7308-4e27-b349-c63fe8ab9160
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"traefik.ingress.kubernetes.io/router.entrypoints":"web,websecure","traefik.ingress.kubernetes.io/router.middlewares":"ediai-production-security-headers@kubernetescrd"},"labels":{"app":"ediai","environment":"production"},"name":"ediai-ingress","namespace":"ediai-production"},"spec":{"ingressClassName":"traefik","rules":[{"host":"ediai.com","http":{"paths":[{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/api","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/health","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/ready","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/docs","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/redoc","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/openapi.json","pathType":"Prefix"},{"backend":{"service":{"name":"frontend-service","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+      traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+      traefik.ingress.kubernetes.io/router.middlewares: ediai-production-security-headers@kubernetescrd
+    creationTimestamp: "2025-11-20T15:28:31Z"
+    generation: 4
+    labels:
+      app: ediai
+      environment: production
+    name: ediai-ingress
+    namespace: ediai-production
+    resourceVersion: "3200160"
+    uid: 0c80d605-2bbc-49da-b6c7-fb4923e433e8
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: ediai.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /api
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /health
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /ready
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /docs
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /redoc
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /openapi.json
+          pathType: Prefix
+        - backend:
+            service:
+              name: frontend-service
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

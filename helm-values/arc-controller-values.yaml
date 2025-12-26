@@ -1,0 +1,36 @@
+COMPUTED VALUES:
+affinity: {}
+controllerManager:
+  extraArgs:
+  - --sync-period=5s
+env: null
+flags:
+  logFormat: text
+  logLevel: info
+  runnerMaxConcurrentReconciles: 2
+  updateStrategy: immediate
+fullnameOverride: ""
+image:
+  pullPolicy: IfNotPresent
+  repository: ghcr.io/actions/gha-runner-scale-set-controller
+  tag: ""
+imagePullSecrets: []
+labels: {}
+nameOverride: ""
+namespaceOverride: ""
+nodeSelector: {}
+podAnnotations: {}
+podLabels: {}
+podSecurityContext: {}
+priorityClassName: ""
+replicaCount: 1
+resources: {}
+securityContext: {}
+serviceAccount:
+  annotations: {}
+  create: true
+  name: ""
+tolerations: []
+topologySpreadConstraints: []
+volumeMounts: []
+volumes: []

@@ -1,0 +1,23 @@
+COMPUTED VALUES:
+githubConfigSecret: github-app-secret
+githubConfigUrl: https://github.com/johno10661/sop
+maxRunners: 4
+minRunners: 1
+namespaceOverride: ""
+runnerScaleSetName: runners-sop-arm64
+template:
+  spec:
+    containers:
+    - command:
+      - /home/runner/run.sh
+      image: ghcr.io/actions/actions-runner:latest
+      name: runner
+      volumeMounts:
+      - mountPath: /var/run/docker.sock
+        name: docker-sock
+    nodeSelector:
+      kubernetes.io/arch: arm64
+    volumes:
+    - hostPath:
+        path: /var/run/docker.sock
+      name: docker-sock

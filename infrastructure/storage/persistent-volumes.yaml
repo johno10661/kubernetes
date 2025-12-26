@@ -1,0 +1,523 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolume","metadata":{"annotations":{},"labels":{"app":"discourse","environment":"production","volume":"backups"},"name":"discourse-backups-pv"},"spec":{"accessModes":["ReadWriteMany"],"capacity":{"storage":"50Gi"},"mountOptions":["hard","nfsvers=4.1","nolock"],"nfs":{"path":"/volume2/discourse_backups","server":"192.168.9.10"},"persistentVolumeReclaimPolicy":"Retain","storageClassName":"nfs-discourse"}}
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-12-02T02:23:24Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    labels:
+      app: discourse
+      environment: production
+      volume: backups
+    name: discourse-backups-pv
+    resourceVersion: "6572653"
+    uid: 182db2f9-bde4-4fe9-a243-0ed8072fe3de
+  spec:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 50Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: discourse-backups-pvc
+      namespace: discourse-production
+      resourceVersion: "6572651"
+      uid: a7afe6d5-c2bb-4f4c-87ee-f940ffa2ddff
+    mountOptions:
+    - hard
+    - nfsvers=4.1
+    - nolock
+    nfs:
+      path: /volume2/discourse_backups
+      server: 192.168.9.10
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: nfs-discourse
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-02T02:23:24Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolume","metadata":{"annotations":{},"labels":{"app":"discourse","environment":"production","volume":"uploads"},"name":"discourse-uploads-pv"},"spec":{"accessModes":["ReadWriteMany"],"capacity":{"storage":"100Gi"},"mountOptions":["hard","nfsvers=4.1","nolock"],"nfs":{"path":"/volume2/discourse_uploads","server":"192.168.9.10"},"persistentVolumeReclaimPolicy":"Retain","storageClassName":"nfs-discourse"}}
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-12-02T02:23:24Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    labels:
+      app: discourse
+      environment: production
+      volume: uploads
+    name: discourse-uploads-pv
+    resourceVersion: "6572649"
+    uid: de1e9876-e972-444f-94a7-bc28f0f088a7
+  spec:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 100Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: discourse-uploads-pvc
+      namespace: discourse-production
+      resourceVersion: "6572646"
+      uid: af1cc3e8-5938-4940-96f4-3528f61d65f2
+    mountOptions:
+    - hard
+    - nfsvers=4.1
+    - nolock
+    nfs:
+      path: /volume2/discourse_uploads
+      server: 192.168.9.10
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: nfs-discourse
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-02T02:23:24Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: www02
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-11-21T08:04:43Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-3371955a-f353-42b5-8fb7-4fa1145f3900
+    resourceVersion: "3357869"
+    uid: 3e807498-c9f8-4cc7-984d-862a0b4c5b22
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 50Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: prometheus-prometheus-kube-prometheus-prometheus-db-prometheus-prometheus-kube-prometheus-prometheus-0
+      namespace: monitoring
+      resourceVersion: "3357829"
+      uid: 3371955a-f353-42b5-8fb7-4fa1145f3900
+    local:
+      path: /var/lib/rancher/k3s/storage/pvc-3371955a-f353-42b5-8fb7-4fa1145f3900_monitoring_prometheus-prometheus-kube-prometheus-prometheus-db-prometheus-prometheus-kube-prometheus-prometheus-0
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - www02
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-11-21T08:04:43Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: www02
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-12-06T18:15:36Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-532eecea-8cbd-4ee6-bdbc-3aa514120457
+    resourceVersion: "7976175"
+    uid: 8a0d455a-6db3-4fdf-9333-fc69d7d302d7
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 20Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: sentry-data
+      namespace: sentry
+      resourceVersion: "7975991"
+      uid: 532eecea-8cbd-4ee6-bdbc-3aa514120457
+    local:
+      path: /var/lib/rancher/k3s/storage/pvc-532eecea-8cbd-4ee6-bdbc-3aa514120457_sentry_sentry-data
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - www02
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-06T18:15:36Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: www02
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-11-21T05:36:37Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-5908538d-4a45-45b5-9e8f-d1cc5308e70d
+    resourceVersion: "3326899"
+    uid: 40a1d29e-61e6-4987-86b6-5c5b5544bb5f
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 10Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: prometheus-grafana
+      namespace: monitoring
+      resourceVersion: "3326657"
+      uid: 5908538d-4a45-45b5-9e8f-d1cc5308e70d
+    local:
+      path: /var/lib/rancher/k3s/storage/pvc-5908538d-4a45-45b5-9e8f-d1cc5308e70d_monitoring_prometheus-grafana
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - www02
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-11-21T05:36:37Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: www02
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-12-06T18:07:16Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-6118a495-8dfc-4ad8-9242-e5597f54fbf0
+    resourceVersion: "7973157"
+    uid: 18c1f3b2-4082-4a1e-a40c-75918f6f0916
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 30Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: sentry-clickhouse-data-sentry-clickhouse-0
+      namespace: sentry
+      resourceVersion: "7973046"
+      uid: 6118a495-8dfc-4ad8-9242-e5597f54fbf0
+    local:
+      path: /var/lib/rancher/k3s/storage/pvc-6118a495-8dfc-4ad8-9242-e5597f54fbf0_sentry_sentry-clickhouse-data-sentry-clickhouse-0
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - www02
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-06T18:07:16Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: www02
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-12-06T18:07:15Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-70f070c0-dc8f-4199-80b6-c6d9504e853b
+    resourceVersion: "7973151"
+    uid: 28a15e14-1083-4c4b-8f1b-f71eb369eb7f
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 8Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: data-sentry-zookeeper-clickhouse-0
+      namespace: sentry
+      resourceVersion: "7973044"
+      uid: 70f070c0-dc8f-4199-80b6-c6d9504e853b
+    local:
+      path: /var/lib/rancher/k3s/storage/pvc-70f070c0-dc8f-4199-80b6-c6d9504e853b_sentry_data-sentry-zookeeper-clickhouse-0
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - www02
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-06T18:07:15Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: www02
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-12-06T18:07:16Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-7d265112-5417-4d74-8d25-c270cc68c94e
+    resourceVersion: "7973163"
+    uid: 8f10bce3-c2ff-450b-909f-a3ae4650aa90
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 10Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: data-sentry-kafka-controller-0
+      namespace: sentry
+      resourceVersion: "7973045"
+      uid: 7d265112-5417-4d74-8d25-c270cc68c94e
+    local:
+      path: /var/lib/rancher/k3s/storage/pvc-7d265112-5417-4d74-8d25-c270cc68c94e_sentry_data-sentry-kafka-controller-0
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - www02
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-06T18:07:16Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      local.path.provisioner/selected-node: www02
+      pv.kubernetes.io/provisioned-by: rancher.io/local-path
+    creationTimestamp: "2025-12-06T18:07:18Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: pvc-b3da7b0e-035d-47d0-b48c-1797a6812ae3
+    resourceVersion: "7973192"
+    uid: 65479a0d-5391-4d5a-9c07-9956f4e00c00
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 5Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: data-sentry-rabbitmq-0
+      namespace: sentry
+      resourceVersion: "7973047"
+      uid: b3da7b0e-035d-47d0-b48c-1797a6812ae3
+    local:
+      path: /var/lib/rancher/k3s/storage/pvc-b3da7b0e-035d-47d0-b48c-1797a6812ae3_sentry_data-sentry-rabbitmq-0
+    nodeAffinity:
+      required:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/hostname
+            operator: In
+            values:
+            - www02
+    persistentVolumeReclaimPolicy: Delete
+    storageClassName: local-path
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-06T18:07:18Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolume","metadata":{"annotations":{},"name":"runner-cache-pv"},"spec":{"accessModes":["ReadWriteMany"],"capacity":{"storage":"2Ti"},"nfs":{"path":"/volume2/runner-cache","server":"192.168.13.10"},"persistentVolumeReclaimPolicy":"Retain","storageClassName":"runner-cache"}}
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-12-13T04:10:27Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    name: runner-cache-pv
+    resourceVersion: "9969258"
+    uid: b405f968-51e0-4dcb-ac8a-1c8f10b55b0c
+  spec:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 2Ti
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: runner-cache-pvc
+      namespace: arc-runners
+      resourceVersion: "9969255"
+      uid: f7307795-6463-462d-babe-0c79e7beebc2
+    nfs:
+      path: /volume2/runner-cache
+      server: 192.168.13.10
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: runner-cache
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-13T04:10:27Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolume","metadata":{"annotations":{},"labels":{"app":"wordpress","app.kubernetes.io/instance":"susanonyskophoto","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"wordpress","site":"cosplay50-susanonyskophoto"},"name":"sop-cosplay50-pv"},"spec":{"accessModes":["ReadWriteMany"],"capacity":{"storage":"50Gi"},"nfs":{"path":"/volume2/sop-cosplay50","server":"192.168.9.10"},"persistentVolumeReclaimPolicy":"Retain","storageClassName":"nfs-cosplay50"}}
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-12-22T01:15:29Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    labels:
+      app: wordpress
+      app.kubernetes.io/instance: susanonyskophoto
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: wordpress
+      site: cosplay50-susanonyskophoto
+    name: sop-cosplay50-pv
+    resourceVersion: "12739380"
+    uid: aa7a8da0-6cee-4b36-aadd-e0b76d7de781
+  spec:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 50Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: cosplay50-pvc
+      namespace: sop
+      resourceVersion: "12739377"
+      uid: aefe1804-6322-40f2-a0e5-b91b9c052904
+    nfs:
+      path: /volume2/sop-cosplay50
+      server: 192.168.9.10
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: nfs-cosplay50
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-22T01:15:29Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolume","metadata":{"annotations":{},"labels":{"app":"laravel","app.kubernetes.io/instance":"susanonyskophoto","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"wordpress","site":"shoots-susanonyskophoto"},"name":"sop-shoots-pv"},"spec":{"accessModes":["ReadWriteMany"],"capacity":{"storage":"10Gi"},"nfs":{"path":"/volume2/sop-shoots","server":"192.168.9.10"},"persistentVolumeReclaimPolicy":"Retain","storageClassName":"nfs-shoots"}}
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-12-22T01:15:29Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    labels:
+      app: laravel
+      app.kubernetes.io/instance: susanonyskophoto
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: wordpress
+      site: shoots-susanonyskophoto
+    name: sop-shoots-pv
+    resourceVersion: "12739390"
+    uid: 9acfcdd3-188c-44fb-a503-d33c7ce8d186
+  spec:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 10Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: shoots-pvc
+      namespace: sop
+      resourceVersion: "12739378"
+      uid: a1081dba-ff39-475e-b2ad-d9d4ff3c5d4a
+    nfs:
+      path: /volume2/sop-shoots
+      server: 192.168.9.10
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: nfs-shoots
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-22T01:15:29Z"
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolume
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolume","metadata":{"annotations":{},"labels":{"app":"wordpress","app.kubernetes.io/instance":"susanonyskophoto","app.kubernetes.io/managed-by":"kustomize","app.kubernetes.io/name":"wordpress","site":"www-susanonyskophoto"},"name":"sop-www-wpcontent-pv"},"spec":{"accessModes":["ReadWriteMany"],"capacity":{"storage":"20Gi"},"nfs":{"path":"/volume2/sop-www","server":"192.168.9.10"},"persistentVolumeReclaimPolicy":"Retain","storageClassName":"nfs-wpcontent"}}
+      pv.kubernetes.io/bound-by-controller: "yes"
+    creationTimestamp: "2025-12-04T04:04:34Z"
+    finalizers:
+    - kubernetes.io/pv-protection
+    labels:
+      app: wordpress
+      app.kubernetes.io/instance: susanonyskophoto
+      app.kubernetes.io/managed-by: kustomize
+      app.kubernetes.io/name: wordpress
+      site: www-susanonyskophoto
+    name: sop-www-wpcontent-pv
+    resourceVersion: "12739376"
+    uid: d9fdff40-e786-4a13-927a-ff9228d55c45
+  spec:
+    accessModes:
+    - ReadWriteMany
+    capacity:
+      storage: 20Gi
+    claimRef:
+      apiVersion: v1
+      kind: PersistentVolumeClaim
+      name: wordpress-wpcontent-pvc
+      namespace: sop
+      resourceVersion: "12672652"
+      uid: d7a6cf85-adc6-465c-ba64-c7ccd3f312df
+    nfs:
+      path: /volume2/sop-www
+      server: 192.168.9.10
+    persistentVolumeReclaimPolicy: Retain
+    storageClassName: nfs-wpcontent
+    volumeMode: Filesystem
+  status:
+    lastPhaseTransitionTime: "2025-12-21T19:54:59Z"
+    phase: Bound
+kind: List
+metadata:
+  resourceVersion: ""

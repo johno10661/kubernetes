@@ -1,0 +1,292 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"traefik.ingress.kubernetes.io/router.entrypoints":"web,websecure","traefik.ingress.kubernetes.io/router.middlewares":"discourse-production-security-headers@kubernetescrd"},"labels":{"app":"discourse","environment":"production"},"name":"discourse-ingress","namespace":"discourse-production"},"spec":{"ingressClassName":"traefik","rules":[{"host":"forum.gatesmills.app","http":{"paths":[{"backend":{"service":{"name":"discourse-web-service","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+      traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+      traefik.ingress.kubernetes.io/router.middlewares: discourse-production-security-headers@kubernetescrd
+    creationTimestamp: "2025-12-02T02:16:57Z"
+    generation: 2
+    labels:
+      app: discourse
+      environment: production
+    name: discourse-ingress
+    namespace: discourse-production
+    resourceVersion: "6772655"
+    uid: 7579efce-184a-467f-9558-33dd3504335c
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: forum.gatesmills.app
+      http:
+        paths:
+        - backend:
+            service:
+              name: discourse-web-service
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer: {}
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"traefik.ingress.kubernetes.io/router.entrypoints":"web,websecure","traefik.ingress.kubernetes.io/router.middlewares":"ediai-production-security-headers@kubernetescrd"},"labels":{"app":"ediai","environment":"production"},"name":"ediai-ingress","namespace":"ediai-production"},"spec":{"ingressClassName":"traefik","rules":[{"host":"ediai.com","http":{"paths":[{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/api","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/health","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/ready","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/docs","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/redoc","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/openapi.json","pathType":"Prefix"},{"backend":{"service":{"name":"frontend-service","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+      traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+      traefik.ingress.kubernetes.io/router.middlewares: ediai-production-security-headers@kubernetescrd
+    creationTimestamp: "2025-11-20T15:28:31Z"
+    generation: 4
+    labels:
+      app: ediai
+      environment: production
+    name: ediai-ingress
+    namespace: ediai-production
+    resourceVersion: "3200160"
+    uid: 0c80d605-2bbc-49da-b6c7-fb4923e433e8
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: ediai.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /api
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /health
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /ready
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /docs
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /redoc
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /openapi.json
+          pathType: Prefix
+        - backend:
+            service:
+              name: frontend-service
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer: {}
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"traefik.ingress.kubernetes.io/router.entrypoints":"web,websecure","traefik.ingress.kubernetes.io/router.middlewares":"ediai-staging-security-headers@kubernetescrd"},"labels":{"app":"ediai","environment":"staging"},"name":"ediai-ingress","namespace":"ediai-staging"},"spec":{"ingressClassName":"traefik","rules":[{"host":"ediai.net","http":{"paths":[{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/api","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/health","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/ready","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/docs","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/redoc","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":8000}}},"path":"/openapi.json","pathType":"Prefix"},{"backend":{"service":{"name":"frontend-service","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+      traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+      traefik.ingress.kubernetes.io/router.middlewares: ediai-staging-security-headers@kubernetescrd
+    creationTimestamp: "2025-11-20T13:27:45Z"
+    generation: 4
+    labels:
+      app: ediai
+      environment: staging
+    name: ediai-ingress
+    namespace: ediai-staging
+    resourceVersion: "6100253"
+    uid: 6ac805f7-c368-4b4d-8fe6-850a4fee65fb
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: ediai.net
+      http:
+        paths:
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /api
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /health
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /ready
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /docs
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /redoc
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 8000
+          path: /openapi.json
+          pathType: Prefix
+        - backend:
+            service:
+              name: frontend-service
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer: {}
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"traefik.ingress.kubernetes.io/router.entrypoints":"web,websecure"},"labels":{"app":"mailpit","environment":"staging"},"name":"mailpit-ingress","namespace":"ediai-staging"},"spec":{"ingressClassName":"traefik","rules":[{"host":"mail.ediai.net","http":{"paths":[{"backend":{"service":{"name":"mailpit-service","port":{"number":8025}}},"path":"/","pathType":"Prefix"}]}}]}}
+      traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    creationTimestamp: "2025-12-22T05:32:34Z"
+    generation: 1
+    labels:
+      app: mailpit
+      environment: staging
+    name: mailpit-ingress
+    namespace: ediai-staging
+    resourceVersion: "12800669"
+    uid: ddd4a007-bef2-4147-8d51-4412cab77578
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: mail.ediai.net
+      http:
+        paths:
+        - backend:
+            service:
+              name: mailpit-service
+              port:
+                number: 8025
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer: {}
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"traefik.ingress.kubernetes.io/router.entrypoints":"web"},"name":"grafana-ingress","namespace":"monitoring"},"spec":{"ingressClassName":"traefik","rules":[{"host":"grafana.ediai.net","http":{"paths":[{"backend":{"service":{"name":"prometheus-grafana","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+      traefik.ingress.kubernetes.io/router.entrypoints: web
+    creationTimestamp: "2025-11-21T05:41:21Z"
+    generation: 1
+    name: grafana-ingress
+    namespace: monitoring
+    resourceVersion: "3327970"
+    uid: 9de913d3-096f-4b55-b6d2-3f955509651a
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: grafana.ediai.net
+      http:
+        paths:
+        - backend:
+            service:
+              name: prometheus-grafana
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer: {}
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: sentry
+      meta.helm.sh/release-namespace: sentry
+      traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    creationTimestamp: "2025-12-06T18:15:31Z"
+    generation: 1
+    labels:
+      app: sentry
+      app.kubernetes.io/instance: sentry
+      app.kubernetes.io/managed-by: Helm
+      app.kubernetes.io/name: sentry
+      app.kubernetes.io/version: 25.9.0
+      chart: sentry-27.8.0
+      helm.sh/chart: sentry-27.8.0
+      heritage: Helm
+      release: sentry
+    name: sentry
+    namespace: sentry
+    resourceVersion: "7976043"
+    uid: 987a0c98-c7c0-438e-9510-3ea6413a2ad7
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: sentry.ediai.com
+      http:
+        paths:
+        - backend:
+            service:
+              name: sentry-nginx
+              port:
+                number: 80
+          path: /
+          pathType: ImplementationSpecific
+    - host: sentry.ediai.net
+      http:
+        paths:
+        - backend:
+            service:
+              name: sentry-nginx
+              port:
+                number: 80
+          path: /
+          pathType: ImplementationSpecific
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""
