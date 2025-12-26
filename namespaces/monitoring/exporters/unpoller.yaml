@@ -1,0 +1,146 @@
+# UnPoller - UniFi metrics exporter for Prometheus
+# Documentation: https://unpoller.com/docs/
+# Dashboards: https://grafana.com/orgs/unpoller
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: unpoller-secret
+  namespace: monitoring
+type: Opaque
+stringData:
+  UP_UNIFI_DEFAULT_USER: "unpoller"
+  UP_UNIFI_DEFAULT_PASS: "REDACTED"  # Replace with actual password
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: unpoller-config
+  namespace: monitoring
+data:
+  up.conf: |
+    [poller]
+    debug = false
+    quiet = false
+    plugins = []
+
+    [prometheus]
+    disable = false
+    http_listen = "0.0.0.0:9130"
+    report_errors = false
+
+    [influxdb]
+    disable = true
+
+    [unifi]
+    dynamic = false
+
+    [unifi.defaults]
+    url = "https://192.168.9.7:8443"
+    user = "${UP_UNIFI_DEFAULT_USER}"
+    pass = "${UP_UNIFI_DEFAULT_PASS}"
+    sites = ["all"]
+    save_sites = true
+    save_ids = false
+    save_events = false
+    save_alarms = false
+    save_anomalies = false
+    save_dpi = false
+    verify_ssl = false
+    hash_pii = false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unpoller
+  namespace: monitoring
+  labels:
+    app: unpoller
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unpoller
+  template:
+    metadata:
+      labels:
+        app: unpoller
+    spec:
+      containers:
+        - name: unpoller
+          image: ghcr.io/unpoller/unpoller:latest
+          ports:
+            - containerPort: 9130
+              name: metrics
+          env:
+            - name: UP_UNIFI_DEFAULT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: unpoller-secret
+                  key: UP_UNIFI_DEFAULT_USER
+            - name: UP_UNIFI_DEFAULT_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: unpoller-secret
+                  key: UP_UNIFI_DEFAULT_PASS
+          volumeMounts:
+            - name: config
+              mountPath: /etc/unpoller
+              readOnly: true
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 256Mi
+          livenessProbe:
+            httpGet:
+              path: /metrics
+              port: 9130
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            timeoutSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /metrics
+              port: 9130
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 10
+      volumes:
+        - name: config
+          configMap:
+            name: unpoller-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: unpoller
+  namespace: monitoring
+  labels:
+    app: unpoller
+spec:
+  selector:
+    app: unpoller
+  ports:
+    - port: 9130
+      targetPort: 9130
+      name: metrics
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: unpoller
+  namespace: monitoring
+  labels:
+    app: unpoller
+    release: prometheus  # Required for Prometheus Operator discovery
+spec:
+  selector:
+    matchLabels:
+      app: unpoller
+  endpoints:
+    - port: metrics
+      interval: 30s
+      path: /metrics

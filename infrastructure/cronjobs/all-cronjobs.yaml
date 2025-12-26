@@ -1,0 +1,59 @@
+# CronJobs running in the cluster
+# For reference - these are managed by their respective deployments
+---
+# ARC Runners - CI Database Cleanup
+# Cleans up old CI job data every 6 hours
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ci-db-cleanup
+  namespace: arc-runners
+spec:
+  schedule: "0 */6 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: cleanup
+              image: busybox
+              # Actual command varies - check cluster for current implementation
+          restartPolicy: OnFailure
+---
+# Sentry - Data Cleanup
+# Runs daily at midnight to clean up old events (90 day retention)
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: sentry-sentry-cleanup
+  namespace: sentry
+  labels:
+    app.kubernetes.io/managed-by: Helm
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: sentry-cleanup
+              # Image and command managed by Sentry Helm chart
+          restartPolicy: OnFailure
+---
+# SOP - Shoots Scheduler
+# Runs every minute to process scheduled shoots
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: shoots-scheduler
+  namespace: sop
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: scheduler
+              # Managed by SOP deployment
+          restartPolicy: OnFailure

@@ -1,0 +1,204 @@
+# Custom Alerting Rules for EDIai Infrastructure
+# Apply with: kubectl apply -f monitoring/alerts/custom-alerts.yaml
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: custom-alerts
+  namespace: monitoring
+  labels:
+    app: kube-prometheus-stack
+    release: prometheus
+spec:
+  groups:
+    # ===========================================
+    # PostgreSQL Alerts
+    # ===========================================
+    - name: postgresql
+      rules:
+        - alert: PostgresqlDown
+          expr: pg_up == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PostgreSQL is down"
+            description: "PostgreSQL exporter cannot connect to database on {{ $labels.instance }}"
+
+        - alert: PostgresqlTooManyConnections
+          expr: sum by (instance) (pg_stat_activity_count) > 80
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL too many connections"
+            description: "PostgreSQL has {{ $value }} active connections (threshold: 80)"
+
+        - alert: PostgresqlSlowQueries
+          expr: avg by (instance) (rate(pg_stat_activity_max_tx_duration{state="active"}[5m])) > 60
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL slow queries detected"
+            description: "PostgreSQL has queries running longer than 60s on {{ $labels.instance }}"
+
+    # ===========================================
+    # UniFi/UnPoller Alerts
+    # ===========================================
+    - name: unifi
+      rules:
+        - alert: UnpollerDown
+          expr: up{job="unpoller"} == 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "UnPoller is down"
+            description: "UnPoller exporter is not responding"
+
+        - alert: UnifiControllerUnreachable
+          expr: unpoller_device_info == 0
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "UniFi Controller unreachable"
+            description: "UnPoller cannot reach UniFi Controller - no device metrics"
+
+        - alert: UnifiAPOffline
+          expr: changes(unpoller_device_uptime_seconds[10m]) == 0 and unpoller_device_uptime_seconds > 0
+          for: 15m
+          labels:
+            severity: warning
+          annotations:
+            summary: "UniFi AP may be offline"
+            description: "AP {{ $labels.name }} uptime hasn't changed - may be offline"
+
+        - alert: UnifiHighClientCount
+          expr: sum(unpoller_client_info) > 300
+          for: 5m
+          labels:
+            severity: info
+          annotations:
+            summary: "High client count on UniFi network"
+            description: "{{ $value }} clients connected to UniFi network"
+
+    # ===========================================
+    # Sentry Alerts
+    # ===========================================
+    - name: sentry
+      rules:
+        - alert: SentryWebDown
+          expr: kube_deployment_status_replicas_available{namespace="sentry", deployment="sentry-web"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Sentry Web is down"
+            description: "No Sentry Web replicas are available"
+
+        - alert: SentryWorkerDown
+          expr: kube_deployment_status_replicas_available{namespace="sentry", deployment="sentry-worker"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Sentry Worker is down"
+            description: "No Sentry Worker replicas are available"
+
+        - alert: SentryKafkaDown
+          expr: kube_statefulset_status_replicas_ready{namespace="sentry", statefulset="sentry-kafka-controller"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Sentry Kafka is down"
+            description: "Sentry Kafka cluster has no ready replicas"
+
+        - alert: SentryClickhouseDown
+          expr: kube_statefulset_status_replicas_ready{namespace="sentry", statefulset=~"sentry-clickhouse.*"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Sentry ClickHouse is down"
+            description: "Sentry ClickHouse has no ready replicas"
+
+    # ===========================================
+    # EDIai Application Alerts
+    # ===========================================
+    - name: ediai
+      rules:
+        - alert: EDIaiBackendDown
+          expr: kube_deployment_status_replicas_available{namespace=~"ediai-.*", deployment=~".*backend.*"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "EDIai Backend is down"
+            description: "EDIai Backend in {{ $labels.namespace }} has no available replicas"
+
+        - alert: EDIaiFrontendDown
+          expr: kube_deployment_status_replicas_available{namespace=~"ediai-.*", deployment=~".*frontend.*"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "EDIai Frontend is down"
+            description: "EDIai Frontend in {{ $labels.namespace }} has no available replicas"
+
+        - alert: EDIaiPodRestarts
+          expr: increase(kube_pod_container_status_restarts_total{namespace=~"ediai-.*"}[1h]) > 5
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "EDIai pod restarting frequently"
+            description: "Pod {{ $labels.pod }} in {{ $labels.namespace }} has restarted {{ $value }} times in the last hour"
+
+    # ===========================================
+    # GitHub Actions Runners
+    # ===========================================
+    - name: arc-runners
+      rules:
+        - alert: NoRunnersAvailable
+          expr: sum(kube_pod_status_phase{namespace="arc-runners", phase="Running"}) == 0
+          for: 30m
+          labels:
+            severity: warning
+          annotations:
+            summary: "No GitHub Actions runners available"
+            description: "No runner pods are running in arc-runners namespace for 30 minutes"
+
+    # ===========================================
+    # Cluster Health Alerts
+    # ===========================================
+    - name: cluster-health
+      rules:
+        - alert: NodeNotReady
+          expr: kube_node_status_condition{condition="Ready", status="true"} == 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Node {{ $labels.node }} is not ready"
+            description: "Node {{ $labels.node }} has been in NotReady state for 5 minutes"
+
+        - alert: PersistentVolumeFillingUp
+          expr: (kubelet_volume_stats_used_bytes / kubelet_volume_stats_capacity_bytes) > 0.85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PVC {{ $labels.persistentvolumeclaim }} is filling up"
+            description: "PVC {{ $labels.persistentvolumeclaim }} in {{ $labels.namespace }} is {{ $value | humanizePercentage }} full"
+
+        - alert: PodOOMKilled
+          expr: increase(kube_pod_container_status_last_terminated_reason{reason="OOMKilled"}[1h]) > 0
+          for: 0m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod OOMKilled"
+            description: "Pod {{ $labels.pod }} in {{ $labels.namespace }} was OOMKilled"
