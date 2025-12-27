@@ -235,6 +235,56 @@ kubectl logs -l app.kubernetes.io/name=grafana -n monitoring
 kubectl get servicemonitors -n monitoring
 ```
 
+## Digital Signage / TV Display
+
+Grafana is configured for embedding on digital signage systems (e.g., Kitcast on Apple TV).
+
+### Configuration
+
+The following settings enable embedding and anonymous access:
+
+```yaml
+grafana:
+  grafana.ini:
+    security:
+      allow_embedding: true
+      cookie_samesite: none
+      cookie_secure: true
+    auth.anonymous:
+      enabled: true
+      org_role: Viewer
+    server:
+      domain: grafana.ediai.net
+      root_url: https://grafana.ediai.net
+      serve_from_sub_path: true
+  imageRenderer:
+    enabled: true
+```
+
+### Image Renderer
+
+The Grafana Image Renderer is enabled for displaying static PNG snapshots on devices that cannot run Grafana's JavaScript (like Apple TV browsers).
+
+**Render URL format:**
+
+```text
+https://grafana.ediai.net/render/d/<dashboard-uid>/<dashboard-slug>?orgId=1&width=1728&height=972&kiosk=1
+```
+
+**Parameters:**
+
+- `width` / `height`: Image dimensions (use 90% of target resolution for Kitcast border compensation)
+- `kiosk=1`: Removes all UI chrome for clean display
+- `orgId=1`: Organization ID
+
+**Example - Cluster Health Dashboard:**
+
+```text
+https://grafana.ediai.net/render/d/cluster-health-001/cluster-health?orgId=1&width=1728&height=972&kiosk=1
+```
+
+**Note:** For 1920x1080 displays on Kitcast, use 1728x972 (90%) to compensate for the platform's 10% border/safe zone.
+
 ## Troubleshooting
 
 ### ServiceMonitor Not Discovered

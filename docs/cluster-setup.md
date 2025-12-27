@@ -48,6 +48,36 @@ kind create cluster --config cluster/kind-config.yaml
 | 30432 | 5433 | PostgreSQL access |
 | 30379 | 6380 | Redis access |
 
+### Loading Docker Images to Kind
+
+Kind clusters run isolated containerd runtimes that cannot access your local Docker images. You must explicitly load images.
+
+**Standard method (may hang with large images or multi-node clusters):**
+
+```bash
+kind load docker-image myimage:tag --name ediai-local
+```
+
+**Reliable method (direct containerd import):**
+
+```bash
+# Load to a single node
+docker save myimage:tag | docker exec -i ediai-local-control-plane ctr --namespace=k8s.io images import -
+
+# Load to all nodes in multi-node cluster
+for node in ediai-local-control-plane ediai-local-control-plane2 ediai-local-control-plane3; do
+  docker save myimage:tag | docker exec -i $node ctr --namespace=k8s.io images import -
+done
+```
+
+**Verify image is loaded:**
+
+```bash
+docker exec ediai-local-control-plane crictl images | grep myimage
+```
+
+**Note:** The `kind load` command can hang indefinitely when loading large images (>1GB) to multi-node clusters. The direct `docker save | ctr import` method is more reliable.
+
 ## Kubectl Contexts
 
 ```bash

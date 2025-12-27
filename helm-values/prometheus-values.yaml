@@ -445,7 +445,8 @@ grafana:
     existingSecret: ""
     passwordKey: admin-password
     userKey: admin-user
-  adminPassword: changeme123
+  # Password managed externally - see docs/grafana.md
+  adminPassword: ""
   adminUser: admin
   affinity: {}
   alerting: {}
@@ -539,9 +540,19 @@ grafana:
       logs: /var/log/grafana
       plugins: /var/lib/grafana/plugins
       provisioning: /etc/grafana/provisioning
+    security:
+      allow_embedding: true
+      cookie_samesite: none
+      cookie_secure: true
+    auth.anonymous:
+      enabled: true
+      org_role: Viewer
     server:
-      domain: '{{ if (and .Values.ingress.enabled .Values.ingress.hosts) }}{{ tpl
-        (.Values.ingress.hosts | first) . }}{{ else }}''''{{ end }}'
+      domain: grafana.ediai.net
+      root_url: https://grafana.ediai.net
+      protocol: http
+      enforce_domain: false
+      serve_from_sub_path: true
   headlessService: false
   hostAliases: []
   image:
@@ -566,11 +577,11 @@ grafana:
       capabilities:
         drop:
         - ALL
-      readOnlyRootFilesystem: true
+      readOnlyRootFilesystem: false
       seccompProfile:
         type: RuntimeDefault
     deploymentStrategy: {}
-    enabled: false
+    enabled: true
     env:
       HTTP_HOST: 0.0.0.0
       XDG_CACHE_HOME: /tmp/.chromium
